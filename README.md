@@ -52,9 +52,38 @@ Edit the `CITIES` map at the top of either:
 - [`prayertimes.widget/index.jsx`](prayertimes.widget/index.jsx) for the widget
 - [`menubar/prayertimes.30s.py`](menubar/prayertimes.30s.py) for the menu bar
 
-Add coordinates for your city, then optionally change `DEFAULT_CITY`. To use a
-different calculation method, change `METHOD` (and `SCHOOL` for Hanafi vs.
-Shafi'i Asr). See the [Aladhan API docs](https://aladhan.com/prayer-times-api).
+Add your city's coordinates (from [Google Maps](https://maps.google.com) or `maps.apple.com`),
+its IANA timezone, and a display label. Then set it as `DEFAULT_CITY`.
+
+### Calculation method
+
+Change `METHOD` to match your country or preferred authority:
+
+| Method | Authority | Used in |
+|--------|-----------|---------|
+| 1  | University of Islamic Sciences, Karachi | Pakistan, Bangladesh, India |
+| 2  | Islamic Society of North America (ISNA) | USA, Canada |
+| 3  | Muslim World League (MWL) | Europe, Far East |
+| 4  | Umm Al-Qura University, Makkah | Saudi Arabia |
+| 5  | Egyptian General Authority of Survey | Egypt |
+| 7  | Institute of Geophysics, University of Tehran | Iran |
+| 8  | Gulf Region | Gulf states |
+| 9  | Kuwait | Kuwait |
+| 10 | Qatar | Qatar |
+| 11 | Majlis Ugama Islam Singapura (MUIS) | Singapore |
+| 12 | Union Organization Islamic de France | France |
+| 13 | Diyanet İşleri Başkanlığı *(default)* | Turkey |
+| 14 | Spiritual Administration of Muslims of Russia | Russia |
+| 15 | Moonsighting Committee Worldwide | UK & worldwide |
+
+### School (Asr time)
+
+Change `SCHOOL` in both files:
+
+| Value | School | Asr shadow ratio |
+|-------|--------|-----------------|
+| `0` | Shafi'i *(default)* | 1× object length |
+| `1` | Hanafi | 2× object length |
 
 ## Widget controls
 
