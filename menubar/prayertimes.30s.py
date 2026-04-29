@@ -8,6 +8,7 @@
 
 import json
 import os
+import subprocess
 import sys
 import urllib.request
 from datetime import datetime, timedelta, timezone
@@ -42,6 +43,7 @@ DEFAULT_CONFIG = {
 STATE_FILE = os.path.expanduser("~/.prayertimes_city")
 CACHE_DIR  = os.path.expanduser("~/Library/Caches/prayertimes")
 CONFIG_FILE = os.path.expanduser("~/.config/salah-bar/config.json")
+CONFIG_TOOL = os.path.join(os.path.dirname(os.path.dirname(__file__)), "support", "configure.py")
 os.makedirs(CACHE_DIR, exist_ok=True)
 
 PRAYERS = [
@@ -153,6 +155,10 @@ def main():
     if len(sys.argv) > 1 and sys.argv[1] == "set" and len(sys.argv) > 2:
         save_city(sys.argv[2])
         return
+    if len(sys.argv) > 1 and sys.argv[1] == "configure":
+        action = sys.argv[2] if len(sys.argv) > 2 else ""
+        subprocess.run([sys.executable, "-B", CONFIG_TOOL, action], check=False)
+        return
 
     config = load_config()
     city = load_city(config)
@@ -200,6 +206,20 @@ def main():
         print(
             f"--{lbl}{check} | bash='{py}' param1='{script}' param2=set param3={k} terminal=false refresh=true"
         )
+    print("---")
+    print("Configure")
+    print(
+        f"--Choose default city | bash='{py}' param1='{script}' param2=configure param3=choose-default terminal=false refresh=true"
+    )
+    print(
+        f"--Add preset city (Turkey/Egypt/Qatar) | bash='{py}' param1='{script}' param2=configure param3=add-preset-city terminal=false refresh=true"
+    )
+    print(
+        f"--Add custom city | bash='{py}' param1='{script}' param2=configure param3=add-custom-city terminal=false refresh=true"
+    )
+    print(
+        f"--Open config file | bash='{py}' param1='{script}' param2=configure param3=open-config terminal=false refresh=false"
+    )
     print("---")
     print("Refresh | refresh=true")
 

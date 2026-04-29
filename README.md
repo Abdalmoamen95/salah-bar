@@ -13,7 +13,16 @@ Times come from [aladhan.com](https://aladhan.com) (no key needed), method =
 
 ## Quick install
 
-Requires [Homebrew](https://brew.sh).
+### Easiest (non-technical)
+
+1. Download this repository as ZIP from GitHub.
+2. Unzip it.
+3. Double-click `setup.command`.
+4. Follow prompts in Terminal.
+
+The installer can install Homebrew for you if it is missing.
+
+### Developer install
 
 ```bash
 git clone https://github.com/Abdalmoamen95/salah-bar.git
@@ -30,6 +39,13 @@ The installer will:
 5. Create `~/.config/salah-bar/config.json` if you don't already have one.
 6. Launch both apps.
 
+After install, you can configure cities from the menu bar:
+
+- `Configure -> Choose default city`
+- `Configure -> Add preset city (Turkey/Egypt/Qatar)`
+- `Configure -> Add custom city`
+- `Configure -> Open config file`
+
 ## Components
 
 ```
@@ -40,7 +56,9 @@ The installer will:
 ├── menubar/
 │   └── prayertimes.30s.py        # SwiftBar plugin (refreshes every 30s)
 ├── config.example.json           # Default user config copied on install
+├── preset-cities.json            # Bundled city presets for Turkey, Egypt, Qatar
 ├── install.sh
+├── setup.command                 # Double-click installer launcher
 └── README.md
 ```
 
@@ -57,6 +75,21 @@ After install, edit:
 ```
 
 You only need to edit one file. Both the widget and the menu bar read from it.
+
+If you do not want to edit JSON manually, use the menu bar UI instead:
+
+- Open `salah-bar` from the menu bar
+- Choose `Configure`
+- Pick `Add preset city` for Turkey, Egypt, or Qatar
+- Pick `Add custom city` for everywhere else
+
+Preset city chooser:
+
+- Includes bundled populated-place presets for Turkey, Egypt, and Qatar
+- Lets the user search, then choose a matching city from a filtered list
+- Saves the selected city into the shared config automatically
+
+Preset city data is bundled from GeoNames country dumps.
 
 Example:
 

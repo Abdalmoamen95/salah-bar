@@ -7,6 +7,7 @@ set -euo pipefail
 REPO_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 WIDGET_SRC="$REPO_DIR/prayertimes.widget"
 PLUGIN_SRC="$REPO_DIR/menubar/prayertimes.30s.py"
+CONFIG_TOOL_SRC="$REPO_DIR/support/configure.py"
 CONFIG_SRC="$REPO_DIR/config.example.json"
 
 UBERSICHT_DIR="$HOME/Library/Application Support/Übersicht/widgets"
@@ -18,9 +19,29 @@ green() { printf "\033[32m%s\033[0m\n" "$*"; }
 yellow() { printf "\033[33m%s\033[0m\n" "$*"; }
 red()   { printf "\033[31m%s\033[0m\n" "$*"; }
 
-require_brew() {
-  if ! command -v brew >/dev/null 2>&1; then
+ensure_brew() {
+  if command -v brew >/dev/null 2>&1; then
+    return
+  fi
+
+  yellow "Homebrew is not installed."
+  printf "Install Homebrew automatically now? [Y/n] "
+  read -r reply
+  if [[ "${reply:-Y}" =~ ^[Nn]$ ]]; then
     red "Homebrew is required. Install from https://brew.sh, then re-run."
+    exit 1
+  fi
+
+  /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
+
+  if [ -x /opt/homebrew/bin/brew ]; then
+    eval "$(/opt/homebrew/bin/brew shellenv)"
+  elif [ -x /usr/local/bin/brew ]; then
+    eval "$(/usr/local/bin/brew shellenv)"
+  fi
+
+  if ! command -v brew >/dev/null 2>&1; then
+    red "Homebrew installation did not complete. Please install it manually and re-run."
     exit 1
   fi
 }
@@ -28,11 +49,10 @@ require_brew() {
 install_ubersicht() {
   if [ ! -d "/Applications/Übersicht.app" ]; then
     yellow "Installing Übersicht.app via brew…"
-    require_brew
+    ensure_brew
     brew install --cask ubersicht
     open -a Übersicht
-    yellow "Launched Übersicht. Grant any permissions it asks for, then press Enter to continue."
-    read -r
+    yellow "Launched Übersicht. If macOS asks for permissions, allow them."
   fi
   mkdir -p "$UBERSICHT_DIR"
   if [ -e "$UBERSICHT_DIR/prayertimes.widget" ] || [ -L "$UBERSICHT_DIR/prayertimes.widget" ]; then
@@ -45,11 +65,13 @@ install_ubersicht() {
 install_swiftbar() {
   if [ ! -d "/Applications/SwiftBar.app" ]; then
     yellow "Installing SwiftBar.app via brew…"
-    require_brew
+    ensure_brew
     brew install --cask swiftbar
   fi
   defaults write com.ameba.SwiftBar PluginDirectory -string "$REPO_DIR/menubar"
   chmod +x "$PLUGIN_SRC"
+  chmod +x "$CONFIG_TOOL_SRC"
+  rm -rf "$REPO_DIR/menubar/__pycache__"
   green "✓ Configured SwiftBar plugin directory."
 }
 
@@ -58,6 +80,7 @@ install_config() {
   if [ ! -f "$CONFIG_FILE" ]; then
     cp "$CONFIG_SRC" "$CONFIG_FILE"
     green "✓ Created config file at $CONFIG_FILE"
+    yellow "Tip: use the menu bar -> Configure -> Add preset city or Add custom city."
   else
     yellow "Keeping existing config at $CONFIG_FILE"
   fi
