@@ -392,14 +392,12 @@ const cycleCity = () => {
   rebuildWidget();
 };
 
-// Force a re-render every second for the live countdown.
-// We do this by stuffing a timer on window so it survives reloads.
+// Keep countdown reasonably live without hammering full widget repaint.
+// Rebuilding too frequently can cause visible flicker on some macOS setups.
 if (typeof window !== "undefined" && !window.__prayertimes_ticker) {
   window.__prayertimes_ticker = setInterval(() => {
     if (typeof rebuildWidget === "function") rebuildWidget();
-    if (typeof applyPosToWrapper === "function") applyPosToWrapper();
-    if (typeof applyCollapsedToWrapper === "function") applyCollapsedToWrapper();
-  }, 1000);
+  }, 5000);
 }
 
 // -------- DRAG-TO-MOVE -------------------------------------------------------
