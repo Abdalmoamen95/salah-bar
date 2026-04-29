@@ -232,7 +232,14 @@ def maybe_notify(config, city_label, next_prayer, now):
     prayer_time = next_prayer[2].strftime("%Y-%m-%dT%H:%M")
     for offset in sorted(set(offsets), reverse=True):
         trigger = offset * 60
-        if trigger - 30 <= remaining <= trigger:
+        # Plugin refreshes every 30s; include a forward window for 0-minute alerts
+        # so we don't miss exact prayer-time notifications between refresh ticks.
+        if offset == 0:
+            in_window = 0 <= remaining <= 30
+        else:
+            in_window = trigger - 30 <= remaining <= trigger
+
+        if in_window:
             key = f"{city_label}:{next_prayer[0]}:{prayer_time}:{offset}"
             if key in state["notified"]:
                 continue
