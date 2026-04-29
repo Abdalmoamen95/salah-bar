@@ -50,12 +50,8 @@ After install, you can configure cities from the menu bar:
 
 ## Screenshots
 
-Add screenshots in `assets/` and reference them here, for example:
-
-```md
 ![Menu bar](assets/menubar.png)
 ![Widget](assets/widget.png)
-```
 
 ## Components
 
