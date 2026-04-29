@@ -13,16 +13,7 @@ Times come from [aladhan.com](https://aladhan.com) (no key needed), method =
 
 ## Quick install
 
-### Easiest (non-technical)
-
-1. Download this repository as ZIP from GitHub.
-2. Unzip it.
-3. Double-click `setup.command`.
-4. Follow prompts in Terminal.
-
-The installer can install Homebrew for you if it is missing.
-
-### Developer install
+Requires Terminal access.
 
 ```bash
 git clone https://github.com/Abdalmoamen95/salah-bar.git
@@ -65,7 +56,6 @@ After install, you can configure cities from the menu bar:
 ├── config.example.json           # Default user config copied on install
 ├── preset-cities.json            # Bundled city presets for Turkey, Egypt, Qatar
 ├── install.sh
-├── setup.command                 # Double-click installer launcher
 └── README.md
 ```
 
