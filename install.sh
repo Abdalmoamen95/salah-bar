@@ -7,9 +7,12 @@ set -euo pipefail
 REPO_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 WIDGET_SRC="$REPO_DIR/prayertimes.widget"
 PLUGIN_SRC="$REPO_DIR/menubar/prayertimes.30s.py"
+CONFIG_SRC="$REPO_DIR/config.example.json"
 
 UBERSICHT_DIR="$HOME/Library/Application Support/Übersicht/widgets"
 SWIFTBAR_PLUGINS_DEFAULT="$HOME/Library/Application Support/SwiftBar/Plugins"
+CONFIG_DIR="$HOME/.config/salah-bar"
+CONFIG_FILE="$CONFIG_DIR/config.json"
 
 green() { printf "\033[32m%s\033[0m\n" "$*"; }
 yellow() { printf "\033[33m%s\033[0m\n" "$*"; }
@@ -50,6 +53,16 @@ install_swiftbar() {
   green "✓ Configured SwiftBar plugin directory."
 }
 
+install_config() {
+  mkdir -p "$CONFIG_DIR"
+  if [ ! -f "$CONFIG_FILE" ]; then
+    cp "$CONFIG_SRC" "$CONFIG_FILE"
+    green "✓ Created config file at $CONFIG_FILE"
+  else
+    yellow "Keeping existing config at $CONFIG_FILE"
+  fi
+}
+
 restart_apps() {
   osascript -e 'tell application "Übersicht" to quit' 2>/dev/null || true
   osascript -e 'tell application "SwiftBar" to quit'   2>/dev/null || true
@@ -62,11 +75,13 @@ restart_apps() {
 main() {
   install_ubersicht
   install_swiftbar
+  install_config
   restart_apps
   echo
   green "Done."
   echo "  • Desktop widget: top-right corner. Drag the header to move; click the chevron to collapse; click city to cycle."
   echo "  • Menu bar:       🕌 Next-prayer countdown. Click to expand; switch city from the submenu."
+  echo "  • Config file:    $CONFIG_FILE"
 }
 
 main "$@"

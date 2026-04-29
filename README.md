@@ -27,7 +27,8 @@ The installer will:
 2. Symlink `prayertimes.widget/` into Übersicht's widgets folder.
 3. Install [SwiftBar](https://swiftbar.app) if you don't have it.
 4. Point SwiftBar at this repo's `menubar/` folder for plugins.
-5. Launch both apps.
+5. Create `~/.config/salah-bar/config.json` if you don't already have one.
+6. Launch both apps.
 
 ## Components
 
@@ -38,26 +39,61 @@ The installer will:
 │   └── README.md
 ├── menubar/
 │   └── prayertimes.30s.py        # SwiftBar plugin (refreshes every 30s)
+├── config.example.json           # Default user config copied on install
 ├── install.sh
 └── README.md
 ```
 
-The two surfaces share state via `~/.prayertimes_city`. Cycling the city in
-either place updates the file; the other side picks it up on its next refresh.
+The two surfaces share state via `~/.prayertimes_city` and share configuration
+via `~/.config/salah-bar/config.json`. Cycling the city in either place updates
+the state file; the other side picks it up on its next refresh.
 
 ## Configuration
 
-Edit the `CITIES` map at the top of either:
+After install, edit:
 
-- [`prayertimes.widget/index.jsx`](prayertimes.widget/index.jsx) for the widget
-- [`menubar/prayertimes.30s.py`](menubar/prayertimes.30s.py) for the menu bar
+```json
+~/.config/salah-bar/config.json
+```
 
-Add your city's coordinates (from [Google Maps](https://maps.google.com) or `maps.apple.com`),
-its IANA timezone, and a display label. Then set it as `DEFAULT_CITY`.
+You only need to edit one file. Both the widget and the menu bar read from it.
+
+Example:
+
+```json
+{
+  "default_city": "istanbul",
+  "method": 13,
+  "school": 0,
+  "cities": {
+    "istanbul": {
+      "label": "Istanbul",
+      "lat": 41.0082,
+      "lon": 28.9784,
+      "tz": "Europe/Istanbul"
+    },
+    "doha": {
+      "label": "Doha",
+      "lat": 25.2854,
+      "lon": 51.5310,
+      "tz": "Asia/Qatar"
+    }
+  }
+}
+```
+
+Each city needs:
+
+- `label`: name shown in the UI
+- `lat`: latitude
+- `lon`: longitude
+- `tz`: IANA timezone, for example `Europe/Istanbul` or `America/Toronto`
+
+Set `default_city` to one of the keys inside `cities`.
 
 ### Calculation method
 
-Change `METHOD` to match your country or preferred authority:
+Change `method` in `~/.config/salah-bar/config.json` to match your country or preferred authority:
 
 | Method | Authority | Used in |
 |--------|-----------|---------|
@@ -78,7 +114,7 @@ Change `METHOD` to match your country or preferred authority:
 
 ### School (Asr time)
 
-Change `SCHOOL` in both files:
+Change `school` in `~/.config/salah-bar/config.json`:
 
 | Value | School | Asr shadow ratio |
 |-------|--------|-----------------|
@@ -88,7 +124,7 @@ Change `SCHOOL` in both files:
 ## Widget controls
 
 - **Drag** the header bar to reposition.
-- **Click the city name** (top-left) to cycle İzmir → Doha → Cairo.
+- **Click the city name** (top-left) to cycle through your configured cities.
 - **Click the ▾ / ▸** to collapse to a small pill or expand to full schedule.
 
 ## Menu bar controls
@@ -124,7 +160,7 @@ osascript -e 'tell application "SwiftBar" to quit'; open -a SwiftBar
 ```
 
 **Times look wrong.** Verify the calculation method matches your local
-preference and that your city's timezone is correct in the `CITIES` map.
+preference and that your city's timezone is correct in `~/.config/salah-bar/config.json`.
 
 ## Uninstall
 

@@ -6,33 +6,115 @@
 // =============================================================================
 
 // -------- CONFIG -------------------------------------------------------------
-const CITIES = {
-  izmir: { label: "İzmir",  lat: 38.4192, lon: 27.1287, tz: "Europe/Istanbul" },
-  doha:  { label: "Doha",   lat: 25.2854, lon: 51.5310, tz: "Asia/Qatar"      },
-  cairo: { label: "Cairo",  lat: 30.0444, lon: 31.2357, tz: "Africa/Cairo"    }
+const DEFAULT_CONFIG = {
+  default_city: "izmir",
+  method: 13,
+  school: 0,
+  cities: {
+    izmir: { label: "İzmir", lat: 38.4192, lon: 27.1287, tz: "Europe/Istanbul" },
+    doha: { label: "Doha", lat: 25.2854, lon: 51.5310, tz: "Asia/Qatar" },
+    cairo: { label: "Cairo", lat: 30.0444, lon: 31.2357, tz: "Africa/Cairo" }
+  }
 };
 
-// Change this to switch cities. (Or click the city name in the widget — it cycles.)
-const DEFAULT_CITY = "izmir";
+const normalizeConfig = (raw) => {
+  const config = JSON.parse(JSON.stringify(DEFAULT_CONFIG));
+  if (!raw || typeof raw !== "object") return config;
 
-const METHOD = 13;   // 13 = Diyanet İşleri Başkanlığı, Turkey
-const SCHOOL = 0;    // 0 = Shafi'i (standard), 1 = Hanafi
+  if (Number.isInteger(raw.method)) config.method = raw.method;
+  if (raw.school === 0 || raw.school === 1) config.school = raw.school;
+
+  if (raw.cities && typeof raw.cities === "object") {
+    const normalized = Object.entries(raw.cities).reduce((acc, [key, city]) => {
+      if (!city || typeof city !== "object") return acc;
+      const lat = Number(city.lat);
+      const lon = Number(city.lon);
+      if (!Number.isFinite(lat) || !Number.isFinite(lon) || !city.label || !city.tz) return acc;
+      acc[key] = { label: String(city.label), lat, lon, tz: String(city.tz) };
+      return acc;
+    }, {});
+    if (Object.keys(normalized).length > 0) config.cities = normalized;
+  }
+
+  if (raw.default_city && config.cities[raw.default_city]) config.default_city = raw.default_city;
+  return config;
+};
+
+const getConfig = (output) => {
+  const runtimeConfig = typeof window !== "undefined" ? window.__prayertimes_config : null;
+  return normalizeConfig((output && output.config) || runtimeConfig || DEFAULT_CONFIG);
+};
 // -----------------------------------------------------------------------------
 
 // localStorage key for which city is currently displayed
 const CITY_KEY = "prayertimes_city";
 
-// Fetch all 3 cities every refresh so cycling is instant and shell-API-free.
+const DEFAULT_CONFIG_JSON = JSON.stringify(JSON.stringify(DEFAULT_CONFIG));
+
+// Fetch all configured cities every refresh so cycling is instant and setup lives in one file.
 export const command = `
-  DATE_IZ=$(TZ="Europe/Istanbul" date +%d-%m-%Y)
-  DATE_DH=$(TZ="Asia/Qatar"      date +%d-%m-%Y)
-  DATE_CA=$(TZ="Africa/Cairo"    date +%d-%m-%Y)
+  python3 - <<'PY'
+import json
+import os
+import urllib.request
+from datetime import datetime
+from zoneinfo import ZoneInfo
 
-  IZ=$(curl -s --max-time 10 "https://api.aladhan.com/v1/timings/$DATE_IZ?latitude=38.4192&longitude=27.1287&method=${METHOD}&school=${SCHOOL}")
-  DH=$(curl -s --max-time 10 "https://api.aladhan.com/v1/timings/$DATE_DH?latitude=25.2854&longitude=51.5310&method=${METHOD}&school=${SCHOOL}")
-  CA=$(curl -s --max-time 10 "https://api.aladhan.com/v1/timings/$DATE_CA?latitude=30.0444&longitude=31.2357&method=${METHOD}&school=${SCHOOL}")
+CONFIG_PATH = os.path.expanduser("~/.config/salah-bar/config.json")
+DEFAULT_CONFIG = json.loads(${DEFAULT_CONFIG_JSON})
 
-  echo "{\\"izmir\\":$IZ,\\"doha\\":$DH,\\"cairo\\":$CA}"
+def normalize_config(raw):
+  config = json.loads(json.dumps(DEFAULT_CONFIG))
+  if not isinstance(raw, dict):
+    return config
+
+  if isinstance(raw.get("method"), int):
+    config["method"] = raw["method"]
+  if raw.get("school") in (0, 1):
+    config["school"] = raw["school"]
+
+  cities = raw.get("cities")
+  if isinstance(cities, dict):
+    normalized = {}
+    for key, city in cities.items():
+      if not isinstance(city, dict):
+        continue
+      try:
+        normalized[key] = {
+          "label": str(city["label"]),
+          "lat": float(city["lat"]),
+          "lon": float(city["lon"]),
+          "tz": str(city["tz"]),
+        }
+      except Exception:
+        continue
+    if normalized:
+      config["cities"] = normalized
+
+  default_city = raw.get("default_city")
+  if default_city in config["cities"]:
+    config["default_city"] = default_city
+  return config
+
+try:
+  with open(CONFIG_PATH) as f:
+    config = normalize_config(json.load(f))
+except Exception:
+  config = normalize_config({})
+
+timings = {}
+for key, city in config["cities"].items():
+  date_str = datetime.now(ZoneInfo(city["tz"])).strftime("%d-%m-%Y")
+  url = (
+    f"https://api.aladhan.com/v1/timings/{date_str}"
+    f"?latitude={city['lat']}&longitude={city['lon']}"
+    f"&method={config['method']}&school={config['school']}"
+  )
+  with urllib.request.urlopen(url, timeout=10) as response:
+    timings[key] = json.load(response)
+
+print(json.dumps({"config": config, "timings": timings}, ensure_ascii=False))
+PY
 `;
 
 export const refreshFrequency = 60 * 60 * 1000; // refetch API every hour
@@ -229,10 +311,11 @@ const fmtCountdown = (ms) => {
 };
 
 const loadCity = () => {
+  const config = getConfig(window.__prayertimes_output);
   try {
     const v = localStorage.getItem(CITY_KEY);
-    return (v && CITIES[v]) ? v : DEFAULT_CITY;
-  } catch (e) { return DEFAULT_CITY; }
+    return (v && config.cities[v]) ? v : config.default_city;
+  } catch (e) { return config.default_city; }
 };
 
 const saveCity = (c) => {
@@ -272,7 +355,7 @@ const toggleCollapse = (e) => {
 };
 
 const cycleCity = () => {
-  const keys = Object.keys(CITIES);
+  const keys = Object.keys(getConfig(window.__prayertimes_output).cities);
   const cur = loadCity();
   const next = keys[(keys.indexOf(cur) + 1) % keys.length];
   saveCity(next);
@@ -386,12 +469,14 @@ const startDrag = (e) => {
 const cleanTime = (t) => (t || "").split(" ")[0];
 
 const computeView = (city, output) => {
-  const cityData = output && output[city];
+  const config = getConfig(output);
+  const cityConfig = config.cities[city];
+  const cityData = output && output.timings && output.timings[city];
   if (!cityData || !cityData.data) return null;
-  const tz = CITIES[city].tz;
+  const tz = cityConfig.tz;
   const timings = cityData.data.timings;
   const hijri = cityData.data.date && cityData.data.date.hijri;
-  const cityLabel = CITIES[city].label;
+  const cityLabel = cityConfig.label;
 
   const now = new Date();
   const schedule = PRAYERS.map(p => ({
@@ -457,7 +542,10 @@ export const render = ({ output, error }) => {
   }
 
   // Stash output for rebuildWidget + ticker.
-  if (typeof window !== "undefined") window.__prayertimes_output = output;
+  if (typeof window !== "undefined") {
+    window.__prayertimes_output = output;
+    window.__prayertimes_config = getConfig(output);
+  }
 
   const city = loadCity();
   const v = computeView(city, output);
@@ -505,7 +593,7 @@ export const render = ({ output, error }) => {
       </div>
 
       <div className="footer">
-        <span>Diyanet · Shafi'i</span>
+        <span>{`Method ${getConfig(output).method} · ${getConfig(output).school === 1 ? "Hanafi" : "Shafi'i"}`}</span>
         <span>aladhan.com</span>
       </div>
     </div>

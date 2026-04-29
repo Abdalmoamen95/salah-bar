@@ -1,0 +1,25 @@
+{
+  "default_city": "izmir",
+  "method": 13,
+  "school": 0,
+  "cities": {
+    "izmir": {
+      "label": "İzmir",
+      "lat": 38.4192,
+      "lon": 27.1287,
+      "tz": "Europe/Istanbul"
+    },
+    "doha": {
+      "label": "Doha",
+      "lat": 25.2854,
+      "lon": 51.531,
+      "tz": "Asia/Qatar"
+    },
+    "cairo": {
+      "label": "Cairo",
+      "lat": 30.0444,
+      "lon": 31.2357,
+      "tz": "Africa/Cairo"
+    }
+  }
+}

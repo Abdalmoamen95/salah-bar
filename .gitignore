@@ -4,7 +4,7 @@
 .LSOverride
 
 # Prayer times cache (written at runtime, not source)
-*.json
+cache/
 
 # Python
 __pycache__/
