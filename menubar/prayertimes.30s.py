@@ -278,11 +278,20 @@ def main():
         next_p = (first[0], first[1], first[2] + timedelta(days=1))
 
     countdown = fmt_countdown(next_p[2] - now)
+    remaining_s = max(0, int((next_p[2] - now).total_seconds()))
     label = config["cities"][city]["label"]
     maybe_notify(config, label, next_p, now)
 
     # Menu bar line — first line shown
-    print(f"🕌 {next_p[0]} {countdown[:5]}")
+    if 0 < remaining_s <= 5 * 60:
+        # Flash effect: color toggles every plugin refresh (30s).
+        flash_on = (remaining_s // 30) % 2 == 0
+        if flash_on:
+            print(f"🕌 {next_p[0]} {countdown[:5]} | color=#22c55e")
+        else:
+            print(f"🕌 {next_p[0]} {countdown[:5]}")
+    else:
+        print(f"🕌 {next_p[0]} {countdown[:5]}")
 
     # Dropdown
     print("---")
