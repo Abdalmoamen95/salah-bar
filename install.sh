@@ -9,6 +9,8 @@ WIDGET_SRC="$REPO_DIR/prayertimes.widget"
 PLUGIN_SRC="$REPO_DIR/menubar/prayertimes.30s.py"
 CONFIG_TOOL_SRC="$REPO_DIR/support/configure.py"
 CONFIG_SRC="$REPO_DIR/config.example.json"
+SUPPORT_DIR="$REPO_DIR/support"
+MENUBAR_DIR="$REPO_DIR/menubar"
 
 UBERSICHT_DIR="$HOME/Library/Application Support/Übersicht/widgets"
 SWIFTBAR_PLUGINS_DEFAULT="$HOME/Library/Application Support/SwiftBar/Plugins"
@@ -18,6 +20,15 @@ CONFIG_FILE="$CONFIG_DIR/config.json"
 green() { printf "\033[32m%s\033[0m\n" "$*"; }
 yellow() { printf "\033[33m%s\033[0m\n" "$*"; }
 red()   { printf "\033[31m%s\033[0m\n" "$*"; }
+
+clear_quarantine() {
+  if ! command -v xattr >/dev/null 2>&1; then
+    return
+  fi
+  xattr -dr com.apple.quarantine "$MENUBAR_DIR" 2>/dev/null || true
+  xattr -dr com.apple.quarantine "$SUPPORT_DIR" 2>/dev/null || true
+  xattr -dr com.apple.quarantine "$WIDGET_SRC" 2>/dev/null || true
+}
 
 ensure_brew() {
   if command -v brew >/dev/null 2>&1; then
@@ -68,10 +79,25 @@ install_swiftbar() {
     ensure_brew
     brew install --cask swiftbar
   fi
+  clear_quarantine
+
+  if ! command -v python3 >/dev/null 2>&1; then
+    yellow "Installing python3 via brew (required for SwiftBar plugin)…"
+    ensure_brew
+    brew install python
+  fi
+
   defaults write com.ameba.SwiftBar PluginDirectory -string "$REPO_DIR/menubar"
   chmod +x "$PLUGIN_SRC"
   chmod +x "$CONFIG_TOOL_SRC"
   rm -rf "$REPO_DIR/menubar/__pycache__"
+
+  if ! python3 "$PLUGIN_SRC" | head -n 1 >/dev/null; then
+    red "SwiftBar plugin self-test failed. Run this to inspect:"
+    echo "  python3 \"$PLUGIN_SRC\" | head -n 12"
+    exit 1
+  fi
+
   green "✓ Configured SwiftBar plugin directory."
 }
 

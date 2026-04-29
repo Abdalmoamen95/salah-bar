@@ -28,7 +28,9 @@ The installer will:
 3. Install [SwiftBar](https://swiftbar.app) if you don't have it.
 4. Point SwiftBar at this repo's `menubar/` folder for plugins.
 5. Create `~/.config/salah-bar/config.json` if you don't already have one.
-6. Launch both apps.
+6. Clear macOS quarantine flags on runtime folders (`menubar/`, `support/`, `prayertimes.widget/`).
+7. Validate plugin execution before launch.
+8. Launch both apps.
 
 After install, you can configure cities from the menu bar:
 
@@ -197,6 +199,14 @@ Should match `<repo>/menubar`. Then restart SwiftBar:
 
 ```bash
 osascript -e 'tell application "SwiftBar" to quit'; open -a SwiftBar
+```
+
+If the plugin is blocked by Gatekeeper/quarantine, run:
+
+```bash
+xattr -dr com.apple.quarantine ./menubar ./support ./prayertimes.widget
+chmod +x ./menubar/prayertimes.30s.py ./support/configure.py
+python3 ./menubar/prayertimes.30s.py | head -n 12
 ```
 
 **Times look wrong.** Verify the calculation method matches your local
