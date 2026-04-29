@@ -44,7 +44,18 @@ After install, you can configure cities from the menu bar:
 - `Configure -> Choose default city`
 - `Configure -> Add preset city (Turkey/Egypt/Qatar)`
 - `Configure -> Add custom city`
+- `Configure -> Toggle notifications`
+- `Configure -> Reset to defaults`
 - `Configure -> Open config file`
+
+## Screenshots
+
+Add screenshots in `assets/` and reference them here, for example:
+
+```md
+![Menu bar](assets/menubar.png)
+![Widget](assets/widget.png)
+```
 
 ## Components
 
@@ -98,6 +109,10 @@ Example:
   "default_city": "istanbul",
   "method": 13,
   "school": 0,
+  "notifications": {
+    "enabled": true,
+    "offsets_minutes": [10, 5, 0]
+  },
   "cities": {
     "istanbul": {
       "label": "Istanbul",
@@ -123,6 +138,12 @@ Each city needs:
 - `tz`: IANA timezone, for example `Europe/Istanbul` or `America/Toronto`
 
 Set `default_city` to one of the keys inside `cities`.
+
+Notification settings:
+
+- `notifications.enabled`: `true` or `false`
+- `notifications.offsets_minutes`: alert offsets before prayer; default is `[10, 5, 0]`
+  (`0` means "at prayer time")
 
 ### Calculation method
 

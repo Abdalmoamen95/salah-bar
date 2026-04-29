@@ -11,11 +11,16 @@ sys.dont_write_bytecode = True
 CONFIG_FILE = os.path.expanduser("~/.config/salah-bar/config.json")
 STATE_FILE = os.path.expanduser("~/.prayertimes_city")
 PRESET_CITIES_FILE = os.path.join(os.path.dirname(os.path.dirname(__file__)), "preset-cities.json")
+NOTIFY_STATE_FILE = os.path.expanduser("~/Library/Caches/prayertimes/notify_state.json")
 
 DEFAULT_CONFIG = {
     "default_city": "izmir",
     "method": 13,
     "school": 0,
+    "notifications": {
+        "enabled": True,
+        "offsets_minutes": [10, 5, 0],
+    },
     "cities": {
         "izmir": {
             "label": "Izmir",
@@ -48,6 +53,19 @@ def normalize_config(raw):
         config["method"] = raw["method"]
     if raw.get("school") in (0, 1):
         config["school"] = raw["school"]
+
+    notifications = raw.get("notifications")
+    if isinstance(notifications, dict):
+        if isinstance(notifications.get("enabled"), bool):
+            config["notifications"]["enabled"] = notifications["enabled"]
+        offsets = notifications.get("offsets_minutes")
+        if isinstance(offsets, list):
+            valid_offsets = []
+            for value in offsets:
+                if isinstance(value, int) and value >= 0:
+                    valid_offsets.append(value)
+            if valid_offsets:
+                config["notifications"]["offsets_minutes"] = sorted(set(valid_offsets), reverse=True)
 
     cities = raw.get("cities")
     if isinstance(cities, dict):
@@ -253,10 +271,50 @@ def open_config():
 
 def choose_action():
     return choose_from_list(
-        ["Choose default city", "Add preset city", "Add custom city", "Open config file"],
+        [
+            "Choose default city",
+            "Add preset city",
+            "Add custom city",
+            "Toggle notifications",
+            "Reset to defaults",
+            "Open config file",
+        ],
         "What would you like to configure?",
         "Choose default city",
     )
+
+
+def toggle_notifications():
+    config = load_config()
+    enabled = config["notifications"]["enabled"]
+    config["notifications"]["enabled"] = not enabled
+    save_config(config)
+    state_text = "enabled" if config["notifications"]["enabled"] else "disabled"
+    run_osascript([
+        f'display notification "Notifications {state_text}" with title "salah-bar"'
+    ])
+
+
+def reset_to_defaults():
+    confirmed = ask_yes_no(
+        "This will reset cities, default city, method, school, and notifications. Continue?",
+        yes_label="Reset",
+        no_label="Cancel",
+    )
+    if not confirmed:
+        return
+
+    config = json.loads(json.dumps(DEFAULT_CONFIG))
+    save_config(config)
+    with open(STATE_FILE, "w") as f:
+        f.write(config["default_city"])
+    try:
+        os.remove(NOTIFY_STATE_FILE)
+    except FileNotFoundError:
+        pass
+    run_osascript([
+        'display notification "Configuration reset to defaults" with title "salah-bar"'
+    ])
 
 
 def main():
@@ -268,6 +326,10 @@ def main():
             add_custom_city()
         elif action == "choose-default":
             choose_default_city()
+        elif action == "toggle-notifications":
+            toggle_notifications()
+        elif action == "reset-defaults":
+            reset_to_defaults()
         elif action == "open-config":
             open_config()
         else:
@@ -278,6 +340,10 @@ def main():
                 add_preset_city()
             elif picked == "Add custom city":
                 add_custom_city()
+            elif picked == "Toggle notifications":
+                toggle_notifications()
+            elif picked == "Reset to defaults":
+                reset_to_defaults()
             else:
                 open_config()
     except RuntimeError:

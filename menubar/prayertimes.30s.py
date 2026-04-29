@@ -18,6 +18,10 @@ DEFAULT_CONFIG = {
     "default_city": "izmir",
     "method": 13,
     "school": 0,
+    "notifications": {
+        "enabled": True,
+        "offsets_minutes": [10, 5, 0],
+    },
     "cities": {
         "izmir": {
             "label": "İzmir",
@@ -44,7 +48,9 @@ STATE_FILE = os.path.expanduser("~/.prayertimes_city")
 CACHE_DIR  = os.path.expanduser("~/Library/Caches/prayertimes")
 CONFIG_FILE = os.path.expanduser("~/.config/salah-bar/config.json")
 CONFIG_TOOL = os.path.join(os.path.dirname(os.path.dirname(__file__)), "support", "configure.py")
+NOTIFY_STATE_FILE = os.path.join(CACHE_DIR, "notify_state.json")
 os.makedirs(CACHE_DIR, exist_ok=True)
+PYCACHE_DIR = os.path.join(os.path.dirname(__file__), "__pycache__")
 
 PRAYERS = [
     ("Fajr",    "الفجر"),
@@ -67,6 +73,19 @@ def load_config():
         config["method"] = raw["method"]
     if raw.get("school") in (0, 1):
         config["school"] = raw["school"]
+
+    notifications = raw.get("notifications")
+    if isinstance(notifications, dict):
+        if isinstance(notifications.get("enabled"), bool):
+            config["notifications"]["enabled"] = notifications["enabled"]
+        offsets = notifications.get("offsets_minutes")
+        if isinstance(offsets, list):
+            valid_offsets = []
+            for value in offsets:
+                if isinstance(value, int) and value >= 0:
+                    valid_offsets.append(value)
+            if valid_offsets:
+                config["notifications"]["offsets_minutes"] = sorted(set(valid_offsets), reverse=True)
 
     cities = raw.get("cities")
     if isinstance(cities, dict):
@@ -150,7 +169,85 @@ def fmt_countdown(delta):
     return f"{h:02d}:{m:02d}:{s:02d}"
 
 
+def load_notify_state():
+    try:
+        with open(NOTIFY_STATE_FILE) as f:
+            raw = json.load(f)
+        notified = raw.get("notified", [])
+        if isinstance(notified, list):
+            return {"notified": set(str(v) for v in notified)}
+    except Exception:
+        pass
+    return {"notified": set()}
+
+
+def save_notify_state(state):
+    payload = {"notified": sorted(state["notified"])}
+    with open(NOTIFY_STATE_FILE, "w") as f:
+        json.dump(payload, f)
+
+
+def notify(text):
+    safe_text = text.replace('"', '\\"')
+    subprocess.run(
+        ["osascript", "-e", f'display notification "{safe_text}" with title "salah-bar"'],
+        check=False,
+        capture_output=True,
+        text=True,
+    )
+
+
+def cleanup_plugin_artifacts():
+    # SwiftBar may pick up compiled .pyc files under menubar/ as separate plugins.
+    try:
+        if os.path.isdir(PYCACHE_DIR):
+            for name in os.listdir(PYCACHE_DIR):
+                path = os.path.join(PYCACHE_DIR, name)
+                try:
+                    os.remove(path)
+                except Exception:
+                    pass
+            try:
+                os.rmdir(PYCACHE_DIR)
+            except Exception:
+                pass
+    except Exception:
+        pass
+
+
+def maybe_notify(config, city_label, next_prayer, now):
+    notifications = config.get("notifications", {})
+    if not notifications.get("enabled", True):
+        return
+
+    offsets = notifications.get("offsets_minutes", [10, 5, 0])
+    if not offsets:
+        return
+
+    remaining = (next_prayer[2] - now).total_seconds()
+    if remaining < 0:
+        return
+
+    state = load_notify_state()
+    prayer_time = next_prayer[2].strftime("%Y-%m-%dT%H:%M")
+    for offset in sorted(set(offsets), reverse=True):
+        trigger = offset * 60
+        if trigger - 30 <= remaining <= trigger:
+            key = f"{city_label}:{next_prayer[0]}:{prayer_time}:{offset}"
+            if key in state["notified"]:
+                continue
+            if offset == 0:
+                text = f"{next_prayer[0]} time in {city_label}"
+            else:
+                text = f"{next_prayer[0]} in {offset} min ({city_label})"
+            notify(text)
+            state["notified"].add(key)
+            save_notify_state(state)
+
+
 def main():
+    cleanup_plugin_artifacts()
+
     # Allow CLI args from SwiftBar to cycle/set city.
     if len(sys.argv) > 1 and sys.argv[1] == "set" and len(sys.argv) > 2:
         save_city(sys.argv[2])
@@ -182,6 +279,7 @@ def main():
 
     countdown = fmt_countdown(next_p[2] - now)
     label = config["cities"][city]["label"]
+    maybe_notify(config, label, next_p, now)
 
     # Menu bar line — first line shown
     print(f"🕌 {next_p[0]} {countdown[:5]}")
@@ -216,6 +314,14 @@ def main():
     )
     print(
         f"--Add custom city | bash='{py}' param1='{script}' param2=configure param3=add-custom-city terminal=false refresh=true"
+    )
+    notify_enabled = config.get("notifications", {}).get("enabled", True)
+    notify_marker = " ✓" if notify_enabled else ""
+    print(
+        f"--Toggle notifications{notify_marker} | bash='{py}' param1='{script}' param2=configure param3=toggle-notifications terminal=false refresh=true"
+    )
+    print(
+        f"--Reset to defaults | bash='{py}' param1='{script}' param2=configure param3=reset-defaults terminal=false refresh=true"
     )
     print(
         f"--Open config file | bash='{py}' param1='{script}' param2=configure param3=open-config terminal=false refresh=false"

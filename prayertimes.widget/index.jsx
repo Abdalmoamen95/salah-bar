@@ -213,6 +213,19 @@ export const className = `
     padding: 12px 14px;
     margin-bottom: 14px;
   }
+  .next-block.five-min-alert {
+    border-color: rgba(74, 222, 128, 0.9);
+    box-shadow: 0 0 0 1px rgba(74, 222, 128, 0.35), 0 0 18px rgba(74, 222, 128, 0.25);
+    animation: pulse-green 1s ease-in-out infinite;
+  }
+  @keyframes pulse-green {
+    0%, 100% {
+      background: linear-gradient(135deg, rgba(74, 222, 128, 0.16), rgba(74, 222, 128, 0.06));
+    }
+    50% {
+      background: linear-gradient(135deg, rgba(74, 222, 128, 0.32), rgba(74, 222, 128, 0.12));
+    }
+  }
   .next-label {
     font-size: 10px;
     text-transform: uppercase;
@@ -234,6 +247,14 @@ export const className = `
     margin-top: 6px;
     color: #7dd3fc;
     letter-spacing: 0.5px;
+  }
+  .ayah {
+    margin-bottom: 8px;
+    text-align: center;
+    font-size: 21px;
+    line-height: 1.6;
+    font-family: "SF Arabic", "Geeza Pro", sans-serif;
+    color: #e2f3ff;
   }
 
   .prayers { display: flex; flex-direction: column; gap: 6px; }
@@ -272,6 +293,12 @@ const PRAYERS = [
   { key: "Maghrib", en: "Maghrib", ar: "المغرب"  },
   { key: "Isha",    en: "Isha",    ar: "العشاء"  }
 ];
+
+const PRAYER_AYAH = "وَعَجِلْتُ إِلَيْكَ رَبِّ لِتَرْضَىٰ";
+const AYAH_WINDOW_MS = 2 * 60 * 1000;
+const FORCE_AYAH_TEST = true;
+const FIVE_MIN_MS = 5 * 60 * 1000;
+const FORCE_FIVE_MIN_ALERT_TEST = false;
 
 // Build a Date object for today at HH:MM in the given IANA timezone.
 const buildPrayerDate = (hhmm, tz) => {
@@ -490,10 +517,16 @@ const computeView = (city, output) => {
     next = { ...schedule[0], date: new Date(schedule[0].date.getTime() + 24*3600*1000) };
   }
 
+  const currentPrayer = schedule.find(p => {
+    const diff = now - p.date;
+    return diff >= 0 && diff < AYAH_WINDOW_MS;
+  }) || null;
+  const showAyah = FORCE_AYAH_TEST || !!currentPrayer;
+
   const countdownMs = next.date - now;
   const hijriLabel = hijri ? `${hijri.day} ${hijri.month.en} ${hijri.year} AH` : "";
 
-  return { cityLabel, hijriLabel, schedule, next, countdownMs };
+  return { cityLabel, hijriLabel, schedule, next, countdownMs, currentPrayer, showAyah };
 };
 
 // Imperatively update the widget's DOM from current localStorage city + cached output.
@@ -512,6 +545,12 @@ const rebuildWidget = () => {
   const setText = (sel, text) => { const el = root.querySelector(sel); if (el) el.textContent = text; };
   setText(".city", v.cityLabel + " ⇄");
   setText(".date", v.hijriLabel);
+  setText(".next-label", "Next Prayer");
+  const nextBlock = root.querySelector(".next-block");
+  const ayah = root.querySelector(".ayah");
+  const fiveMinAlert = FORCE_FIVE_MIN_ALERT_TEST || (v.countdownMs > 0 && v.countdownMs <= FIVE_MIN_MS);
+  if (nextBlock) nextBlock.classList.toggle("five-min-alert", fiveMinAlert);
+  if (ayah) ayah.style.display = v.showAyah ? "block" : "none";
   setText(".next-name-en", v.next.en);
   setText(".next-name-ar", v.next.ar);
   setText(".next-countdown", fmtCountdown(v.countdownMs));
@@ -520,9 +559,11 @@ const rebuildWidget = () => {
   v.schedule.forEach((p, i) => {
     const row = rows[i];
     if (!row) return;
-    const isNext = p.key === v.next.key && v.next.date.getTime() === p.date.getTime();
-    const passed = p.date < new Date() && !isNext;
-    row.className = `row ${isNext ? "active" : ""} ${passed ? "passed" : ""}`.trim();
+    const isActive = v.showAyah
+      ? !!v.currentPrayer && p.key === v.currentPrayer.key && v.currentPrayer.date.getTime() === p.date.getTime()
+      : p.key === v.next.key && v.next.date.getTime() === p.date.getTime();
+    const passed = p.date < new Date() && !isActive;
+    row.className = `row ${isActive ? "active" : ""} ${passed ? "passed" : ""}`.trim();
     const setInRow = (sel, text) => { const el = row.querySelector(sel); if (el) el.textContent = text; };
     setInRow(".name-en", p.en);
     setInRow(".name-ar", p.ar);
@@ -552,8 +593,9 @@ export const render = ({ output, error }) => {
   if (!v) {
     return <div data-prayer-widget style={posStyle}><div className="error">Loading prayer times…</div></div>;
   }
-  const { cityLabel, hijriLabel, schedule, next, countdownMs } = v;
+  const { cityLabel, hijriLabel, schedule, next, countdownMs, currentPrayer, showAyah } = v;
   const now = new Date();
+  const fiveMinAlert = FORCE_FIVE_MIN_ALERT_TEST || (countdownMs > 0 && countdownMs <= FIVE_MIN_MS);
 
   const collapsed = loadCollapsed();
 
@@ -569,21 +611,26 @@ export const render = ({ output, error }) => {
         </div>
       </div>
 
-      <div className="next-block">
+      <div className={`next-block ${fiveMinAlert ? "five-min-alert" : ""}`.trim()}>
+        <div className="ayah" style={{ display: showAyah ? "block" : "none" }}>{PRAYER_AYAH}</div>
         <div className="next-label">Next Prayer</div>
-        <div className="next-name">
-          <span className="next-name-en">{next.en}</span>
-          <span className="next-name-ar">{next.ar}</span>
+        <div className="next-info">
+          <div className="next-name">
+            <span className="next-name-en">{next.en}</span>
+            <span className="next-name-ar">{next.ar}</span>
+          </div>
+          <div className="next-countdown">{fmtCountdown(countdownMs)}</div>
         </div>
-        <div className="next-countdown">{fmtCountdown(countdownMs)}</div>
       </div>
 
       <div className="prayers">
         {schedule.map(p => {
-          const isNext = p.key === next.key && next.date.getTime() === p.date.getTime();
-          const passed = p.date < now && !isNext;
+          const isActive = showAyah
+            ? !!currentPrayer && p.key === currentPrayer.key && currentPrayer.date.getTime() === p.date.getTime()
+            : p.key === next.key && next.date.getTime() === p.date.getTime();
+          const passed = p.date < now && !isActive;
           return (
-            <div key={p.key} className={`row ${isNext ? "active" : ""} ${passed ? "passed" : ""}`}>
+            <div key={p.key} className={`row ${isActive ? "active" : ""} ${passed ? "passed" : ""}`}>
               <span className="name-en">{p.en}</span>
               <span className="name-ar">{p.ar}</span>
               <span className="time">{p.timeStr}</span>
