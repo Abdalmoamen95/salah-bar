@@ -10,6 +10,10 @@ const DEFAULT_CONFIG = {
   default_city: "izmir",
   method: 13,
   school: 0,
+  flash_warning: {
+    enabled: true,
+    minutes: 5
+  },
   cities: {
     izmir: { label: "İzmir", lat: 38.4192, lon: 27.1287, tz: "Europe/Istanbul" },
     doha: { label: "Doha", lat: 25.2854, lon: 51.5310, tz: "Asia/Qatar" },
@@ -23,6 +27,15 @@ const normalizeConfig = (raw) => {
 
   if (Number.isInteger(raw.method)) config.method = raw.method;
   if (raw.school === 0 || raw.school === 1) config.school = raw.school;
+
+  if (raw.flash_warning && typeof raw.flash_warning === "object") {
+    if (typeof raw.flash_warning.enabled === "boolean") {
+      config.flash_warning.enabled = raw.flash_warning.enabled;
+    }
+    if (Number.isInteger(raw.flash_warning.minutes) && raw.flash_warning.minutes > 0) {
+      config.flash_warning.minutes = raw.flash_warning.minutes;
+    }
+  }
 
   if (raw.cities && typeof raw.cities === "object") {
     const normalized = Object.entries(raw.cities).reduce((acc, [key, city]) => {
@@ -61,7 +74,9 @@ from datetime import datetime
 from zoneinfo import ZoneInfo
 
 CONFIG_PATH = os.path.expanduser("~/.config/salah-bar/config.json")
+CACHE_DIR = os.path.expanduser("~/Library/Caches/prayertimes")
 DEFAULT_CONFIG = json.loads(${DEFAULT_CONFIG_JSON})
+os.makedirs(CACHE_DIR, exist_ok=True)
 
 def normalize_config(raw):
   config = json.loads(json.dumps(DEFAULT_CONFIG))
@@ -72,6 +87,14 @@ def normalize_config(raw):
     config["method"] = raw["method"]
   if raw.get("school") in (0, 1):
     config["school"] = raw["school"]
+
+  flash_warning = raw.get("flash_warning")
+  if isinstance(flash_warning, dict):
+    if isinstance(flash_warning.get("enabled"), bool):
+      config["flash_warning"]["enabled"] = flash_warning["enabled"]
+    minutes = flash_warning.get("minutes")
+    if isinstance(minutes, int) and minutes > 0:
+      config["flash_warning"]["minutes"] = minutes
 
   cities = raw.get("cities")
   if isinstance(cities, dict):
@@ -105,19 +128,25 @@ except Exception:
 timings = {}
 for key, city in config["cities"].items():
   date_str = datetime.now(ZoneInfo(city["tz"])).strftime("%d-%m-%Y")
-  url = (
-    f"https://api.aladhan.com/v1/timings/{date_str}"
-    f"?latitude={city['lat']}&longitude={city['lon']}"
-    f"&method={config['method']}&school={config['school']}"
-  )
-  with urllib.request.urlopen(url, timeout=10) as response:
-    timings[key] = json.load(response)
+  cache_file = os.path.join(CACHE_DIR, f"{key}_{date_str}.json")
+  if not os.path.exists(cache_file) or os.path.getsize(cache_file) < 100:
+    url = (
+      f"https://api.aladhan.com/v1/timings/{date_str}"
+      f"?latitude={city['lat']}&longitude={city['lon']}"
+      f"&method={config['method']}&school={config['school']}"
+    )
+    with urllib.request.urlopen(url, timeout=10) as response:
+      payload = response.read()
+    with open(cache_file, "wb") as f:
+      f.write(payload)
+  with open(cache_file) as f:
+    timings[key] = json.load(f)
 
 print(json.dumps({"config": config, "timings": timings}, ensure_ascii=False))
 PY
 `;
 
-export const refreshFrequency = 60 * 60 * 1000; // refetch API every hour
+export const refreshFrequency = 30 * 1000; // reload config every 30s; timings are cached per city/day
 
 export const initialState = { output: null, error: null };
 
@@ -139,9 +168,7 @@ export const className = `
   pointer-events: all;
   font-family: -apple-system, BlinkMacSystemFont, "SF Pro Display", sans-serif;
   color: rgba(255, 255, 255, 0.95);
-  background: rgba(20, 20, 25, 0.55);
-  -webkit-backdrop-filter: blur(28px) saturate(1.4);
-  backdrop-filter: blur(28px) saturate(1.4);
+  background: rgba(20, 20, 25, 0.88);
   border: 1px solid rgba(255, 255, 255, 0.08);
   border-radius: 18px;
   padding: 18px 20px;
@@ -297,8 +324,8 @@ const PRAYERS = [
 const PRAYER_AYAH = "وَعَجِلْتُ إِلَيْكَ رَبِّ لِتَرْضَىٰ";
 const AYAH_WINDOW_MS = 2 * 60 * 1000;
 const FORCE_AYAH_TEST = true;
-const FIVE_MIN_MS = 5 * 60 * 1000;
 const FORCE_FIVE_MIN_ALERT_TEST = false;
+const COUNTDOWN_TICK_MS = 1000;
 
 // Build a Date object for today at HH:MM in the given IANA timezone.
 const buildPrayerDate = (hhmm, tz) => {
@@ -335,6 +362,14 @@ const fmtCountdown = (ms) => {
   const s = total % 60;
   const pad = (n) => String(n).padStart(2, "0");
   return `${pad(h)}:${pad(m)}:${pad(s)}`;
+};
+
+const isFlashAlertActive = (countdownMs, output) => {
+  const cfg = getConfig(output);
+  const flash = cfg.flash_warning || { enabled: true, minutes: 5 };
+  if (!flash.enabled) return false;
+  const windowMs = flash.minutes * 60 * 1000;
+  return countdownMs > 0 && countdownMs <= windowMs;
 };
 
 const loadCity = () => {
@@ -392,12 +427,22 @@ const cycleCity = () => {
   rebuildWidget();
 };
 
-// Keep countdown reasonably live without hammering full widget repaint.
-// Rebuilding too frequently can cause visible flicker on some macOS setups.
-if (typeof window !== "undefined" && !window.__prayertimes_ticker) {
-  window.__prayertimes_ticker = setInterval(() => {
-    if (typeof rebuildWidget === "function") rebuildWidget();
-  }, 5000);
+// Update countdown every second without rebuilding the whole widget.
+if (typeof window !== "undefined") {
+  // Clear any legacy full-rebuild ticker from older widget versions.
+  if (window.__prayertimes_ticker) {
+    clearInterval(window.__prayertimes_ticker);
+    window.__prayertimes_ticker = null;
+  }
+
+  // Ensure exactly one countdown ticker is active after widget reloads.
+  if (window.__prayertimes_countdown_ticker) {
+    clearInterval(window.__prayertimes_countdown_ticker);
+  }
+  window.__prayertimes_countdown_ticker = setInterval(() => {
+    if (typeof document !== "undefined" && document.hidden) return;
+    if (typeof updateLiveCountdown === "function") updateLiveCountdown();
+  }, COUNTDOWN_TICK_MS);
 }
 
 // -------- DRAG-TO-MOVE -------------------------------------------------------
@@ -546,7 +591,7 @@ const rebuildWidget = () => {
   setText(".next-label", "Next Prayer");
   const nextBlock = root.querySelector(".next-block");
   const ayah = root.querySelector(".ayah");
-  const fiveMinAlert = FORCE_FIVE_MIN_ALERT_TEST || (v.countdownMs > 0 && v.countdownMs <= FIVE_MIN_MS);
+  const fiveMinAlert = FORCE_FIVE_MIN_ALERT_TEST || isFlashAlertActive(v.countdownMs, out);
   if (nextBlock) nextBlock.classList.toggle("five-min-alert", fiveMinAlert);
   if (ayah) ayah.style.display = v.showAyah ? "block" : "none";
   setText(".next-name-en", v.next.en);
@@ -567,6 +612,31 @@ const rebuildWidget = () => {
     setInRow(".name-ar", p.ar);
     setInRow(".time", p.timeStr);
   });
+};
+
+const updateLiveCountdown = () => {
+  const root = document.querySelector("[data-prayer-widget]");
+  const out = window.__prayertimes_output;
+  if (!root || !out) return;
+
+  const city = loadCity();
+  const v = computeView(city, out);
+  if (!v) return;
+
+  const currentPrayerSig = v.currentPrayer ? `${v.currentPrayer.key}:${v.currentPrayer.date.getTime()}` : "-";
+  const viewSig = `${city}|${v.next.key}:${v.next.date.getTime()}|${currentPrayerSig}|${v.showAyah ? 1 : 0}`;
+  if (window.__prayertimes_view_sig !== viewSig) {
+    window.__prayertimes_view_sig = viewSig;
+    rebuildWidget();
+    return;
+  }
+
+  const countdownEl = root.querySelector(".next-countdown");
+  if (countdownEl) countdownEl.textContent = fmtCountdown(v.countdownMs);
+
+  const nextBlock = root.querySelector(".next-block");
+  const fiveMinAlert = FORCE_FIVE_MIN_ALERT_TEST || isFlashAlertActive(v.countdownMs, out);
+  if (nextBlock) nextBlock.classList.toggle("five-min-alert", fiveMinAlert);
 };
 
 // -------- RENDER -------------------------------------------------------------
@@ -593,9 +663,15 @@ export const render = ({ output, error }) => {
   }
   const { cityLabel, hijriLabel, schedule, next, countdownMs, currentPrayer, showAyah } = v;
   const now = new Date();
-  const fiveMinAlert = FORCE_FIVE_MIN_ALERT_TEST || (countdownMs > 0 && countdownMs <= FIVE_MIN_MS);
+  const fiveMinAlert = FORCE_FIVE_MIN_ALERT_TEST || isFlashAlertActive(countdownMs, output);
+  const currentPrayerSig = currentPrayer ? `${currentPrayer.key}:${currentPrayer.date.getTime()}` : "-";
+  const viewSig = `${city}|${next.key}:${next.date.getTime()}|${currentPrayerSig}|${showAyah ? 1 : 0}`;
 
   const collapsed = loadCollapsed();
+
+  if (typeof window !== "undefined") {
+    window.__prayertimes_view_sig = viewSig;
+  }
 
   return (
     <div data-prayer-widget data-collapsed={collapsed ? "true" : "false"} style={posStyle}>

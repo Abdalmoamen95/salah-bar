@@ -17,6 +17,10 @@ DEFAULT_CONFIG = {
     "default_city": "izmir",
     "method": 13,
     "school": 0,
+    "flash_warning": {
+        "enabled": True,
+        "minutes": 5,
+    },
     "notifications": {
         "enabled": True,
         "offsets_minutes": [10, 5, 0],
@@ -53,6 +57,14 @@ def normalize_config(raw):
         config["method"] = raw["method"]
     if raw.get("school") in (0, 1):
         config["school"] = raw["school"]
+
+    flash_warning = raw.get("flash_warning")
+    if isinstance(flash_warning, dict):
+        if isinstance(flash_warning.get("enabled"), bool):
+            config["flash_warning"]["enabled"] = flash_warning["enabled"]
+        minutes = flash_warning.get("minutes")
+        if isinstance(minutes, int) and minutes > 0:
+            config["flash_warning"]["minutes"] = minutes
 
     notifications = raw.get("notifications")
     if isinstance(notifications, dict):
@@ -276,6 +288,8 @@ def choose_action():
             "Add preset city",
             "Add custom city",
             "Toggle notifications",
+            "Toggle green flash",
+            "Set green flash window",
             "Reset to defaults",
             "Open config file",
         ],
@@ -293,6 +307,37 @@ def toggle_notifications():
     run_osascript([
         f'display notification "Notifications {state_text}" with title "salah-bar"'
     ])
+
+
+def toggle_flash_warning():
+    config = load_config()
+    enabled = config.get("flash_warning", {}).get("enabled", True)
+    config.setdefault("flash_warning", {"enabled": True, "minutes": 5})
+    config["flash_warning"]["enabled"] = not enabled
+    save_config(config)
+    state_text = "enabled" if config["flash_warning"]["enabled"] else "disabled"
+    run_osascript([
+        f'display notification "Green flash {state_text}" with title "salah-bar"'
+    ])
+
+
+def set_flash_minutes(minutes):
+    if not isinstance(minutes, int) or minutes <= 0:
+        raise RuntimeError("Flash window must be a positive integer")
+    config = load_config()
+    config.setdefault("flash_warning", {"enabled": True, "minutes": 5})
+    config["flash_warning"]["minutes"] = minutes
+    save_config(config)
+    run_osascript([
+        f'display notification "Green flash window set to {minutes} min" with title "salah-bar"'
+    ])
+
+
+def choose_flash_minutes():
+    config = load_config()
+    current = str(config.get("flash_warning", {}).get("minutes", 5))
+    picked = choose_from_list(["1", "3", "5", "10", "15"], "Set green flash warning window (minutes)", current)
+    set_flash_minutes(int(picked))
 
 
 def reset_to_defaults():
@@ -328,6 +373,11 @@ def main():
             choose_default_city()
         elif action == "toggle-notifications":
             toggle_notifications()
+        elif action == "toggle-flash-warning":
+            toggle_flash_warning()
+        elif action and action.startswith("set-flash-minutes-"):
+            minutes_text = action.replace("set-flash-minutes-", "", 1)
+            set_flash_minutes(int(minutes_text))
         elif action == "reset-defaults":
             reset_to_defaults()
         elif action == "open-config":
@@ -342,6 +392,10 @@ def main():
                 add_custom_city()
             elif picked == "Toggle notifications":
                 toggle_notifications()
+            elif picked == "Toggle green flash":
+                toggle_flash_warning()
+            elif picked == "Set green flash window":
+                choose_flash_minutes()
             elif picked == "Reset to defaults":
                 reset_to_defaults()
             else:

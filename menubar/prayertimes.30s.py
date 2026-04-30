@@ -18,6 +18,10 @@ DEFAULT_CONFIG = {
     "default_city": "izmir",
     "method": 13,
     "school": 0,
+    "flash_warning": {
+        "enabled": True,
+        "minutes": 5,
+    },
     "notifications": {
         "enabled": True,
         "offsets_minutes": [10, 5, 0],
@@ -73,6 +77,14 @@ def load_config():
         config["method"] = raw["method"]
     if raw.get("school") in (0, 1):
         config["school"] = raw["school"]
+
+    flash_warning = raw.get("flash_warning")
+    if isinstance(flash_warning, dict):
+        if isinstance(flash_warning.get("enabled"), bool):
+            config["flash_warning"]["enabled"] = flash_warning["enabled"]
+        minutes = flash_warning.get("minutes")
+        if isinstance(minutes, int) and minutes > 0:
+            config["flash_warning"]["minutes"] = minutes
 
     notifications = raw.get("notifications")
     if isinstance(notifications, dict):
@@ -288,9 +300,12 @@ def main():
     remaining_s = max(0, int((next_p[2] - now).total_seconds()))
     label = config["cities"][city]["label"]
     maybe_notify(config, label, next_p, now)
+    flash_warning = config.get("flash_warning", {})
+    flash_enabled = flash_warning.get("enabled", True)
+    flash_minutes = flash_warning.get("minutes", 5)
 
     # Menu bar line — first line shown
-    if 0 < remaining_s <= 5 * 60:
+    if flash_enabled and 0 < remaining_s <= flash_minutes * 60:
         # Flash effect: color toggles every plugin refresh (30s).
         flash_on = (remaining_s // 30) % 2 == 0
         if flash_on:
@@ -336,6 +351,16 @@ def main():
     print(
         f"--Toggle notifications{notify_marker} | bash='{py}' param1='{script}' param2=configure param3=toggle-notifications terminal=false refresh=true"
     )
+    flash_marker = " ✓" if flash_enabled else ""
+    print(
+        f"--Toggle green flash{flash_marker} | bash='{py}' param1='{script}' param2=configure param3=toggle-flash-warning terminal=false refresh=true"
+    )
+    print(f"--Green flash window ({flash_minutes} min)")
+    for option in (1, 3, 5, 10, 15):
+        option_marker = " ✓" if flash_minutes == option else ""
+        print(
+            f"----{option} min{option_marker} | bash='{py}' param1='{script}' param2=configure param3=set-flash-minutes-{option} terminal=false refresh=true"
+        )
     print(
         f"--Reset to defaults | bash='{py}' param1='{script}' param2=configure param3=reset-defaults terminal=false refresh=true"
     )

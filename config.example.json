@@ -2,6 +2,10 @@
   "default_city": "izmir",
   "method": 13,
   "school": 0,
+  "flash_warning": {
+    "enabled": true,
+    "minutes": 5
+  },
   "notifications": {
     "enabled": true,
     "offsets_minutes": [10, 5, 0]
