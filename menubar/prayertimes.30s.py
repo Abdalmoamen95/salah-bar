@@ -14,10 +14,16 @@ import urllib.request
 from datetime import datetime, timedelta, timezone
 from zoneinfo import ZoneInfo
 
+PRAYER_NAMES = {
+    "en": ["Fajr", "Dhuhr", "Asr", "Maghrib", "Isha"],
+    "tr": ["Sabah", "Öğle", "İkindi", "Akşam", "Yatsı"],
+}
+
 DEFAULT_CONFIG = {
     "default_city": "izmir",
     "method": 13,
     "school": 0,
+    "language": "en",
     "flash_warning": {
         "enabled": True,
         "minutes": 5,
@@ -63,6 +69,7 @@ PRAYERS = [
     ("Maghrib", "المغرب"),
     ("Isha",    "العشاء"),
 ]
+PRAYER_KEYS = [p[0] for p in PRAYERS]
 
 
 def load_config():
@@ -77,6 +84,8 @@ def load_config():
         config["method"] = raw["method"]
     if raw.get("school") in (0, 1):
         config["school"] = raw["school"]
+    if raw.get("language") in PRAYER_NAMES:
+        config["language"] = raw["language"]
 
     flash_warning = raw.get("flash_warning")
     if isinstance(flash_warning, dict):
@@ -165,12 +174,13 @@ def parse_hhmm(t):
     return t.split(" ")[0]
 
 
-def build_schedule(timings, now, tzinfo):
+def build_schedule(timings, now, tzinfo, lang="en"):
+    names = PRAYER_NAMES.get(lang, PRAYER_NAMES["en"])
     out = []
-    for key, ar in PRAYERS:
+    for (key, ar), local_name in zip(PRAYERS, names):
         hh, mm = parse_hhmm(timings[key]).split(":")
         d = now.replace(hour=int(hh), minute=int(mm), second=0, microsecond=0)
-        out.append((key, ar, d))
+        out.append((key, local_name, ar, d))
     return out
 
 
@@ -236,12 +246,12 @@ def maybe_notify(config, city_label, next_prayer, now):
     if not offsets:
         return
 
-    remaining = (next_prayer[2] - now).total_seconds()
+    remaining = (next_prayer[3] - now).total_seconds()
     if remaining < 0:
         return
 
     state = load_notify_state()
-    prayer_time = next_prayer[2].strftime("%Y-%m-%dT%H:%M")
+    prayer_time = next_prayer[3].strftime("%Y-%m-%dT%H:%M")
     for offset in sorted(set(offsets), reverse=True):
         trigger = offset * 60
         # Plugin refreshes every 30s; include a forward window for 0-minute alerts
@@ -256,9 +266,9 @@ def maybe_notify(config, city_label, next_prayer, now):
             if key in state["notified"]:
                 continue
             if offset == 0:
-                text = f"{next_prayer[0]} time in {city_label}"
+                text = f"{next_prayer[1]} / {next_prayer[2]} time in {city_label}"
             else:
-                text = f"{next_prayer[0]} in {offset} min ({city_label})"
+                text = f"{next_prayer[1]} / {next_prayer[2]} in {offset} min ({city_label})"
             notify(text)
             state["notified"].add(key)
             save_notify_state(state)
@@ -287,44 +297,47 @@ def main():
         print(f"Prayer times error: {e}")
         return
 
-    schedule = build_schedule(timings, now, tzinfo)
-    upcoming = [s for s in schedule if s[2] > now]
+    lang = config.get("language", "en")
+    schedule = build_schedule(timings, now, tzinfo, lang)
+    upcoming = [s for s in schedule if s[3] > now]
     if upcoming:
         next_p = upcoming[0]
     else:
         # Tomorrow's Fajr (close enough until next refresh)
         first = schedule[0]
-        next_p = (first[0], first[1], first[2] + timedelta(days=1))
+        next_p = (first[0], first[1], first[2], first[3] + timedelta(days=1))
 
-    countdown = fmt_countdown(next_p[2] - now)
-    remaining_s = max(0, int((next_p[2] - now).total_seconds()))
+    countdown = fmt_countdown(next_p[3] - now)
+    remaining_s = max(0, int((next_p[3] - now).total_seconds()))
     label = config["cities"][city]["label"]
     maybe_notify(config, label, next_p, now)
+    lang = config.get("language", "en")
     flash_warning = config.get("flash_warning", {})
     flash_enabled = flash_warning.get("enabled", True)
     flash_minutes = flash_warning.get("minutes", 5)
 
     # Menu bar line — first line shown
+    next_display = f"{next_p[1]} / {next_p[2]}"
     if flash_enabled and 0 < remaining_s <= flash_minutes * 60:
         # Flash effect: color toggles every plugin refresh (30s).
         flash_on = (remaining_s // 30) % 2 == 0
         if flash_on:
-            print(f"🕌 {next_p[0]} {countdown[:5]} | color=#22c55e")
+            print(f"🕌 {next_p[1]} {countdown[:5]} | color=#22c55e")
         else:
-            print(f"🕌 {next_p[0]} {countdown[:5]}")
+            print(f"🕌 {next_p[1]} {countdown[:5]}")
     else:
-        print(f"🕌 {next_p[0]} {countdown[:5]}")
+        print(f"🕌 {next_p[1]} {countdown[:5]}")
 
     # Dropdown
     print("---")
     print(f"City: {label} | size=12")
-    print(f"Next: {next_p[0]} ({next_p[1]}) at {next_p[2].strftime('%H:%M')} | size=12")
+    print(f"Next: {next_display} at {next_p[3].strftime('%H:%M')} | size=12")
     print("---")
-    for key, ar, d in schedule:
-        marker = "→" if key == next_p[0] and d.date() == next_p[2].date() else " "
+    for key, local_name, ar, d in schedule:
+        marker = "→" if key == next_p[0] and d.date() == next_p[3].date() else " "
         passed = d < now
         opacity = " color=#888888" if passed and not (key == next_p[0]) else ""
-        print(f"{marker} {key}  {ar}  {d.strftime('%H:%M')} | font=Menlo size=13{opacity}")
+        print(f"{marker} {local_name} / {ar}  {d.strftime('%H:%M')} | font=Menlo size=13{opacity}")
     print("---")
     print("Switch city")
     script = os.path.realpath(__file__)
@@ -360,6 +373,14 @@ def main():
         option_marker = " ✓" if flash_minutes == option else ""
         print(
             f"----{option} min{option_marker} | bash='{py}' param1='{script}' param2=configure param3=set-flash-minutes-{option} terminal=false refresh=true"
+        )
+    lang = config.get("language", "en")
+    LANG_LABELS = {"en": "English", "tr": "Turkish"}
+    print(f"--Language ({LANG_LABELS.get(lang, lang)})")
+    for lang_key, lang_label in (("en", "English"), ("tr", "Turkish")):
+        lang_marker = " ✓" if lang == lang_key else ""
+        print(
+            f"----{lang_label}{lang_marker} | bash='{py}' param1='{script}' param2=configure param3=set-language-{lang_key} terminal=false refresh=true"
         )
     print(
         f"--Reset to defaults | bash='{py}' param1='{script}' param2=configure param3=reset-defaults terminal=false refresh=true"

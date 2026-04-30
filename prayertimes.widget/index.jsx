@@ -10,6 +10,7 @@ const DEFAULT_CONFIG = {
   default_city: "izmir",
   method: 13,
   school: 0,
+  language: "en",
   flash_warning: {
     enabled: true,
     minutes: 5
@@ -27,6 +28,7 @@ const normalizeConfig = (raw) => {
 
   if (Number.isInteger(raw.method)) config.method = raw.method;
   if (raw.school === 0 || raw.school === 1) config.school = raw.school;
+  if (raw.language && ["en", "tr"].includes(raw.language)) config.language = raw.language;
 
   if (raw.flash_warning && typeof raw.flash_warning === "object") {
     if (typeof raw.flash_warning.enabled === "boolean") {
@@ -87,6 +89,8 @@ def normalize_config(raw):
     config["method"] = raw["method"]
   if raw.get("school") in (0, 1):
     config["school"] = raw["school"]
+  if raw.get("language") in ("en", "tr"):
+    config["language"] = raw["language"]
 
   flash_warning = raw.get("flash_warning")
   if isinstance(flash_warning, dict):
@@ -230,7 +234,7 @@ export const className = `
   .city:hover { color: #7dd3fc; }
   .date {
     font-size: 11px;
-    opacity: 0.55;
+    opacity: 1;
   }
 
   .next-block {
@@ -304,21 +308,179 @@ export const className = `
     padding-top: 10px;
     border-top: 1px solid rgba(255, 255, 255, 0.06);
     display: flex;
-    justify-content: space-between;
+    flex-direction: column;
+    gap: 7px;
     font-size: 10px;
     opacity: 0.45;
+  }
+  .footer-meta { display: flex; justify-content: space-between; }
+  .footer-quote {
+    font-size: 13px;
+    line-height: 1.7;
+    opacity: 0.9;
+    text-align: center;
+    font-family: "SF Arabic", "Geeza Pro", sans-serif;
+    direction: rtl;
+  }
+  .footer-quote-en {
+    font-size: 10px;
+    line-height: 1.5;
+    opacity: 0.75;
+    text-align: center;
+    font-style: italic;
+    margin-top: 3px;
+  }
+  .footer-quote-ref {
+    font-size: 9.5px;
+    text-align: center;
+    opacity: 0.55;
+    margin-top: 2px;
   }
 
   .error { color: #fca5a5; font-size: 11px; padding: 8px 0; }
 `;
 
 // -------- HELPERS ------------------------------------------------------------
+const PRAYER_NAMES = {
+  en: ["Fajr",  "Dhuhr",  "Asr",     "Maghrib", "Isha"],
+  tr: ["Sabah", "Öğle",   "İkindi",  "Akşam",   "Yatsı"],
+};
+
+// Returns a moon-phase emoji for a Hijri day (1-30).
+const moonEmoji = (day) => {
+  if (day <= 1)  return "🌑"; // new moon
+  if (day <= 3)  return "🌒";
+  if (day <= 6)  return "🌓";
+  if (day <= 9)  return "🌔"; // first quarter
+  if (day <= 12) return "🌕";
+  if (day <= 14) return "🌕"; // full moon
+  if (day <= 17) return "🌖";
+  if (day <= 20) return "🌗"; // last quarter
+  if (day <= 24) return "🌘";
+  return "🌑"; // waning to new
+};
+
+const UI_STRINGS = {
+  en: {
+    nextPrayer: "Next Prayer",
+    ah: "AH",
+    hanafi: "Hanafi",
+    shafii: "Shafi'i",
+  },
+  tr: {
+    nextPrayer: "Sonraki Namaz",
+    ah: "H",
+    hanafi: "Hanefi",
+    shafii: "Şafii",
+  },
+};
+
+const FOOTER_QUOTES = [
+  {
+    ar: "إِنَّ الصَّلَاةَ كَانَتْ عَلَى الْمُؤْمِنِينَ كِتَابًا مَّوْقُوتًا",
+    en: "Indeed, prayer has been decreed upon the believers a decree of specified times.",
+    ref: "Quran 4:103",
+  },
+  {
+    ar: "وَاسْتَعِينُوا بِالصَّبْرِ وَالصَّلَاةِ ۚ وَإِنَّهَا لَكَبِيرَةٌ إِلَّا عَلَى الْخَاشِعِينَ",
+    en: "Seek help through patience and prayer; it is difficult except for the humbly submissive.",
+    ref: "Quran 2:45",
+  },
+  {
+    ar: "إِنَّ الصَّلَاةَ تَنْهَىٰ عَنِ الْفَحْشَاءِ وَالْمُنكَرِ",
+    en: "Indeed, prayer prohibits immorality and wrongdoing.",
+    ref: "Quran 29:45",
+  },
+  {
+    ar: "وَهُوَ مَعَكُمْ أَيْنَ مَا كُنتُمْ ۚ وَاللَّهُ بِمَا تَعْمَلُونَ بَصِيرٌ",
+    en: "He is with you wherever you are, and Allah of what you do is Seeing.",
+    ref: "Quran 57:4",
+  },
+  {
+    ar: "لَا يُكَلِّفُ اللَّهُ نَفْسًا إِلَّا وُسْعَهَا",
+    en: "Allah does not burden a soul beyond that it can bear.",
+    ref: "Quran 2:286",
+  },
+  {
+    ar: "وَمَن يَتَوَكَّلْ عَلَى اللَّهِ فَهُوَ حَسْبُهُ",
+    en: "Whoever relies upon Allah — then He is sufficient for him.",
+    ref: "Quran 65:3",
+  },
+  {
+    ar: "فَاذْكُرُونِي أَذْكُرْكُمْ وَاشْكُرُوا لِي وَلَا تَكْفُرُونِ",
+    en: "Remember Me; I will remember you. Be grateful to Me and do not deny Me.",
+    ref: "Quran 2:152",
+  },
+  {
+    ar: "إِنَّ مَعَ الْعُسْرِ يُسْرًا",
+    en: "Verily, with hardship comes ease.",
+    ref: "Quran 94:6",
+  },
+  {
+    ar: "وَلَذِكْرُ اللَّهِ أَكْبَرُ",
+    en: "And the remembrance of Allah is greater.",
+    ref: "Quran 29:45",
+  },
+  {
+    ar: "أَحَبُّ الْأَعْمَالِ إِلَى اللَّهِ أَدْوَمُهَا وَإِنْ قَلَّ",
+    en: "The most beloved deeds to Allah are those done consistently, even if small.",
+    ref: "Sahih Bukhari & Muslim",
+  },
+  {
+    ar: "لَا يُؤْمِنُ أَحَدُكُمْ حَتَّىٰ يُحِبَّ لِأَخِيهِ مَا يُحِبُّ لِنَفْسِهِ",
+    en: "None of you truly believes until he loves for his brother what he loves for himself.",
+    ref: "Sahih Bukhari & Muslim",
+  },
+  {
+    ar: "الْكَلِمَةُ الطَّيِّبَةُ صَدَقَةٌ",
+    en: "A kind word is a form of charity.",
+    ref: "Sahih Bukhari",
+  },
+  {
+    ar: "لَيْسَ الشَّدِيدُ بِالصُّرَعَةِ ۖ إِنَّمَا الشَّدِيدُ الَّذِي يَمْلِكُ نَفْسَهُ عِنْدَ الْغَضَبِ",
+    en: "The strong person is not the wrestler; it is the one who controls himself when angry.",
+    ref: "Sahih Bukhari & Muslim",
+  },
+  {
+    ar: "يَسِّرُوا وَلَا تُعَسِّرُوا، وَبَشِّرُوا وَلَا تُنَفِّرُوا",
+    en: "Make things easy, do not make them difficult. Give glad tidings and do not drive people away.",
+    ref: "Sahih Bukhari & Muslim",
+  },
+  {
+    ar: "مَنْ كَانَ يُؤْمِنُ بِاللَّهِ وَالْيَوْمِ الْآخِرِ فَلْيَقُلْ خَيْرًا أَوْ لِيَصْمُتْ",
+    en: "Whoever believes in Allah and the Last Day, let him speak good or remain silent.",
+    ref: "Sahih Bukhari & Muslim",
+  },
+  {
+    ar: "الدُّنْيَا سِجْنُ الْمُؤْمِنِ وَجَنَّةُ الْكَافِرِ",
+    en: "The world is a prison for the believer and a paradise for the disbeliever.",
+    ref: "Sahih Muslim",
+  },
+  {
+    ar: "إِنَّ اللَّهَ جَمِيلٌ يُحِبُّ الْجَمَالَ",
+    en: "Allah is beautiful and He loves beauty.",
+    ref: "Sahih Muslim",
+  },
+  {
+    ar: "الطَّهُورُ شَطْرُ الْإِيمَانِ",
+    en: "Purity is half of faith.",
+    ref: "Sahih Muslim",
+  },
+];
+
+// Pick a quote based on 30-min slots so it changes every 30 minutes.
+const currentQuote = () => {
+  const now = new Date();
+  const slot = Math.floor((now.getHours() * 60 + now.getMinutes()) / 30);
+  return FOOTER_QUOTES[slot % FOOTER_QUOTES.length];
+};
+
 const PRAYERS = [
-  { key: "Fajr",    en: "Fajr",    ar: "الفجر"   },
-  { key: "Dhuhr",   en: "Dhuhr",   ar: "الظهر"   },
-  { key: "Asr",     en: "Asr",     ar: "العصر"   },
-  { key: "Maghrib", en: "Maghrib", ar: "المغرب"  },
-  { key: "Isha",    en: "Isha",    ar: "العشاء"  }
+  { key: "Fajr",    ar: "الفجر"   },
+  { key: "Dhuhr",   ar: "الظهر"   },
+  { key: "Asr",     ar: "العصر"   },
+  { key: "Maghrib", ar: "المغرب"  },
+  { key: "Isha",    ar: "العشاء"  }
 ];
 
 const PRAYER_AYAH = "وَعَجِلْتُ إِلَيْكَ رَبِّ لِتَرْضَىٰ";
@@ -549,8 +711,12 @@ const computeView = (city, output) => {
   const cityLabel = cityConfig.label;
 
   const now = new Date();
-  const schedule = PRAYERS.map(p => ({
+  const lang = config.language || "en";
+  const ui = UI_STRINGS[lang] || UI_STRINGS.en;
+  const names = PRAYER_NAMES[lang] || PRAYER_NAMES.en;
+  const schedule = PRAYERS.map((p, i) => ({
     ...p,
+    localName: names[i],
     timeStr: cleanTime(timings[p.key]),
     date: buildPrayerDate(cleanTime(timings[p.key]), tz)
   }));
@@ -567,9 +733,11 @@ const computeView = (city, output) => {
   const showAyah = FORCE_AYAH_TEST || !!currentPrayer;
 
   const countdownMs = next.date - now;
-  const hijriLabel = hijri ? `${hijri.day} ${hijri.month.en} ${hijri.year} AH` : "";
+  const hijriDay = hijri ? parseInt(hijri.day, 10) : 0;
+  const moonPhase = moonEmoji(hijriDay);
+  const hijriLabel = hijri ? `${moonPhase} ${hijri.day} ${hijri.month.en} ${hijri.year} ${ui.ah}` : "";
 
-  return { cityLabel, hijriLabel, schedule, next, countdownMs, currentPrayer, showAyah };
+  return { cityLabel, hijriLabel, schedule, next, countdownMs, currentPrayer, showAyah, ui };
 };
 
 // Imperatively update the widget's DOM from current localStorage city + cached output.
@@ -588,14 +756,14 @@ const rebuildWidget = () => {
   const setText = (sel, text) => { const el = root.querySelector(sel); if (el) el.textContent = text; };
   setText(".city", v.cityLabel + " ⇄");
   setText(".date", v.hijriLabel);
-  setText(".next-label", "Next Prayer");
+  setText(".next-label", v.ui.nextPrayer);
   const nextBlock = root.querySelector(".next-block");
   const ayah = root.querySelector(".ayah");
   const fiveMinAlert = FORCE_FIVE_MIN_ALERT_TEST || isFlashAlertActive(v.countdownMs, out);
   if (nextBlock) nextBlock.classList.toggle("five-min-alert", fiveMinAlert);
   if (ayah) ayah.style.display = v.showAyah ? "block" : "none";
-  setText(".next-name-en", v.next.en);
-  setText(".next-name-ar", v.next.ar);
+  setText(".next-name-en", `${v.next.localName} / ${v.next.ar}`);
+  setText(".next-name-ar", "");
   setText(".next-countdown", fmtCountdown(v.countdownMs));
 
   const rows = root.querySelectorAll(".prayers .row");
@@ -608,10 +776,23 @@ const rebuildWidget = () => {
     const passed = p.date < new Date() && !isActive;
     row.className = `row ${isActive ? "active" : ""} ${passed ? "passed" : ""}`.trim();
     const setInRow = (sel, text) => { const el = row.querySelector(sel); if (el) el.textContent = text; };
-    setInRow(".name-en", p.en);
-    setInRow(".name-ar", p.ar);
+    setInRow(".name-en", `${p.localName} / ${p.ar}`);
+    setInRow(".name-ar", "");
     setInRow(".time", p.timeStr);
   });
+
+  const footerSchool = root.querySelector(".footer-meta span");
+  if (footerSchool) {
+    const cfg = window.__prayertimes_config || {};
+    footerSchool.textContent = `Method ${cfg.method} · ${cfg.school === 1 ? v.ui.hanafi : v.ui.shafii}`;
+  }
+  const q = currentQuote();
+  const footerQuote = root.querySelector(".footer-quote");
+  const footerRef = root.querySelector(".footer-quote-ref");
+  if (footerQuote) footerQuote.textContent = q.ar;
+  const footerEn = root.querySelector(".footer-quote-en");
+  if (footerEn) footerEn.textContent = q.en;
+  if (footerRef) footerRef.textContent = q.ref;
 };
 
 const updateLiveCountdown = () => {
@@ -661,7 +842,7 @@ export const render = ({ output, error }) => {
   if (!v) {
     return <div data-prayer-widget style={posStyle}><div className="error">Loading prayer times…</div></div>;
   }
-  const { cityLabel, hijriLabel, schedule, next, countdownMs, currentPrayer, showAyah } = v;
+  const { cityLabel, hijriLabel, schedule, next, countdownMs, currentPrayer, showAyah, ui } = v;
   const now = new Date();
   const fiveMinAlert = FORCE_FIVE_MIN_ALERT_TEST || isFlashAlertActive(countdownMs, output);
   const currentPrayerSig = currentPrayer ? `${currentPrayer.key}:${currentPrayer.date.getTime()}` : "-";
@@ -687,11 +868,11 @@ export const render = ({ output, error }) => {
 
       <div className={`next-block ${fiveMinAlert ? "five-min-alert" : ""}`.trim()}>
         <div className="ayah" style={{ display: showAyah ? "block" : "none" }}>{PRAYER_AYAH}</div>
-        <div className="next-label">Next Prayer</div>
+        <div className="next-label">{ui.nextPrayer}</div>
         <div className="next-info">
           <div className="next-name">
-            <span className="next-name-en">{next.en}</span>
-            <span className="next-name-ar">{next.ar}</span>
+            <span className="next-name-en">{next.localName} / {next.ar}</span>
+            <span className="next-name-ar"></span>
           </div>
           <div className="next-countdown">{fmtCountdown(countdownMs)}</div>
         </div>
@@ -705,8 +886,8 @@ export const render = ({ output, error }) => {
           const passed = p.date < now && !isActive;
           return (
             <div key={p.key} className={`row ${isActive ? "active" : ""} ${passed ? "passed" : ""}`}>
-              <span className="name-en">{p.en}</span>
-              <span className="name-ar">{p.ar}</span>
+              <span className="name-en">{p.localName} / {p.ar}</span>
+              <span className="name-ar"></span>
               <span className="time">{p.timeStr}</span>
             </div>
           );
@@ -714,8 +895,12 @@ export const render = ({ output, error }) => {
       </div>
 
       <div className="footer">
-        <span>{`Method ${getConfig(output).method} · ${getConfig(output).school === 1 ? "Hanafi" : "Shafi'i"}`}</span>
-        <span>aladhan.com</span>
+        <div className="footer-meta">
+          <span>{`Method ${getConfig(output).method} · ${getConfig(output).school === 1 ? ui.hanafi : ui.shafii}`}</span>
+        </div>
+        <div className="footer-quote">{currentQuote().ar}</div>
+        <div className="footer-quote-en">{currentQuote().en}</div>
+        <div className="footer-quote-ref">{currentQuote().ref}</div>
       </div>
     </div>
   );

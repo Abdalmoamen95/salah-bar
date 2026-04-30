@@ -17,6 +17,7 @@ DEFAULT_CONFIG = {
     "default_city": "izmir",
     "method": 13,
     "school": 0,
+    "language": "en",
     "flash_warning": {
         "enabled": True,
         "minutes": 5,
@@ -57,6 +58,8 @@ def normalize_config(raw):
         config["method"] = raw["method"]
     if raw.get("school") in (0, 1):
         config["school"] = raw["school"]
+    if raw.get("language") in ("en", "tr"):
+        config["language"] = raw["language"]
 
     flash_warning = raw.get("flash_warning")
     if isinstance(flash_warning, dict):
@@ -290,6 +293,7 @@ def choose_action():
             "Toggle notifications",
             "Toggle green flash",
             "Set green flash window",
+            "Choose language",
             "Reset to defaults",
             "Open config file",
         ],
@@ -340,6 +344,21 @@ def choose_flash_minutes():
     set_flash_minutes(int(picked))
 
 
+def choose_language():
+    config = load_config()
+    current = config.get("language", "en")
+    LANG_LABELS = {"en": "English", "tr": "Turkish"}
+    options = ["English", "Turkish"]
+    default = LANG_LABELS.get(current, "English")
+    picked = choose_from_list(options, "Choose prayer name language", default)
+    lang_key = "tr" if picked == "Turkish" else "en"
+    config["language"] = lang_key
+    save_config(config)
+    run_osascript([
+        f'display notification "Prayer language set to {picked}" with title "salah-bar"'
+    ])
+
+
 def reset_to_defaults():
     confirmed = ask_yes_no(
         "This will reset cities, default city, method, school, and notifications. Continue?",
@@ -378,6 +397,18 @@ def main():
         elif action and action.startswith("set-flash-minutes-"):
             minutes_text = action.replace("set-flash-minutes-", "", 1)
             set_flash_minutes(int(minutes_text))
+        elif action == "choose-language":
+            choose_language()
+        elif action and action.startswith("set-language-"):
+            lang_key = action.replace("set-language-", "", 1)
+            if lang_key in ("en", "tr"):
+                config = load_config()
+                config["language"] = lang_key
+                save_config(config)
+                LANG_LABELS = {"en": "English", "tr": "Turkish"}
+                run_osascript([
+                    f'display notification "Prayer language set to {LANG_LABELS[lang_key]}" with title "salah-bar"'
+                ])
         elif action == "reset-defaults":
             reset_to_defaults()
         elif action == "open-config":
@@ -396,6 +427,8 @@ def main():
                 toggle_flash_warning()
             elif picked == "Set green flash window":
                 choose_flash_minutes()
+            elif picked == "Choose language":
+                choose_language()
             elif picked == "Reset to defaults":
                 reset_to_defaults()
             else:

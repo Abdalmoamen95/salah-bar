@@ -2,6 +2,7 @@
   "default_city": "izmir",
   "method": 13,
   "school": 0,
+  "language": "en",
   "flash_warning": {
     "enabled": true,
     "minutes": 5
