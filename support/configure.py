@@ -548,6 +548,70 @@ def prayer_settings_menu():
         choose_language()
 
 
+ASSETS_DIR = os.path.join(os.path.dirname(os.path.dirname(__file__)), "assets")
+AUDIO_EXTENSIONS = (".mp3", ".m4a", ".wav", ".aiff", ".aac")
+
+
+def list_asset_sounds():
+    """Return list of audio files found in the assets/ folder."""
+    try:
+        return sorted(
+            f for f in os.listdir(ASSETS_DIR)
+            if os.path.splitext(f)[1].lower() in AUDIO_EXTENSIONS
+        )
+    except FileNotFoundError:
+        return []
+
+
+def choose_adhan_sound():
+    """Let user pick a bundled sound or enter a custom path."""
+    config = load_config()
+    current_file = config.get("notifications", {}).get("adhan_file", "")
+    current_label = os.path.basename(current_file) if current_file else "adhan.mp3 (default)"
+
+    bundled = list_asset_sounds()
+    options = [f"{f} (bundled)" for f in bundled] + ["Custom path...", "Silent (no sound)"]
+
+    picked = choose_from_list(options, f"Choose adhan sound  [current: {current_label}]")
+
+    if picked == "Silent (no sound)":
+        config.setdefault("notifications", {})["adhan_enabled"] = False
+        config["notifications"]["adhan_file"] = ""
+        save_config(config)
+        run_osascript(['display notification "Adhan sound disabled" with title "salah-bar"'])
+
+    elif picked == "Custom path...":
+        path = ask_text(
+            "Enter full path to audio file (mp3, m4a, wav):",
+            current_file or os.path.expanduser("~/Music/adhan.mp3")
+        ).strip()
+        if not path:
+            return
+        if not os.path.isfile(os.path.expanduser(path)):
+            run_osascript([
+                f'display dialog "File not found:\\n{applescript_escape(path)}" buttons {{"OK"}} default button "OK" with title "salah-bar"'
+            ])
+            return
+        config.setdefault("notifications", {})["adhan_file"] = path
+        config["notifications"]["adhan_enabled"] = True
+        save_config(config)
+        # Preview the sound
+        if ask_yes_no("Sound set! Play a preview?", yes_label="Play", no_label="Skip"):
+            subprocess.Popen(["afplay", os.path.expanduser(path)], stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)
+        run_osascript([f'display notification "Adhan sound set to {applescript_escape(os.path.basename(path))}" with title "salah-bar"'])
+
+    elif picked.endswith("(bundled)"):
+        filename = picked.replace(" (bundled)", "")
+        full_path = os.path.join(ASSETS_DIR, filename)
+        config.setdefault("notifications", {})["adhan_file"] = full_path
+        config["notifications"]["adhan_enabled"] = True
+        save_config(config)
+        # Preview the sound
+        if ask_yes_no(f"Sound set to {filename}! Play a preview?", yes_label="Play", no_label="Skip"):
+            subprocess.Popen(["afplay", full_path], stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)
+        run_osascript([f'display notification "Adhan sound set to {applescript_escape(filename)}" with title "salah-bar"'])
+
+
 def toggle_adhan():
     config = load_config()
     enabled = config.get("notifications", {}).get("adhan_enabled", True)
@@ -565,14 +629,17 @@ def notifications_menu():
     notif_enabled = config.get("notifications", {}).get("enabled", True)
     flash_enabled = config.get("flash_warning", {}).get("enabled", True)
     adhan_enabled = config.get("notifications", {}).get("adhan_enabled", True)
+    adhan_file = config.get("notifications", {}).get("adhan_file", "")
+    adhan_name = os.path.basename(adhan_file) if adhan_file else "adhan.mp3 (default)"
 
     notif_status = "ON ✓" if notif_enabled else "OFF"
     flash_status = "ON ✓" if flash_enabled else "OFF"
-    adhan_status = "ON ✓" if adhan_enabled else "OFF"
+    adhan_status = "ON ✓" if adhan_enabled else "Silent"
 
     notif_items = [
         f"Prayer Notifications: {notif_status}",
-        f"Adhan Sound at Prayer Time: {adhan_status}",
+        f"Adhan Sound: {adhan_status}  [{adhan_name}]",
+        "Change Adhan Sound",
         f"Green Flash Alert: {flash_status}",
         "Flash Alert Window",
     ]
@@ -581,8 +648,10 @@ def notifications_menu():
 
     if picked.startswith("Prayer Notifications"):
         toggle_notifications()
-    elif picked.startswith("Adhan Sound"):
+    elif picked.startswith("Adhan Sound:"):
         toggle_adhan()
+    elif picked == "Change Adhan Sound":
+        choose_adhan_sound()
     elif picked.startswith("Green Flash Alert"):
         toggle_flash_warning()
     elif picked == "Flash Alert Window":
