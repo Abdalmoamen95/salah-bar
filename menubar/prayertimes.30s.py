@@ -286,6 +286,17 @@ def main():
     print(
         f"--Toggle notifications{notify_marker} | bash='{py}' param1='{script}' param2=configure param3=toggle-notifications terminal=false refresh=true"
     )
+    adhan_enabled = config.get("notifications", {}).get("adhan_enabled", True)
+    adhan_file = config.get("notifications", {}).get("adhan_file", "")
+    adhan_name = os.path.basename(adhan_file) if adhan_file else "adhan.mp3"
+    adhan_marker = " ✓" if adhan_enabled else " (silent)"
+    print(f"--Adhan sound{adhan_marker}  [{adhan_name}]")
+    print(
+        f"----Toggle on/off | bash='{py}' param1='{script}' param2=configure param3=toggle-adhan terminal=false refresh=true"
+    )
+    print(
+        f"----Change sound... | bash='{py}' param1='{script}' param2=configure param3=choose-adhan-sound terminal=false refresh=true"
+    )
     flash_marker = " ✓" if flash_enabled else ""
     print(
         f"--Toggle green flash{flash_marker} | bash='{py}' param1='{script}' param2=configure param3=toggle-flash-warning terminal=false refresh=true"

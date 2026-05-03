@@ -716,6 +716,10 @@ def main():
                 run_osascript([
                     f'display notification "Prayer language set to {LANG_LABELS[lang_key]}" with title "salah-bar"'
                 ])
+        elif action == "toggle-adhan":
+            toggle_adhan()
+        elif action == "choose-adhan-sound":
+            choose_adhan_sound()
         elif action == "reset-defaults":
             reset_to_defaults()
         elif action == "open-config":
