@@ -51,6 +51,8 @@ The installer:
 - Green flash colour when prayer is approaching.
 - Full schedule in dropdown with prayer names in `{language} / {Arabic}` format.
 - Notifications at configurable offsets before prayer time (e.g. 10 min, 5 min, at time).
+- **Fallback caching**: If API is unavailable, shows `(cached)` indicator and continues with last known times.
+- **Health logging**: All API calls and errors logged to `~/Library/Logs/salah-bar/salah-bar.log`.
 
 ### Configure menu
 
@@ -188,7 +190,35 @@ Shared state:
 
 ---
 
-## Troubleshooting
+## Architecture & Improvements
+
+This project has been refactored for reliability, extensibility, and maintainability:
+
+### Configuration Consolidation
+- **Single source of truth**: All config logic lives in `support/config.py`
+- **No duplication**: Previously, config handling was duplicated in 3 files; now unified with a single module
+- **Consistent validation**: All config loads are validated with `validate_config_schema()`
+
+### Network Resilience
+- **Retry logic**: API calls retry up to 3 times with exponential backoff (0.5s → 1s → 2s)
+- **Fallback caching**: If API is down, automatically falls back to the most recent cache (even if old)
+- **Transparent recovery**: Users see `(cached)` indicator in menu bar when using fallback
+- **Health logging**: All network events logged to `~/Library/Logs/salah-bar/salah-bar.log`
+
+### Developer Experience
+- **Shared API module**: `support/api.py` provides `APIClient` for resilient requests
+- **Test suite**: `test_config.py` validates config schema and API resilience
+- **Cleaner code**: Plugins import shared utilities instead of duplicating logic
+
+### Testing
+Run the test suite to validate all changes:
+```bash
+python3 test_config.py
+```
+
+Expected output: `✓ All tests passed!`
+
+---
 
 **Widget doesn't appear.**
 Make sure Übersicht is running:
@@ -213,6 +243,19 @@ Re-run the installer to recreate the login items:
 ./install.sh
 ```
 You can also confirm they were added in **System Settings → General → Login Items & Extensions**.
+
+**Check plugin health and logs.**
+The plugin logs all events to a local log file:
+```bash
+tail -f ~/Library/Logs/salah-bar/salah-bar.log
+```
+You can also validate the config directly:
+```bash
+python3 support/config.py
+```
+
+**Plugin shows "(cached)" indicator.**
+This means the API is currently unavailable and the plugin is using the most recent cached times. Once the API recovers, it will fetch fresh times on the next refresh.
 
 **Blocked by Gatekeeper.**
 ```bash

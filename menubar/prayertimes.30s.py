@@ -10,56 +10,22 @@ import json
 import os
 import subprocess
 import sys
-import urllib.request
 from datetime import datetime, timedelta, timezone
 from zoneinfo import ZoneInfo
+
+# Add support directory to path for shared modules
+sys.path.insert(0, os.path.join(os.path.dirname(os.path.dirname(__file__)), "support"))
+
+from config import load_config, load_city, save_city, CACHE_DIR, STATE_FILE, logger
+from api import APIClient
 
 PRAYER_NAMES = {
     "en": ["Fajr", "Dhuhr", "Asr", "Maghrib", "Isha"],
     "tr": ["Sabah", "Öğle", "İkindi", "Akşam", "Yatsı"],
 }
 
-DEFAULT_CONFIG = {
-    "default_city": "izmir",
-    "method": 13,
-    "school": 0,
-    "language": "en",
-    "flash_warning": {
-        "enabled": True,
-        "minutes": 5,
-    },
-    "notifications": {
-        "enabled": True,
-        "offsets_minutes": [10, 5, 0],
-    },
-    "cities": {
-        "izmir": {
-            "label": "İzmir",
-            "lat": 38.4192,
-            "lon": 27.1287,
-            "tz": "Europe/Istanbul",
-        },
-        "doha": {
-            "label": "Doha",
-            "lat": 25.2854,
-            "lon": 51.5310,
-            "tz": "Asia/Qatar",
-        },
-        "cairo": {
-            "label": "Cairo",
-            "lat": 30.0444,
-            "lon": 31.2357,
-            "tz": "Africa/Cairo",
-        },
-    },
-}
-
-STATE_FILE = os.path.expanduser("~/.prayertimes_city")
-CACHE_DIR  = os.path.expanduser("~/Library/Caches/prayertimes")
-CONFIG_FILE = os.path.expanduser("~/.config/salah-bar/config.json")
 CONFIG_TOOL = os.path.join(os.path.dirname(os.path.dirname(__file__)), "support", "configure.py")
 NOTIFY_STATE_FILE = os.path.join(CACHE_DIR, "notify_state.json")
-os.makedirs(CACHE_DIR, exist_ok=True)
 PYCACHE_DIR = os.path.join(os.path.dirname(__file__), "__pycache__")
 
 PRAYERS = [
@@ -72,102 +38,21 @@ PRAYERS = [
 PRAYER_KEYS = [p[0] for p in PRAYERS]
 
 
-def load_config():
-    config = json.loads(json.dumps(DEFAULT_CONFIG))
-    try:
-        with open(CONFIG_FILE) as f:
-            raw = json.load(f)
-    except Exception:
-        return config
-
-    if isinstance(raw.get("method"), int):
-        config["method"] = raw["method"]
-    if raw.get("school") in (0, 1):
-        config["school"] = raw["school"]
-    if raw.get("language") in PRAYER_NAMES:
-        config["language"] = raw["language"]
-
-    flash_warning = raw.get("flash_warning")
-    if isinstance(flash_warning, dict):
-        if isinstance(flash_warning.get("enabled"), bool):
-            config["flash_warning"]["enabled"] = flash_warning["enabled"]
-        minutes = flash_warning.get("minutes")
-        if isinstance(minutes, int) and minutes > 0:
-            config["flash_warning"]["minutes"] = minutes
-
-    notifications = raw.get("notifications")
-    if isinstance(notifications, dict):
-        if isinstance(notifications.get("enabled"), bool):
-            config["notifications"]["enabled"] = notifications["enabled"]
-        offsets = notifications.get("offsets_minutes")
-        if isinstance(offsets, list):
-            valid_offsets = []
-            for value in offsets:
-                if isinstance(value, int) and value >= 0:
-                    valid_offsets.append(value)
-            if valid_offsets:
-                config["notifications"]["offsets_minutes"] = sorted(set(valid_offsets), reverse=True)
-
-    cities = raw.get("cities")
-    if isinstance(cities, dict):
-        normalized = {}
-        for key, city in cities.items():
-            if not isinstance(city, dict):
-                continue
-            try:
-                normalized[key] = {
-                    "label": str(city["label"]),
-                    "lat": float(city["lat"]),
-                    "lon": float(city["lon"]),
-                    "tz": str(city["tz"]),
-                }
-            except Exception:
-                continue
-        if normalized:
-            config["cities"] = normalized
-
-    default_city = raw.get("default_city")
-    if default_city in config["cities"]:
-        config["default_city"] = default_city
-
-    return config
-
-
-def load_city(config):
-    try:
-        v = open(STATE_FILE).read().strip()
-        return v if v in config["cities"] else config["default_city"]
-    except Exception:
-        return config["default_city"]
-
-
-def save_city(c):
-    try:
-        with open(STATE_FILE, "w") as f:
-            f.write(c)
-    except Exception:
-        pass
-
-
 def fetch_timings(config, city):
+    """Fetch prayer times using resilient API client."""
     city_config = config["cities"][city]
-    lat = city_config["lat"]
-    lon = city_config["lon"]
     tz = city_config["tz"]
     tzinfo = ZoneInfo(tz)
     now = datetime.now(tzinfo)
-    date_str = now.strftime("%d-%m-%Y")
-    cache = os.path.join(CACHE_DIR, f"{city}_{date_str}.json")
-    if not os.path.exists(cache) or os.path.getsize(cache) < 100:
-        url = (
-            f"https://api.aladhan.com/v1/timings/{date_str}"
-            f"?latitude={lat}&longitude={lon}&method={config['method']}&school={config['school']}"
-        )
-        with urllib.request.urlopen(url, timeout=10) as r:
-            data = r.read()
-        with open(cache, "wb") as f:
-            f.write(data)
-    return json.load(open(cache)), now, tzinfo
+    
+    api_client = APIClient()
+    data, is_fresh, error_msg = api_client.fetch_timings(config, city, tzinfo)
+    
+    if data is None:
+        logger.error(f"Failed to fetch timings for {city}: {error_msg}")
+        raise RuntimeError(error_msg or "API fetch failed")
+    
+    return data, now, tzinfo, is_fresh, error_msg
 
 
 def parse_hhmm(t):
@@ -289,12 +174,15 @@ def main():
     config = load_config()
     city = load_city(config)
     try:
-        data, now, tzinfo = fetch_timings(config, city)
+        data, now, tzinfo, is_fresh, error_msg = fetch_timings(config, city)
         timings = data["data"]["timings"]
     except Exception as e:
-        print(f"🕌 ⚠")
+        error_display = "🕌 ⚠" if str(e) == "API fetch failed" else "🕌 ✗"
+        print(error_display)
         print("---")
         print(f"Prayer times error: {e}")
+        print("---")
+        print("Open config | terminal=false")
         return
 
     lang = config.get("language", "en")
@@ -311,26 +199,32 @@ def main():
     remaining_s = max(0, int((next_p[3] - now).total_seconds()))
     label = config["cities"][city]["label"]
     maybe_notify(config, label, next_p, now)
-    lang = config.get("language", "en")
+    
     flash_warning = config.get("flash_warning", {})
     flash_enabled = flash_warning.get("enabled", True)
     flash_minutes = flash_warning.get("minutes", 5)
 
     # Menu bar line — first line shown
-    next_display = f"{next_p[1]} / {next_p[2]}"
+    # Add warning indicator if using fallback cache
+    fallback_indicator = " (cached)" if not is_fresh else ""
     if flash_enabled and 0 < remaining_s <= flash_minutes * 60:
         # Flash effect: color toggles every plugin refresh (30s).
         flash_on = (remaining_s // 30) % 2 == 0
         if flash_on:
-            print(f"🕌 {next_p[1]} {countdown[:5]} | color=#22c55e")
+            print(f"🕌 {next_p[1]} {countdown[:5]}{fallback_indicator} | color=#22c55e")
         else:
-            print(f"🕌 {next_p[1]} {countdown[:5]}")
+            print(f"🕌 {next_p[1]} {countdown[:5]}{fallback_indicator}")
     else:
-        print(f"🕌 {next_p[1]} {countdown[:5]}")
+        print(f"🕌 {next_p[1]} {countdown[:5]}{fallback_indicator}")
 
     # Dropdown
     print("---")
+    if not is_fresh and error_msg:
+        print(f"⚠ {error_msg} | color=#f59e0b")
+        print("---")
+    
     print(f"City: {label} | size=12")
+    next_display = f"{next_p[1]} / {next_p[2]}"
     print(f"Next: {next_display} at {next_p[3].strftime('%H:%M')} | size=12")
     print("---")
     for key, local_name, ar, d in schedule:

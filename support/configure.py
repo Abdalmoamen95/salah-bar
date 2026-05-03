@@ -8,123 +8,17 @@ import sys
 
 sys.dont_write_bytecode = True
 
-CONFIG_FILE = os.path.expanduser("~/.config/salah-bar/config.json")
-STATE_FILE = os.path.expanduser("~/.prayertimes_city")
+# Add current directory to path for imports
+sys.path.insert(0, os.path.dirname(__file__))
+
+# Import shared config module
+from config import (
+    load_config, save_config, load_city, save_city, logger,
+    CONFIG_FILE, STATE_FILE, CACHE_DIR, DEFAULT_CONFIG
+)
+
 PRESET_CITIES_FILE = os.path.join(os.path.dirname(os.path.dirname(__file__)), "preset-cities.json")
-NOTIFY_STATE_FILE = os.path.expanduser("~/Library/Caches/prayertimes/notify_state.json")
-
-DEFAULT_CONFIG = {
-    "default_city": "izmir",
-    "method": 13,
-    "school": 0,
-    "language": "en",
-    "flash_warning": {
-        "enabled": True,
-        "minutes": 5,
-    },
-    "notifications": {
-        "enabled": True,
-        "offsets_minutes": [10, 5, 0],
-    },
-    "cities": {
-        "izmir": {
-            "label": "Izmir",
-            "lat": 38.4192,
-            "lon": 27.1287,
-            "tz": "Europe/Istanbul",
-        },
-        "doha": {
-            "label": "Doha",
-            "lat": 25.2854,
-            "lon": 51.5310,
-            "tz": "Asia/Qatar",
-        },
-        "cairo": {
-            "label": "Cairo",
-            "lat": 30.0444,
-            "lon": 31.2357,
-            "tz": "Africa/Cairo",
-        },
-    },
-}
-
-
-def normalize_config(raw):
-    config = json.loads(json.dumps(DEFAULT_CONFIG))
-    if not isinstance(raw, dict):
-        return config
-
-    if isinstance(raw.get("method"), int):
-        config["method"] = raw["method"]
-    if raw.get("school") in (0, 1):
-        config["school"] = raw["school"]
-    if raw.get("language") in ("en", "tr"):
-        config["language"] = raw["language"]
-
-    flash_warning = raw.get("flash_warning")
-    if isinstance(flash_warning, dict):
-        if isinstance(flash_warning.get("enabled"), bool):
-            config["flash_warning"]["enabled"] = flash_warning["enabled"]
-        minutes = flash_warning.get("minutes")
-        if isinstance(minutes, int) and minutes > 0:
-            config["flash_warning"]["minutes"] = minutes
-
-    notifications = raw.get("notifications")
-    if isinstance(notifications, dict):
-        if isinstance(notifications.get("enabled"), bool):
-            config["notifications"]["enabled"] = notifications["enabled"]
-        offsets = notifications.get("offsets_minutes")
-        if isinstance(offsets, list):
-            valid_offsets = []
-            for value in offsets:
-                if isinstance(value, int) and value >= 0:
-                    valid_offsets.append(value)
-            if valid_offsets:
-                config["notifications"]["offsets_minutes"] = sorted(set(valid_offsets), reverse=True)
-
-    cities = raw.get("cities")
-    if isinstance(cities, dict):
-        normalized = {}
-        for key, city in cities.items():
-            if not isinstance(city, dict):
-                continue
-            try:
-                normalized[key] = {
-                    "label": str(city["label"]),
-                    "lat": float(city["lat"]),
-                    "lon": float(city["lon"]),
-                    "tz": str(city["tz"]),
-                }
-            except Exception:
-                continue
-        if normalized:
-            config["cities"] = normalized
-
-    default_city = raw.get("default_city")
-    if default_city in config["cities"]:
-        config["default_city"] = default_city
-
-    return config
-
-
-def load_config():
-    try:
-        with open(CONFIG_FILE) as f:
-            return normalize_config(json.load(f))
-    except Exception:
-        return normalize_config({})
-
-
-def load_presets():
-    with open(PRESET_CITIES_FILE, encoding="utf-8") as f:
-        return json.load(f)
-
-
-def save_config(config):
-    os.makedirs(os.path.dirname(CONFIG_FILE), exist_ok=True)
-    with open(CONFIG_FILE, "w") as f:
-        json.dump(config, f, indent=2, ensure_ascii=False)
-        f.write("\n")
+NOTIFY_STATE_FILE = os.path.join(CACHE_DIR, "notify_state.json")
 
 
 def applescript_escape(text):
