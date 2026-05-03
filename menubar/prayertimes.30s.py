@@ -96,11 +96,21 @@ def save_notify_state(state):
         json.dump(payload, f)
 
 
-def play_adhan(config):
-    """Play adhan sound file in the background if enabled and file exists."""
-    if not config.get("notifications", {}).get("adhan_enabled", True):
+def play_adhan(config, prayer_key=""):
+    """Play adhan sound file in the background if enabled and file exists.
+    Uses fajr_adhan_file for Fajr prayer if configured, otherwise adhan_file.
+    """
+    notifications = config.get("notifications", {})
+    if not notifications.get("adhan_enabled", True):
         return
-    sound_path = config.get("notifications", {}).get("adhan_file") or ADHAN_SOUND_FILE
+
+    # Fajr gets its own sound if set
+    is_fajr = prayer_key.lower() in ("fajr", "sabah")
+    if is_fajr and notifications.get("fajr_adhan_file"):
+        sound_path = notifications["fajr_adhan_file"]
+    else:
+        sound_path = notifications.get("adhan_file") or ADHAN_SOUND_FILE
+
     sound_path = os.path.expanduser(sound_path)
     if not os.path.isfile(sound_path):
         logger.warning(f"Adhan sound file not found: {sound_path}")
@@ -115,7 +125,7 @@ def play_adhan(config):
         logger.warning(f"Failed to play adhan: {e}")
 
 
-def notify(text, play_sound=False, config=None):
+def notify(text, play_sound=False, config=None, prayer_key=""):
     safe_text = text.replace('"', '\\"')
     subprocess.run(
         ["osascript", "-e", f'display notification "{safe_text}" with title "salah-bar"'],
@@ -124,7 +134,7 @@ def notify(text, play_sound=False, config=None):
         text=True,
     )
     if play_sound and config is not None:
-        play_adhan(config)
+        play_adhan(config, prayer_key=prayer_key)
 
 
 def cleanup_plugin_artifacts():
@@ -176,7 +186,7 @@ def maybe_notify(config, city_label, next_prayer, now):
                 continue
             if offset == 0:
                 text = f"{next_prayer[1]} / {next_prayer[2]} time in {city_label}"
-                notify(text, play_sound=True, config=config)
+                notify(text, play_sound=True, config=config, prayer_key=next_prayer[0])
             else:
                 text = f"{next_prayer[1]} / {next_prayer[2]} in {offset} min ({city_label})"
                 notify(text)
@@ -288,14 +298,20 @@ def main():
     )
     adhan_enabled = config.get("notifications", {}).get("adhan_enabled", True)
     adhan_file = config.get("notifications", {}).get("adhan_file", "")
-    adhan_name = os.path.basename(adhan_file) if adhan_file else "adhan.mp3"
+    adhan_name = os.path.basename(adhan_file) if adhan_file else "adhan-jazzi.mp3"
     adhan_marker = " ✓" if adhan_enabled else " (silent)"
+    fajr_file = config.get("notifications", {}).get("fajr_adhan_file", "")
+    fajr_name = os.path.basename(fajr_file) if fajr_file else "same as others"
     print(f"--Adhan sound{adhan_marker}  [{adhan_name}]")
     print(
         f"----Toggle on/off | bash='{py}' param1='{script}' param2=configure param3=toggle-adhan terminal=false refresh=true"
     )
     print(
         f"----Change sound... | bash='{py}' param1='{script}' param2=configure param3=choose-adhan-sound terminal=false refresh=true"
+    )
+    print(f"--Fajr adhan  [{fajr_name}]")
+    print(
+        f"----Change Fajr sound... | bash='{py}' param1='{script}' param2=configure param3=choose-fajr-adhan terminal=false refresh=true"
     )
     flash_marker = " ✓" if flash_enabled else ""
     print(

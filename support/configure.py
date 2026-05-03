@@ -578,6 +578,52 @@ def load_tracks():
     return tracks
 
 
+def choose_fajr_adhan_sound():
+    """Let user pick a specific adhan for Fajr prayer (with الصلاة خير من النوم)."""
+    config = load_config()
+    current_file = config.get("notifications", {}).get("fajr_adhan_file", "")
+    current_label = os.path.basename(current_file) if current_file else "Same as other prayers"
+
+    tracks = load_tracks()
+    track_labels = [t["label"] for t in tracks]
+    options = track_labels + ["Custom path...", "Same as other prayers (no override)"]
+
+    picked = choose_from_list(options, f"Choose Fajr adhan  [current: {current_label}]")
+
+    if picked == "Same as other prayers (no override)":
+        config.setdefault("notifications", {})["fajr_adhan_file"] = ""
+        save_config(config)
+        run_osascript(['display notification "Fajr will use the default adhan sound" with title "salah-bar"'])
+
+    elif picked == "Custom path...":
+        path = ask_text(
+            "Enter full path to Fajr audio file (mp3, m4a, wav):",
+            current_file or os.path.expanduser("~/Music/fajr-adhan.mp3")
+        ).strip()
+        if not path:
+            return
+        if not os.path.isfile(os.path.expanduser(path)):
+            run_osascript([
+                f'display dialog "File not found:\\n{applescript_escape(path)}" buttons {{"OK"}} default button "OK" with title "salah-bar"'
+            ])
+            return
+        config.setdefault("notifications", {})["fajr_adhan_file"] = path
+        save_config(config)
+        if ask_yes_no("Fajr sound set! Play a preview?", yes_label="Play", no_label="Skip"):
+            subprocess.Popen(["afplay", os.path.expanduser(path)], stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)
+        run_osascript([f'display notification "Fajr adhan set to {applescript_escape(os.path.basename(path))}" with title "salah-bar"'])
+
+    else:
+        track = next((t for t in tracks if t["label"] == picked), None)
+        if not track:
+            return
+        config.setdefault("notifications", {})["fajr_adhan_file"] = track["path"]
+        save_config(config)
+        if ask_yes_no("Fajr sound set! Play a preview?", yes_label="Play", no_label="Skip"):
+            subprocess.Popen(["afplay", track["path"]], stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)
+        run_osascript([f'display notification "Fajr adhan set to: {applescript_escape(picked)}" with title "salah-bar"'])
+
+
 def choose_adhan_sound():
     """Let user pick from the built-in track library or enter a custom path."""
     config = load_config()
@@ -647,7 +693,9 @@ def notifications_menu():
     flash_enabled = config.get("flash_warning", {}).get("enabled", True)
     adhan_enabled = config.get("notifications", {}).get("adhan_enabled", True)
     adhan_file = config.get("notifications", {}).get("adhan_file", "")
-    adhan_name = os.path.basename(adhan_file) if adhan_file else "adhan.mp3 (default)"
+    adhan_name = os.path.basename(adhan_file) if adhan_file else "adhan-jazzi.mp3 (default)"
+    fajr_file = config.get("notifications", {}).get("fajr_adhan_file", "")
+    fajr_name = os.path.basename(fajr_file) if fajr_file else "same as others"
 
     notif_status = "ON ✓" if notif_enabled else "OFF"
     flash_status = "ON ✓" if flash_enabled else "OFF"
@@ -657,6 +705,8 @@ def notifications_menu():
         f"Prayer Notifications: {notif_status}",
         f"Adhan Sound: {adhan_status}  [{adhan_name}]",
         "Change Adhan Sound",
+        f"Fajr Adhan: [{fajr_name}]",
+        "Change Fajr Adhan",
         f"Green Flash Alert: {flash_status}",
         "Flash Alert Window",
     ]
@@ -669,6 +719,10 @@ def notifications_menu():
         toggle_adhan()
     elif picked == "Change Adhan Sound":
         choose_adhan_sound()
+    elif picked.startswith("Fajr Adhan:"):
+        choose_fajr_adhan_sound()
+    elif picked == "Change Fajr Adhan":
+        choose_fajr_adhan_sound()
     elif picked.startswith("Green Flash Alert"):
         toggle_flash_warning()
     elif picked == "Flash Alert Window":
@@ -737,6 +791,8 @@ def main():
             toggle_adhan()
         elif action == "choose-adhan-sound":
             choose_adhan_sound()
+        elif action == "choose-fajr-adhan":
+            choose_fajr_adhan_sound()
         elif action == "reset-defaults":
             reset_to_defaults()
         elif action == "open-config":

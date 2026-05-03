@@ -51,6 +51,7 @@ DEFAULT_CONFIG = {
         "offsets_minutes": [10, 5, 0],
         "adhan_enabled": True,
         "adhan_file": "",
+        "fajr_adhan_file": "",
     },
     "display": {
         "size": "Normal",
@@ -114,6 +115,8 @@ def normalize_config(raw):
             config["notifications"]["adhan_enabled"] = notifications["adhan_enabled"]
         if isinstance(notifications.get("adhan_file"), str):
             config["notifications"]["adhan_file"] = notifications["adhan_file"]
+        if isinstance(notifications.get("fajr_adhan_file"), str):
+            config["notifications"]["fajr_adhan_file"] = notifications["fajr_adhan_file"]
 
     display = raw.get("display")
     if isinstance(display, dict):

@@ -11,7 +11,8 @@
     "enabled": true,
     "offsets_minutes": [10, 5, 0],
     "adhan_enabled": true,
-    "adhan_file": ""
+    "adhan_file": "",
+    "fajr_adhan_file": ""
   },
   "display": {
     "size": "Normal",
