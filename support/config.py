@@ -50,6 +50,11 @@ DEFAULT_CONFIG = {
         "enabled": True,
         "offsets_minutes": [10, 5, 0],
     },
+    "display": {
+        "size": "Normal",
+        "theme": "Dark",
+        "show_seconds": True,
+    },
     "cities": {
         "izmir": {
             "label": "İzmir",
@@ -103,6 +108,15 @@ def normalize_config(raw):
             valid_offsets = [v for v in offsets if isinstance(v, int) and v >= 0]
             if valid_offsets:
                 config["notifications"]["offsets_minutes"] = sorted(set(valid_offsets), reverse=True)
+
+    display = raw.get("display")
+    if isinstance(display, dict):
+        if display.get("size") in ("Compact", "Normal", "Large"):
+            config["display"]["size"] = display["size"]
+        if display.get("theme") in ("Light", "Dark"):
+            config["display"]["theme"] = display["theme"]
+        if isinstance(display.get("show_seconds"), bool):
+            config["display"]["show_seconds"] = display["show_seconds"]
 
     cities = raw.get("cities")
     if isinstance(cities, dict):

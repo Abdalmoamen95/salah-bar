@@ -11,6 +11,11 @@
     "enabled": true,
     "offsets_minutes": [10, 5, 0]
   },
+  "display": {
+    "size": "Normal",
+    "theme": "Dark",
+    "show_seconds": true
+  },
   "cities": {
     "izmir": {
       "label": "İzmir",
