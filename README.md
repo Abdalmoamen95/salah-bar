@@ -27,7 +27,8 @@ The installer:
 5. Creates `~/.config/salah-bar/config.json` if not present.
 6. Clears macOS quarantine flags on runtime folders.
 7. Validates plugin execution before launch.
-8. Launches both apps.
+8. Adds Übersicht and SwiftBar to macOS login items.
+9. Launches both apps.
 
 ---
 
@@ -205,6 +206,13 @@ Should end in `.../menubar`. Restart SwiftBar:
 ```bash
 osascript -e 'tell application "SwiftBar" to quit'; open -a SwiftBar
 ```
+
+**Apps do not come back after reboot.**
+Re-run the installer to recreate the login items:
+```bash
+./install.sh
+```
+You can also confirm they were added in **System Settings → General → Login Items & Extensions**.
 
 **Blocked by Gatekeeper.**
 ```bash

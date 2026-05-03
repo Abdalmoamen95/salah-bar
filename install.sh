@@ -21,6 +21,35 @@ green() { printf "\033[32m%s\033[0m\n" "$*"; }
 yellow() { printf "\033[33m%s\033[0m\n" "$*"; }
 red()   { printf "\033[31m%s\033[0m\n" "$*"; }
 
+resolve_app_path() {
+  local app_name="$1"
+  local resolved
+  resolved="$(osascript -e "POSIX path of (path to application \"$app_name\")" 2>/dev/null | tr -d '\r')" || true
+  if [ -n "$resolved" ] && [ -d "$resolved" ]; then
+    printf "%s\n" "${resolved%/}"
+    return 0
+  fi
+  return 1
+}
+
+ensure_login_item() {
+  local app_name="$1"
+  local app_path="$2"
+
+  if [ ! -d "$app_path" ]; then
+    yellow "Skipping login item for $app_name; app not found at $app_path"
+    return
+  fi
+
+  osascript \
+    -e 'tell application "System Events"' \
+    -e "if exists login item \"$app_name\" then delete login item \"$app_name\"" \
+    -e "make login item at end with properties {name:\"$app_name\", path:\"$app_path\", hidden:false}" \
+    -e 'end tell' >/dev/null
+
+  green "✓ Added $app_name to login items."
+}
+
 clear_quarantine() {
   if ! command -v xattr >/dev/null 2>&1; then
     return
@@ -101,6 +130,16 @@ install_swiftbar() {
   green "✓ Configured SwiftBar plugin directory."
 }
 
+configure_startup() {
+  local ubersicht_app swiftbar_app
+
+  ubersicht_app="$(resolve_app_path "Übersicht")" || ubersicht_app="/Applications/Übersicht.app"
+  swiftbar_app="$(resolve_app_path "SwiftBar")" || swiftbar_app="/Applications/SwiftBar.app"
+
+  ensure_login_item "Übersicht" "$ubersicht_app"
+  ensure_login_item "SwiftBar" "$swiftbar_app"
+}
+
 install_config() {
   mkdir -p "$CONFIG_DIR"
   if [ ! -f "$CONFIG_FILE" ]; then
@@ -125,12 +164,14 @@ main() {
   install_ubersicht
   install_swiftbar
   install_config
+  configure_startup
   restart_apps
   echo
   green "Done."
   echo "  • Desktop widget: top-right corner. Drag the header to move; click the chevron to collapse; click city to cycle."
   echo "  • Menu bar:       🕌 Next-prayer countdown. Click to expand; switch city from the submenu."
   echo "  • Config file:    $CONFIG_FILE"
+  echo "  • Auto-start:     Übersicht + SwiftBar now launch automatically after login."
 }
 
 main "$@"
