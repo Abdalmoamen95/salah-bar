@@ -433,6 +433,14 @@ def choose_school():
         ])
 
 
+def _refresh_widget():
+    """Trigger an immediate Übersicht widget refresh."""
+    subprocess.Popen(
+        ["open", "-g", "ubersicht://widgets/refresh?id=prayertimes"],
+        stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL
+    )
+
+
 def choose_display_settings():
     """Configure display options."""
     config = load_config()
@@ -452,6 +460,7 @@ def choose_display_settings():
             config["display"] = {}
         config["display"]["size"] = size
         save_config(config)
+        _refresh_widget()
         run_osascript([f'display notification "Widget size set to {size}" with title "salah-bar"'])
     
     elif setting == "Theme":
@@ -464,6 +473,7 @@ def choose_display_settings():
             config["display"] = {}
         config["display"]["theme"] = theme
         save_config(config)
+        _refresh_widget()
         run_osascript([f'display notification "Theme set to {theme}" with title "salah-bar"'])
     
     elif setting == "Show Seconds in Countdown":
@@ -472,6 +482,7 @@ def choose_display_settings():
             config["display"] = {}
         config["display"]["show_seconds"] = show_secs
         save_config(config)
+        _refresh_widget()
         state = "enabled" if show_secs else "disabled"
         run_osascript([f'display notification "Seconds in countdown {state}" with title "salah-bar"'])
 
@@ -483,6 +494,7 @@ def set_display_size(size):
     config = load_config()
     config.setdefault("display", {})["size"] = size
     save_config(config)
+    _refresh_widget()
     run_osascript([f'display notification "Widget size set to {size}" with title "salah-bar"'])
 
 
@@ -493,6 +505,7 @@ def set_display_theme(theme):
     config = load_config()
     config.setdefault("display", {})["theme"] = theme
     save_config(config)
+    _refresh_widget()
     run_osascript([f'display notification "Theme set to {theme}" with title "salah-bar"'])
 
 
@@ -502,6 +515,7 @@ def toggle_display_seconds():
     show_secs = not config.get("display", {}).get("show_seconds", True)
     config.setdefault("display", {})["show_seconds"] = show_secs
     save_config(config)
+    _refresh_widget()
     state = "enabled" if show_secs else "disabled"
     run_osascript([f'display notification "Seconds in countdown {state}" with title "salah-bar"'])
 
@@ -656,7 +670,7 @@ def load_tracks():
         pass
     # Also include any extra files in sounds/ not in the manifest
     try:
-        manifest_files = {t["file"] for t in (json.load(open(TRACKS_FILE)) if os.path.isfile(TRACKS_FILE) else [])}
+        manifest_files = {t["file"] for t in (json.load(open(TRACKS_FILE)) if os.path.isfile(TRACKS_FILE) else []) if t.get("file")}
         for f in sorted(os.listdir(SOUNDS_DIR)):
             if os.path.splitext(f)[1].lower() in AUDIO_EXTENSIONS and f not in manifest_files:
                 tracks.append({"label": f, "path": os.path.join(SOUNDS_DIR, f), "id": f})

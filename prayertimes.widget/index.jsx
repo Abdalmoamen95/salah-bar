@@ -11,6 +11,7 @@ const DEFAULT_CONFIG = {
   method: 13,
   school: 0,
   language: "en",
+  display: { size: "Normal", theme: "Dark", show_seconds: true },
   flash_warning: {
     enabled: true,
     minutes: 5
@@ -29,6 +30,13 @@ const normalizeConfig = (raw) => {
   if (Number.isInteger(raw.method)) config.method = raw.method;
   if (raw.school === 0 || raw.school === 1) config.school = raw.school;
   if (raw.language && ["en", "tr"].includes(raw.language)) config.language = raw.language;
+
+  if (raw.display && typeof raw.display === "object") {
+    const d = raw.display;
+    if (["Compact", "Normal", "Large"].includes(d.size)) config.display.size = d.size;
+    if (["Light", "Dark"].includes(d.theme)) config.display.theme = d.theme;
+    if (typeof d.show_seconds === "boolean") config.display.show_seconds = d.show_seconds;
+  }
 
   if (raw.flash_warning && typeof raw.flash_warning === "object") {
     if (typeof raw.flash_warning.enabled === "boolean") {
@@ -121,6 +129,16 @@ def normalize_config(raw):
   default_city = raw.get("default_city")
   if default_city in config["cities"]:
     config["default_city"] = default_city
+
+  display = raw.get("display")
+  if isinstance(display, dict):
+    if display.get("size") in ("Compact", "Normal", "Large"):
+      config["display"]["size"] = display["size"]
+    if display.get("theme") in ("Light", "Dark"):
+      config["display"]["theme"] = display["theme"]
+    if isinstance(display.get("show_seconds"), bool):
+      config["display"]["show_seconds"] = display["show_seconds"]
+
   return config
 
 try:
@@ -338,6 +356,28 @@ export const className = `
   }
 
   .error { color: #fca5a5; font-size: 11px; padding: 8px 0; }
+
+  .theme-light {
+    color: rgba(0, 0, 0, 0.85);
+    background: rgba(248, 250, 252, 0.95);
+    border-color: rgba(0, 0, 0, 0.1);
+    box-shadow: 0 10px 40px rgba(0, 0, 0, 0.12);
+  }
+  .theme-light .next-countdown { color: #0369a1; }
+  .theme-light .city { color: rgba(0, 0, 0, 0.85); }
+  .theme-light .city:hover { color: #0369a1; }
+  .theme-light .next-block {
+    background: linear-gradient(135deg, rgba(3, 105, 161, 0.1), rgba(3, 105, 161, 0.04));
+    border-color: rgba(3, 105, 161, 0.25);
+  }
+  .theme-light .row.active { background: rgba(3, 105, 161, 0.08); }
+  .theme-light .footer { border-top-color: rgba(0, 0, 0, 0.08); }
+  .theme-light .header { border-bottom-color: rgba(0, 0, 0, 0.08); }
+  .theme-light .ayah { color: #1e3a5f; }
+  .theme-light .footer-quote { color: rgba(0, 0, 0, 0.8); }
+  .theme-light .footer-quote-en { color: rgba(0, 0, 0, 0.65); }
+  .theme-light .toggle { color: rgba(0, 0, 0, 0.55); }
+  .theme-light .toggle:hover { background: rgba(0,0,0,0.06); }
 `;
 
 // -------- HELPERS ------------------------------------------------------------
@@ -379,100 +419,124 @@ const FOOTER_QUOTES = [
   {
     ar: "إِنَّ الصَّلَاةَ كَانَتْ عَلَى الْمُؤْمِنِينَ كِتَابًا مَّوْقُوتًا",
     en: "Indeed, prayer has been decreed upon the believers a decree of specified times.",
-    ref: "Quran 4:103",
+    tr: "Şüphesiz namaz, müminlere belirli vakitlere bağlanmış bir farz olarak yazılmıştır.",
+    ref: "Kuran 4:103",
   },
   {
     ar: "وَاسْتَعِينُوا بِالصَّبْرِ وَالصَّلَاةِ ۚ وَإِنَّهَا لَكَبِيرَةٌ إِلَّا عَلَى الْخَاشِعِينَ",
     en: "Seek help through patience and prayer; it is difficult except for the humbly submissive.",
-    ref: "Quran 2:45",
+    tr: "Sabır ve namazla yardım isteyin; şüphesiz bu, huşu sahipleri dışında ağır gelir.",
+    ref: "Kuran 2:45",
   },
   {
     ar: "إِنَّ الصَّلَاةَ تَنْهَىٰ عَنِ الْفَحْشَاءِ وَالْمُنكَرِ",
     en: "Indeed, prayer prohibits immorality and wrongdoing.",
-    ref: "Quran 29:45",
+    tr: "Şüphesiz namaz, hayâsızlığı ve kötülüğü engeller.",
+    ref: "Kuran 29:45",
   },
   {
     ar: "وَهُوَ مَعَكُمْ أَيْنَ مَا كُنتُمْ ۚ وَاللَّهُ بِمَا تَعْمَلُونَ بَصِيرٌ",
     en: "He is with you wherever you are, and Allah of what you do is Seeing.",
-    ref: "Quran 57:4",
+    tr: "O, nerede olursanız olun sizinle beraberdir; Allah yaptıklarınızı hakkıyla görendir.",
+    ref: "Kuran 57:4",
   },
   {
     ar: "لَا يُكَلِّفُ اللَّهُ نَفْسًا إِلَّا وُسْعَهَا",
     en: "Allah does not burden a soul beyond that it can bear.",
-    ref: "Quran 2:286",
+    tr: "Allah, hiçbir kimseye gücünün üstünde bir yük yüklemez.",
+    ref: "Kuran 2:286",
   },
   {
     ar: "وَمَن يَتَوَكَّلْ عَلَى اللَّهِ فَهُوَ حَسْبُهُ",
     en: "Whoever relies upon Allah — then He is sufficient for him.",
-    ref: "Quran 65:3",
+    tr: "Kim Allah'a tevekkül ederse O, ona yeter.",
+    ref: "Kuran 65:3",
   },
   {
     ar: "فَاذْكُرُونِي أَذْكُرْكُمْ وَاشْكُرُوا لِي وَلَا تَكْفُرُونِ",
     en: "Remember Me; I will remember you. Be grateful to Me and do not deny Me.",
-    ref: "Quran 2:152",
+    tr: "Siz beni zikredin, ben de sizi zikredeyim; bana şükredin, nankörlük etmeyin.",
+    ref: "Kuran 2:152",
   },
   {
     ar: "إِنَّ مَعَ الْعُسْرِ يُسْرًا",
     en: "Verily, with hardship comes ease.",
-    ref: "Quran 94:6",
+    tr: "Şüphesiz güçlüğün yanında bir kolaylık vardır.",
+    ref: "Kuran 94:6",
   },
   {
     ar: "وَلَذِكْرُ اللَّهِ أَكْبَرُ",
     en: "And the remembrance of Allah is greater.",
-    ref: "Quran 29:45",
+    tr: "Allah'ı zikretmek elbette en büyük ibadettir.",
+    ref: "Kuran 29:45",
   },
   {
     ar: "أَحَبُّ الْأَعْمَالِ إِلَى اللَّهِ أَدْوَمُهَا وَإِنْ قَلَّ",
     en: "The most beloved deeds to Allah are those done consistently, even if small.",
-    ref: "Sahih Bukhari & Muslim",
+    tr: "Allah'ın en çok sevdiği amel, az da olsa devamlı olanıdır.",
+    ref: "Buhari & Müslim",
   },
   {
     ar: "لَا يُؤْمِنُ أَحَدُكُمْ حَتَّىٰ يُحِبَّ لِأَخِيهِ مَا يُحِبُّ لِنَفْسِهِ",
     en: "None of you truly believes until he loves for his brother what he loves for himself.",
-    ref: "Sahih Bukhari & Muslim",
+    tr: "Hiçbiriniz, kendisi için istediğini kardeşi için de istemedikçe gerçek anlamda iman etmiş olmaz.",
+    ref: "Buhari & Müslim",
   },
   {
     ar: "الْكَلِمَةُ الطَّيِّبَةُ صَدَقَةٌ",
     en: "A kind word is a form of charity.",
-    ref: "Sahih Bukhari",
+    tr: "Güzel söz bir sadakadır.",
+    ref: "Buhari",
   },
   {
     ar: "لَيْسَ الشَّدِيدُ بِالصُّرَعَةِ ۖ إِنَّمَا الشَّدِيدُ الَّذِي يَمْلِكُ نَفْسَهُ عِنْدَ الْغَضَبِ",
     en: "The strong person is not the wrestler; it is the one who controls himself when angry.",
-    ref: "Sahih Bukhari & Muslim",
+    tr: "Güçlü olan güreşte galip gelen değil; öfke anında kendine hâkim olandır.",
+    ref: "Buhari & Müslim",
   },
   {
     ar: "يَسِّرُوا وَلَا تُعَسِّرُوا، وَبَشِّرُوا وَلَا تُنَفِّرُوا",
     en: "Make things easy, do not make them difficult. Give glad tidings and do not drive people away.",
-    ref: "Sahih Bukhari & Muslim",
+    tr: "Kolaylaştırın, zorlaştırmayın; müjdeleyin, nefret ettirmeyin.",
+    ref: "Buhari & Müslim",
   },
   {
     ar: "مَنْ كَانَ يُؤْمِنُ بِاللَّهِ وَالْيَوْمِ الْآخِرِ فَلْيَقُلْ خَيْرًا أَوْ لِيَصْمُتْ",
     en: "Whoever believes in Allah and the Last Day, let him speak good or remain silent.",
-    ref: "Sahih Bukhari & Muslim",
+    tr: "Allah'a ve ahiret gününe iman eden, ya hayır söylesin ya da sussun.",
+    ref: "Buhari & Müslim",
   },
   {
     ar: "الدُّنْيَا سِجْنُ الْمُؤْمِنِ وَجَنَّةُ الْكَافِرِ",
     en: "The world is a prison for the believer and a paradise for the disbeliever.",
-    ref: "Sahih Muslim",
+    tr: "Dünya müminin zindanı, kâfirin cennetidir.",
+    ref: "Müslim",
   },
   {
     ar: "إِنَّ اللَّهَ جَمِيلٌ يُحِبُّ الْجَمَالَ",
     en: "Allah is beautiful and He loves beauty.",
-    ref: "Sahih Muslim",
+    tr: "Allah güzeldir ve güzelliği sever.",
+    ref: "Müslim",
   },
   {
     ar: "الطَّهُورُ شَطْرُ الْإِيمَانِ",
     en: "Purity is half of faith.",
-    ref: "Sahih Muslim",
+    tr: "Temizlik imanın yarısıdır.",
+    ref: "Müslim",
   },
 ];
 
 // Pick a quote based on 30-min slots so it changes every 30 minutes.
-const currentQuote = () => {
+const currentQuote = (lang) => {
   const now = new Date();
   const slot = Math.floor((now.getHours() * 60 + now.getMinutes()) / 30);
   return FOOTER_QUOTES[slot % FOOTER_QUOTES.length];
+};
+
+// Get the translated text for a quote; falls back to English.
+const quoteTranslation = (q, lang) => {
+  if (lang === "tr" && q.tr) return q.tr;
+  return q.en;
 };
 
 const PRAYERS = [
@@ -516,13 +580,14 @@ const buildPrayerDate = (hhmm, tz) => {
   return new Date(probe.getTime() - offsetMs);
 };
 
-const fmtCountdown = (ms) => {
+const fmtCountdown = (ms, showSeconds = true) => {
   if (ms < 0) ms = 0;
   const total = Math.floor(ms / 1000);
   const h = Math.floor(total / 3600);
   const m = Math.floor((total % 3600) / 60);
   const s = total % 60;
   const pad = (n) => String(n).padStart(2, "0");
+  if (!showSeconds) return `${pad(h)}:${pad(m)}`;
   return `${pad(h)}:${pad(m)}:${pad(s)}`;
 };
 
@@ -654,6 +719,25 @@ const applyCollapsedToWrapper = () => {
   }
 };
 
+const applyDisplaySettings = () => {
+  const inner = document.querySelector("[data-prayer-widget]");
+  if (!inner) return;
+  const w = findWrapper(inner);
+  const cfg = window.__prayertimes_config || {};
+  const display = cfg.display || { size: "Normal", theme: "Dark", show_seconds: true };
+  // Width (only when not collapsed — collapsed uses auto)
+  if (w && !loadCollapsed()) {
+    const widths = { Compact: "220px", Normal: "280px", Large: "340px" };
+    w.style.width = widths[display.size] || "280px";
+  }
+  // Theme class on the inner widget div
+  if (display.theme === "Light") {
+    inner.classList.add("theme-light");
+  } else {
+    inner.classList.remove("theme-light");
+  }
+};
+
 const applyPosToWrapper = () => {
   const inner = document.querySelector("[data-prayer-widget]");
   if (!inner) return;
@@ -764,7 +848,10 @@ const rebuildWidget = () => {
   if (ayah) ayah.style.display = v.showAyah ? "block" : "none";
   setText(".next-name-en", `${v.next.localName} / ${v.next.ar}`);
   setText(".next-name-ar", "");
-  setText(".next-countdown", fmtCountdown(v.countdownMs));
+  const showSecs = (window.__prayertimes_config && window.__prayertimes_config.display &&
+    typeof window.__prayertimes_config.display.show_seconds === "boolean")
+    ? window.__prayertimes_config.display.show_seconds : true;
+  setText(".next-countdown", fmtCountdown(v.countdownMs, showSecs));
 
   const rows = root.querySelectorAll(".prayers .row");
   v.schedule.forEach((p, i) => {
@@ -787,12 +874,14 @@ const rebuildWidget = () => {
     footerSchool.textContent = `Method ${cfg.method} · ${cfg.school === 1 ? v.ui.hanafi : v.ui.shafii}`;
   }
   const q = currentQuote();
+  const lang = (window.__prayertimes_config && window.__prayertimes_config.language) || "en";
   const footerQuote = root.querySelector(".footer-quote");
   const footerRef = root.querySelector(".footer-quote-ref");
   if (footerQuote) footerQuote.textContent = q.ar;
   const footerEn = root.querySelector(".footer-quote-en");
-  if (footerEn) footerEn.textContent = q.en;
+  if (footerEn) footerEn.textContent = quoteTranslation(q, lang);
   if (footerRef) footerRef.textContent = q.ref;
+  applyDisplaySettings();
 };
 
 const updateLiveCountdown = () => {
@@ -813,7 +902,10 @@ const updateLiveCountdown = () => {
   }
 
   const countdownEl = root.querySelector(".next-countdown");
-  if (countdownEl) countdownEl.textContent = fmtCountdown(v.countdownMs);
+  const showSecs = (window.__prayertimes_config && window.__prayertimes_config.display &&
+    typeof window.__prayertimes_config.display.show_seconds === "boolean")
+    ? window.__prayertimes_config.display.show_seconds : true;
+  if (countdownEl) countdownEl.textContent = fmtCountdown(v.countdownMs, showSecs);
 
   const nextBlock = root.querySelector(".next-block");
   const fiveMinAlert = FORCE_FIVE_MIN_ALERT_TEST || isFlashAlertActive(v.countdownMs, out);
@@ -835,6 +927,7 @@ export const render = ({ output, error }) => {
   if (typeof window !== "undefined") {
     window.__prayertimes_output = output;
     window.__prayertimes_config = getConfig(output);
+    setTimeout(applyDisplaySettings, 0);
   }
 
   const city = loadCity();
@@ -849,6 +942,8 @@ export const render = ({ output, error }) => {
   const viewSig = `${city}|${next.key}:${next.date.getTime()}|${currentPrayerSig}|${showAyah ? 1 : 0}`;
 
   const collapsed = loadCollapsed();
+  const displayCfg = getConfig(output).display || { size: "Normal", theme: "Dark", show_seconds: true };
+  const showSecs = displayCfg.show_seconds !== false;
 
   if (typeof window !== "undefined") {
     window.__prayertimes_view_sig = viewSig;
@@ -874,7 +969,7 @@ export const render = ({ output, error }) => {
             <span className="next-name-en">{next.localName} / {next.ar}</span>
             <span className="next-name-ar"></span>
           </div>
-          <div className="next-countdown">{fmtCountdown(countdownMs)}</div>
+          <div className="next-countdown">{fmtCountdown(countdownMs, showSecs)}</div>
         </div>
       </div>
 
@@ -899,7 +994,7 @@ export const render = ({ output, error }) => {
           <span>{`Method ${getConfig(output).method} · ${getConfig(output).school === 1 ? ui.hanafi : ui.shafii}`}</span>
         </div>
         <div className="footer-quote">{currentQuote().ar}</div>
-        <div className="footer-quote-en">{currentQuote().en}</div>
+        <div className="footer-quote-en">{quoteTranslation(currentQuote(), getConfig(output).language)}</div>
         <div className="footer-quote-ref">{currentQuote().ref}</div>
       </div>
     </div>
