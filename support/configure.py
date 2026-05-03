@@ -564,7 +564,13 @@ def load_tracks():
         for t in manifest:
             path = os.path.join(SOUNDS_DIR, t["file"])
             if os.path.isfile(path):
-                tracks.append({"label": f"{t['name']} — {t['reciter_en']}", "path": path, "id": t["id"]})
+                tracks.append({
+                    "label": f"{t['name']} — {t['reciter_en']}",
+                    "path": path,
+                    "id": t["id"],
+                    "fajr": t.get("fajr", False),
+                    "default": t.get("default", False),
+                })
     except (FileNotFoundError, json.JSONDecodeError, KeyError):
         pass
     # Also include any extra files in sounds/ not in the manifest
@@ -585,12 +591,18 @@ def choose_fajr_adhan_sound():
     current_label = os.path.basename(current_file) if current_file else "Same as other prayers"
 
     tracks = load_tracks()
-    track_labels = [t["label"] for t in tracks]
+    # Sort: fajr-tagged tracks first, then default, then rest
+    fajr_tracks = [t for t in tracks if t.get("fajr")]
+    other_tracks = [t for t in tracks if not t.get("fajr")]
+    sorted_tracks = fajr_tracks + other_tracks
+    track_labels = [t["label"] + (" ★ Fajr" if t.get("fajr") else "") for t in sorted_tracks]
     options = track_labels + ["Custom path...", "Same as other prayers (no override)"]
 
     picked = choose_from_list(options, f"Choose Fajr adhan  [current: {current_label}]")
+    # Strip the ★ suffix before matching
+    picked_clean = picked.replace(" ★ Fajr", "")
 
-    if picked == "Same as other prayers (no override)":
+    if picked in ("Same as other prayers (no override)", "Same as other prayers (no override) ★ Fajr"):
         config.setdefault("notifications", {})["fajr_adhan_file"] = ""
         save_config(config)
         run_osascript(['display notification "Fajr will use the default adhan sound" with title "salah-bar"'])
@@ -614,14 +626,14 @@ def choose_fajr_adhan_sound():
         run_osascript([f'display notification "Fajr adhan set to {applescript_escape(os.path.basename(path))}" with title "salah-bar"'])
 
     else:
-        track = next((t for t in tracks if t["label"] == picked), None)
+        track = next((t for t in sorted_tracks if t["label"] == picked_clean), None)
         if not track:
             return
         config.setdefault("notifications", {})["fajr_adhan_file"] = track["path"]
         save_config(config)
         if ask_yes_no("Fajr sound set! Play a preview?", yes_label="Play", no_label="Skip"):
             subprocess.Popen(["afplay", track["path"]], stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)
-        run_osascript([f'display notification "Fajr adhan set to: {applescript_escape(picked)}" with title "salah-bar"'])
+        run_osascript([f'display notification "Fajr adhan set to: {applescript_escape(picked_clean)}" with title "salah-bar"'])
 
 
 def choose_adhan_sound():

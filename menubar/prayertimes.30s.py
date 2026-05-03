@@ -128,7 +128,8 @@ def play_adhan(config, prayer_key=""):
 def notify(text, play_sound=False, config=None, prayer_key=""):
     safe_text = text.replace('"', '\\"')
     subprocess.run(
-        ["osascript", "-e", f'display notification "{safe_text}" with title "salah-bar"'],
+        ["osascript", "-e",
+         f'display notification "{safe_text}" with title "salah-bar" subtitle "Prayer Reminder"'],
         check=False,
         capture_output=True,
         text=True,
