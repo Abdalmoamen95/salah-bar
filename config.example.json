@@ -9,7 +9,9 @@
   },
   "notifications": {
     "enabled": true,
-    "offsets_minutes": [10, 5, 0]
+    "offsets_minutes": [10, 5, 0],
+    "adhan_enabled": true,
+    "adhan_file": ""
   },
   "display": {
     "size": "Normal",

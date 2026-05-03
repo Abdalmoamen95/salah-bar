@@ -49,6 +49,8 @@ DEFAULT_CONFIG = {
     "notifications": {
         "enabled": True,
         "offsets_minutes": [10, 5, 0],
+        "adhan_enabled": True,
+        "adhan_file": "",
     },
     "display": {
         "size": "Normal",
@@ -108,6 +110,10 @@ def normalize_config(raw):
             valid_offsets = [v for v in offsets if isinstance(v, int) and v >= 0]
             if valid_offsets:
                 config["notifications"]["offsets_minutes"] = sorted(set(valid_offsets), reverse=True)
+        if isinstance(notifications.get("adhan_enabled"), bool):
+            config["notifications"]["adhan_enabled"] = notifications["adhan_enabled"]
+        if isinstance(notifications.get("adhan_file"), str):
+            config["notifications"]["adhan_file"] = notifications["adhan_file"]
 
     display = raw.get("display")
     if isinstance(display, dict):

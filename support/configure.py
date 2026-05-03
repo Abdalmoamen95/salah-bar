@@ -548,25 +548,41 @@ def prayer_settings_menu():
         choose_language()
 
 
+def toggle_adhan():
+    config = load_config()
+    enabled = config.get("notifications", {}).get("adhan_enabled", True)
+    config.setdefault("notifications", {})["adhan_enabled"] = not enabled
+    save_config(config)
+    state_text = "enabled" if config["notifications"]["adhan_enabled"] else "disabled"
+    run_osascript([
+        f'display notification "Adhan sound {state_text}" with title "salah-bar"'
+    ])
+
+
 def notifications_menu():
     """Notifications settings submenu."""
     config = load_config()
     notif_enabled = config.get("notifications", {}).get("enabled", True)
     flash_enabled = config.get("flash_warning", {}).get("enabled", True)
-    
+    adhan_enabled = config.get("notifications", {}).get("adhan_enabled", True)
+
     notif_status = "ON ✓" if notif_enabled else "OFF"
     flash_status = "ON ✓" if flash_enabled else "OFF"
-    
+    adhan_status = "ON ✓" if adhan_enabled else "OFF"
+
     notif_items = [
         f"Prayer Notifications: {notif_status}",
+        f"Adhan Sound at Prayer Time: {adhan_status}",
         f"Green Flash Alert: {flash_status}",
         "Flash Alert Window",
     ]
-    
+
     picked = choose_from_list(notif_items, "Notification Settings", notif_items[0])
-    
+
     if picked.startswith("Prayer Notifications"):
         toggle_notifications()
+    elif picked.startswith("Adhan Sound"):
+        toggle_adhan()
     elif picked.startswith("Green Flash Alert"):
         toggle_flash_warning()
     elif picked == "Flash Alert Window":

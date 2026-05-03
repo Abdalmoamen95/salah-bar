@@ -28,6 +28,7 @@ PRAYER_NAMES = {
 CONFIG_TOOL = os.path.join(os.path.dirname(os.path.dirname(__file__)), "support", "configure.py")
 NOTIFY_STATE_FILE = os.path.join(CACHE_DIR, "notify_state.json")
 PYCACHE_DIR = os.path.join(os.path.dirname(__file__), "__pycache__")
+ADHAN_SOUND_FILE = os.path.join(os.path.dirname(os.path.dirname(__file__)), "assets", "adhan.mp3")
 
 PRAYERS = [
     ("Fajr",    "الفجر"),
@@ -95,7 +96,26 @@ def save_notify_state(state):
         json.dump(payload, f)
 
 
-def notify(text):
+def play_adhan(config):
+    """Play adhan sound file in the background if enabled and file exists."""
+    if not config.get("notifications", {}).get("adhan_enabled", True):
+        return
+    sound_path = config.get("notifications", {}).get("adhan_file") or ADHAN_SOUND_FILE
+    sound_path = os.path.expanduser(sound_path)
+    if not os.path.isfile(sound_path):
+        logger.warning(f"Adhan sound file not found: {sound_path}")
+        return
+    try:
+        subprocess.Popen(
+            ["afplay", sound_path],
+            stdout=subprocess.DEVNULL,
+            stderr=subprocess.DEVNULL,
+        )
+    except Exception as e:
+        logger.warning(f"Failed to play adhan: {e}")
+
+
+def notify(text, play_sound=False, config=None):
     safe_text = text.replace('"', '\\"')
     subprocess.run(
         ["osascript", "-e", f'display notification "{safe_text}" with title "salah-bar"'],
@@ -103,6 +123,8 @@ def notify(text):
         capture_output=True,
         text=True,
     )
+    if play_sound and config is not None:
+        play_adhan(config)
 
 
 def cleanup_plugin_artifacts():
@@ -138,6 +160,7 @@ def maybe_notify(config, city_label, next_prayer, now):
 
     state = load_notify_state()
     prayer_time = next_prayer[3].strftime("%Y-%m-%dT%H:%M")
+
     for offset in sorted(set(offsets), reverse=True):
         trigger = offset * 60
         # Plugin refreshes every 30s; include a forward window for 0-minute alerts
@@ -153,9 +176,10 @@ def maybe_notify(config, city_label, next_prayer, now):
                 continue
             if offset == 0:
                 text = f"{next_prayer[1]} / {next_prayer[2]} time in {city_label}"
+                notify(text, play_sound=True, config=config)
             else:
                 text = f"{next_prayer[1]} / {next_prayer[2]} in {offset} min ({city_label})"
-            notify(text)
+                notify(text)
             state["notified"].add(key)
             save_notify_state(state)
 
