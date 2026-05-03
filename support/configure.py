@@ -476,6 +476,36 @@ def choose_display_settings():
         run_osascript([f'display notification "Seconds in countdown {state}" with title "salah-bar"'])
 
 
+def set_display_size(size):
+    """Set widget size directly from SwiftBar menu actions."""
+    if size not in ("Compact", "Normal", "Large"):
+        raise RuntimeError("Invalid widget size")
+    config = load_config()
+    config.setdefault("display", {})["size"] = size
+    save_config(config)
+    run_osascript([f'display notification "Widget size set to {size}" with title "salah-bar"'])
+
+
+def set_display_theme(theme):
+    """Set widget theme directly from SwiftBar menu actions."""
+    if theme not in ("Light", "Dark"):
+        raise RuntimeError("Invalid theme")
+    config = load_config()
+    config.setdefault("display", {})["theme"] = theme
+    save_config(config)
+    run_osascript([f'display notification "Theme set to {theme}" with title "salah-bar"'])
+
+
+def toggle_display_seconds():
+    """Toggle live countdown seconds visibility from SwiftBar menu actions."""
+    config = load_config()
+    show_secs = not config.get("display", {}).get("show_seconds", True)
+    config.setdefault("display", {})["show_seconds"] = show_secs
+    save_config(config)
+    state = "enabled" if show_secs else "disabled"
+    run_osascript([f'display notification "Seconds in countdown {state}" with title "salah-bar"'])
+
+
 def main_menu():
     """Main menu with categorized options."""
     config = load_config()
@@ -882,6 +912,20 @@ def main():
             choose_adhan_sound()
         elif action == "choose-fajr-adhan":
             choose_fajr_adhan_sound()
+        elif action == "choose-display-settings":
+            choose_display_settings()
+        elif action == "set-display-size-compact":
+            set_display_size("Compact")
+        elif action == "set-display-size-normal":
+            set_display_size("Normal")
+        elif action == "set-display-size-large":
+            set_display_size("Large")
+        elif action == "set-display-theme-light":
+            set_display_theme("Light")
+        elif action == "set-display-theme-dark":
+            set_display_theme("Dark")
+        elif action == "toggle-display-seconds":
+            toggle_display_seconds()
         elif action == "reset-defaults":
             reset_to_defaults()
         elif action == "open-config":

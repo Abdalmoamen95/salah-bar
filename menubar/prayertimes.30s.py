@@ -333,6 +333,32 @@ def main():
     print(
         f"--Add custom city | bash='{py}' param1='{script}' param2=configure param3=add-custom-city terminal=false refresh=true"
     )
+    display_cfg = config.get("display", {})
+    display_size = display_cfg.get("size", "Normal")
+    display_theme = display_cfg.get("theme", "Dark")
+    display_seconds = display_cfg.get("show_seconds", True)
+    seconds_status = "ON ✓" if display_seconds else "OFF"
+    print(f"--Display settings  [{display_size} · {display_theme} · sec {seconds_status.split()[0]}]")
+    print(
+        f"----Open display dialog | bash='{py}' param1='{script}' param2=configure param3=choose-display-settings terminal=false refresh=true"
+    )
+    print(f"----Widget size ({display_size})")
+    for opt in ("Compact", "Normal", "Large"):
+        marker = " ✓" if display_size == opt else ""
+        action = f"set-display-size-{opt.lower()}"
+        print(
+            f"------{opt}{marker} | bash='{py}' param1='{script}' param2=configure param3={action} terminal=false refresh=true"
+        )
+    print(f"----Theme ({display_theme})")
+    for opt in ("Light", "Dark"):
+        marker = " ✓" if display_theme == opt else ""
+        action = f"set-display-theme-{opt.lower()}"
+        print(
+            f"------{opt}{marker} | bash='{py}' param1='{script}' param2=configure param3={action} terminal=false refresh=true"
+        )
+    print(
+        f"----Show seconds ({seconds_status}) | bash='{py}' param1='{script}' param2=configure param3=toggle-display-seconds terminal=false refresh=true"
+    )
     notify_enabled = config.get("notifications", {}).get("enabled", True)
     notify_marker = " ✓" if notify_enabled else ""
     print(
