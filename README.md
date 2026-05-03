@@ -56,19 +56,34 @@ The installer:
 
 ### Configure menu
 
-Open the menu bar icon → **Configure**:
+Open the menu bar icon → **Configure** for a categorized settings interface:
 
-| Item | What it does |
-|------|--------------|
-| Choose default city | Pick from your saved cities |
-| Add preset city (Turkey/Egypt/Qatar) | Search bundled GeoNames city list |
-| Add custom city | Enter lat/lon/timezone manually |
-| Toggle notifications ✓ | Enable or disable prayer alerts |
-| Toggle green flash ✓ | Enable or disable the approach alert |
-| Green flash window (N min) | Set the alert window: 1/3/5/10/15 min |
-| Language (English/Turkish) | Switch prayer name language |
-| Reset to defaults | Restore factory config |
-| Open config file | Open JSON in your default editor |
+#### 📍 Cities
+- **Set Default City** — Pick which city to show on startup
+- **Add Preset City** — Search and add from bundled GeoNames database (Turkey/Egypt/Qatar/etc.)
+- **Add Custom City** — Enter coordinates and timezone manually
+- **View All Cities** — See all configured cities with timezones and default indicator (✓)
+- **Remove City** — Delete a configured city (can't remove default city)
+
+#### ⚙️ Prayer Settings
+- **Choose Prayer Method** — Select calculation method (Muslim World League / Egyptian / Diyanet)
+- **Choose Islamic School** — Shafi'i (default) or Hanafi (affects Asr prayer time)
+- **Choose Language** — English or Turkish prayer names (Arabic always shown)
+
+#### 🎨 Display Settings
+- **Widget Size** — Compact, Normal, or Large
+- **Theme** — Light or Dark mode
+- **Show Seconds in Countdown** — Toggle seconds display in countdown timer
+
+#### 🔔 Notifications
+- **Prayer Notifications** — Enable/disable macOS alerts before prayer times
+- **Green Flash Alert** — Enable/disable the green highlight when prayer approaches
+- **Flash Alert Window** — Set alert window: 1, 3, 5, 10, or 15 minutes
+
+#### Other
+- **View Configuration** — See summary of all current settings
+- **Reset All** — Restore to factory defaults
+- **Edit Config File** — Open JSON config in your default editor
 
 ---
 
@@ -97,6 +112,11 @@ Both surfaces read from it. It refreshes every 30 seconds.
   "notifications": {
     "enabled": true,
     "offsets_minutes": [10, 5, 0]
+  },
+  "display": {
+    "size": "Normal",
+    "theme": "Dark",
+    "show_seconds": true
   },
   "cities": {
     "izmir": {
@@ -127,6 +147,9 @@ Both surfaces read from it. It refreshes every 30 seconds.
 | `flash_warning.minutes` | int | How many minutes before prayer to start flashing |
 | `notifications.enabled` | bool | Enable macOS notifications |
 | `notifications.offsets_minutes` | array | Minutes before prayer to notify; `0` = at prayer time |
+| `display.size` | string | Widget size: "Compact", "Normal", or "Large" |
+| `display.theme` | string | Theme: "Light" or "Dark" |
+| `display.show_seconds` | bool | Show seconds in countdown timer |
 
 ### Language
 
