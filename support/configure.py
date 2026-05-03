@@ -436,7 +436,7 @@ def choose_school():
 def _refresh_widget():
     """Trigger an immediate Übersicht widget refresh."""
     subprocess.Popen(
-        ["open", "-g", "ubersicht://widgets/refresh?id=prayertimes"],
+        ["open", "-g", "ubersicht://widgets/refresh"],
         stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL
     )
 
