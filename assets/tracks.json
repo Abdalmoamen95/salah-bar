@@ -5,6 +5,89 @@
     "name": "حي على الصلاة",
     "reciter": "محمد جازي عبدالله",
     "reciter_en": "Muhammad Jazi Abdullah",
-    "style": "Makkah"
+    "style": "Makkah",
+    "default": true
+  },
+  {
+    "id": "adhan-abdulbasit",
+    "file": "adhan-abdulbasit.mp3",
+    "name": "أذان",
+    "reciter": "الشيخ عبدالباسط عبدالصمد",
+    "reciter_en": "Sheikh Abdulbasit Abdussamad",
+    "style": "Egyptian"
+  },
+  {
+    "id": "adhan-abdulbasit-isha",
+    "file": "adhan-abdulbasit-isha.mp3",
+    "name": "أذان العشاء",
+    "reciter": "الشيخ عبدالباسط عبدالصمد",
+    "reciter_en": "Sheikh Abdulbasit Abdussamad",
+    "style": "Egyptian"
+  },
+  {
+    "id": "adhan-fajr-abdulbasit",
+    "file": "adhan-fajr-abdulbasit.mp3",
+    "name": "أذان الفجر",
+    "reciter": "الشيخ عبدالباسط عبد الصمد",
+    "reciter_en": "Sheikh Abdulbasit Abdussamad",
+    "style": "Egyptian",
+    "fajr": true
+  },
+  {
+    "id": "adhan-fakhro-qatar",
+    "file": "adhan-fakhro-qatar.mp3",
+    "name": "أذان",
+    "reciter": "أحمد فخرو",
+    "reciter_en": "Ahmad Fakhro",
+    "style": "Qatar — مسجد الإمام محمد بن عبدالوهاب"
+  },
+  {
+    "id": "adhan-nabet-qatar",
+    "file": "adhan-nabet-qatar.mp3",
+    "name": "أذان",
+    "reciter": "صالح النابت",
+    "reciter_en": "Saleh Al-Nabit",
+    "style": "Qatar — مسجد الإمام محمد بن عبدالوهاب"
+  },
+  {
+    "id": "adhan-hijazi-kabara",
+    "file": "adhan-hijazi-kabara.mp3",
+    "name": "أذان حجازي",
+    "reciter": "الشيخ محمد صلاح الدين كبارة",
+    "reciter_en": "Sheikh Muhammad Salahuddin Kabara",
+    "style": "Hijazi"
+  },
+  {
+    "id": "adhan-fajr-assaf",
+    "file": "adhan-fajr-assaf.mp3",
+    "name": "أذان الفجر",
+    "reciter": "ياسين العساف",
+    "reciter_en": "Yassin Al-Assaf",
+    "style": "Iraqi",
+    "fajr": true
+  },
+  {
+    "id": "adhan-qatami",
+    "file": "adhan-qatami.mp3",
+    "name": "أذان",
+    "reciter": "الشيخ ناصر القطامي",
+    "reciter_en": "Sheikh Nasser Al-Qatami",
+    "style": "Kuwaiti"
+  },
+  {
+    "id": "adhan-marrwash-morocco",
+    "file": "adhan-marrwash-morocco.mp3",
+    "name": "أذان",
+    "reciter": "كمال محمد المروش",
+    "reciter_en": "Kamal Muhammad Al-Marrwash",
+    "style": "Moroccan"
+  },
+  {
+    "id": "adhan-damardash-hail",
+    "file": "adhan-damardash-hail.mp3",
+    "name": "أذان",
+    "reciter": "محمد الدمرداش",
+    "reciter_en": "Muhammad Al-Damardash",
+    "style": "Saudi — جامع الملك فهد بحائل"
   }
 ]
