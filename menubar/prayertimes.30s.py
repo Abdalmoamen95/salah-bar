@@ -28,7 +28,7 @@ PRAYER_NAMES = {
 CONFIG_TOOL = os.path.join(os.path.dirname(os.path.dirname(__file__)), "support", "configure.py")
 NOTIFY_STATE_FILE = os.path.join(CACHE_DIR, "notify_state.json")
 PYCACHE_DIR = os.path.join(os.path.dirname(__file__), "__pycache__")
-ADHAN_SOUND_FILE = os.path.join(os.path.dirname(os.path.dirname(__file__)), "assets", "adhan.mp3")
+ADHAN_SOUND_FILE = os.path.join(os.path.dirname(os.path.dirname(__file__)), "assets", "sounds", "adhan-jazzi.mp3")
 
 PRAYERS = [
     ("Fajr",    "الفجر"),

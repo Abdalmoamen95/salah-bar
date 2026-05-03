@@ -549,30 +549,46 @@ def prayer_settings_menu():
 
 
 ASSETS_DIR = os.path.join(os.path.dirname(os.path.dirname(__file__)), "assets")
+SOUNDS_DIR = os.path.join(ASSETS_DIR, "sounds")
+TRACKS_FILE = os.path.join(ASSETS_DIR, "tracks.json")
 AUDIO_EXTENSIONS = (".mp3", ".m4a", ".wav", ".aiff", ".aac")
 
 
-def list_asset_sounds():
-    """Return list of audio files found in the assets/ folder."""
+def load_tracks():
+    """Load track manifest from tracks.json, falling back to raw file scan."""
+    tracks = []
+    # Load named tracks from manifest
     try:
-        return sorted(
-            f for f in os.listdir(ASSETS_DIR)
-            if os.path.splitext(f)[1].lower() in AUDIO_EXTENSIONS
-        )
-    except FileNotFoundError:
-        return []
+        with open(TRACKS_FILE) as f:
+            manifest = json.load(f)
+        for t in manifest:
+            path = os.path.join(SOUNDS_DIR, t["file"])
+            if os.path.isfile(path):
+                tracks.append({"label": f"{t['name']} — {t['reciter_en']}", "path": path, "id": t["id"]})
+    except (FileNotFoundError, json.JSONDecodeError, KeyError):
+        pass
+    # Also include any extra files in sounds/ not in the manifest
+    try:
+        manifest_files = {t["file"] for t in (json.load(open(TRACKS_FILE)) if os.path.isfile(TRACKS_FILE) else [])}
+        for f in sorted(os.listdir(SOUNDS_DIR)):
+            if os.path.splitext(f)[1].lower() in AUDIO_EXTENSIONS and f not in manifest_files:
+                tracks.append({"label": f, "path": os.path.join(SOUNDS_DIR, f), "id": f})
+    except (FileNotFoundError, json.JSONDecodeError):
+        pass
+    return tracks
 
 
 def choose_adhan_sound():
-    """Let user pick a bundled sound or enter a custom path."""
+    """Let user pick from the built-in track library or enter a custom path."""
     config = load_config()
     current_file = config.get("notifications", {}).get("adhan_file", "")
-    current_label = os.path.basename(current_file) if current_file else "adhan.mp3 (default)"
+    current_label = os.path.basename(current_file) if current_file else "adhan-jazzi.mp3 (default)"
 
-    bundled = list_asset_sounds()
-    options = [f"{f} (bundled)" for f in bundled] + ["Custom path...", "Silent (no sound)"]
+    tracks = load_tracks()
+    track_labels = [t["label"] for t in tracks]
+    options = track_labels + ["Custom path...", "Silent (no sound)"]
 
-    picked = choose_from_list(options, f"Choose adhan sound  [current: {current_label}]")
+    picked = choose_from_list(options, f"Choose adhan track  [current: {current_label}]")
 
     if picked == "Silent (no sound)":
         config.setdefault("notifications", {})["adhan_enabled"] = False
@@ -595,21 +611,22 @@ def choose_adhan_sound():
         config.setdefault("notifications", {})["adhan_file"] = path
         config["notifications"]["adhan_enabled"] = True
         save_config(config)
-        # Preview the sound
         if ask_yes_no("Sound set! Play a preview?", yes_label="Play", no_label="Skip"):
             subprocess.Popen(["afplay", os.path.expanduser(path)], stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)
         run_osascript([f'display notification "Adhan sound set to {applescript_escape(os.path.basename(path))}" with title "salah-bar"'])
 
-    elif picked.endswith("(bundled)"):
-        filename = picked.replace(" (bundled)", "")
-        full_path = os.path.join(ASSETS_DIR, filename)
-        config.setdefault("notifications", {})["adhan_file"] = full_path
+    else:
+        # Matched a track from the library
+        track = next((t for t in tracks if t["label"] == picked), None)
+        if not track:
+            return
+        config.setdefault("notifications", {})["adhan_file"] = track["path"]
         config["notifications"]["adhan_enabled"] = True
         save_config(config)
-        # Preview the sound
-        if ask_yes_no(f"Sound set to {filename}! Play a preview?", yes_label="Play", no_label="Skip"):
-            subprocess.Popen(["afplay", full_path], stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)
-        run_osascript([f'display notification "Adhan sound set to {applescript_escape(filename)}" with title "salah-bar"'])
+        display_name = picked
+        if ask_yes_no(f"Track set! Play a preview?", yes_label="Play", no_label="Skip"):
+            subprocess.Popen(["afplay", track["path"]], stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)
+        run_osascript([f'display notification "Adhan set to: {applescript_escape(display_name)}" with title "salah-bar"'])
 
 
 def toggle_adhan():
