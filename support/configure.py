@@ -5,6 +5,9 @@ import os
 import re
 import subprocess
 import sys
+import hashlib
+import urllib.parse
+import urllib.request
 
 sys.dont_write_bytecode = True
 
@@ -552,6 +555,42 @@ ASSETS_DIR = os.path.join(os.path.dirname(os.path.dirname(__file__)), "assets")
 SOUNDS_DIR = os.path.join(ASSETS_DIR, "sounds")
 TRACKS_FILE = os.path.join(ASSETS_DIR, "tracks.json")
 AUDIO_EXTENSIONS = (".mp3", ".m4a", ".wav", ".aiff", ".aac")
+REMOTE_SOUNDS_DIR = os.path.join(CACHE_DIR, "remote-sounds")
+
+
+def is_remote_source(path_or_url):
+    return isinstance(path_or_url, str) and path_or_url.startswith(("http://", "https://"))
+
+
+def _cache_filename_for_url(url, track_id=""):
+    parsed = urllib.parse.urlparse(url)
+    ext = os.path.splitext(parsed.path)[1].lower()
+    if ext not in AUDIO_EXTENSIONS:
+        ext = ".mp3"
+    digest = hashlib.sha1(url.encode("utf-8")).hexdigest()[:12]
+    if track_id:
+        safe_id = re.sub(r"[^a-zA-Z0-9._-]+", "-", track_id).strip("-")
+        if safe_id:
+            return f"{safe_id}-{digest}{ext}"
+    return f"remote-{digest}{ext}"
+
+
+def resolve_audio_source(path_or_url, track_id=""):
+    """Return a local playable path. Download remote URLs to cache when needed."""
+    if not path_or_url:
+        return ""
+
+    expanded = os.path.expanduser(path_or_url)
+    if not is_remote_source(expanded):
+        return expanded
+
+    os.makedirs(REMOTE_SOUNDS_DIR, exist_ok=True)
+    cached = os.path.join(REMOTE_SOUNDS_DIR, _cache_filename_for_url(expanded, track_id=track_id))
+    if os.path.isfile(cached) and os.path.getsize(cached) > 0:
+        return cached
+
+    urllib.request.urlretrieve(expanded, cached)
+    return cached
 
 
 def load_tracks():
@@ -562,11 +601,23 @@ def load_tracks():
         with open(TRACKS_FILE) as f:
             manifest = json.load(f)
         for t in manifest:
-            path = os.path.join(SOUNDS_DIR, t["file"])
-            if os.path.isfile(path):
+            file_name = t.get("file", "")
+            path = os.path.join(SOUNDS_DIR, file_name) if file_name else ""
+            remote_url = t.get("url", "")
+            if path and os.path.isfile(path):
                 tracks.append({
                     "label": f"{t['name']} — {t['reciter_en']}",
                     "path": path,
+                    "source": path,
+                    "id": t["id"],
+                    "fajr": t.get("fajr", False),
+                    "default": t.get("default", False),
+                })
+            elif isinstance(remote_url, str) and remote_url.startswith(("http://", "https://")):
+                tracks.append({
+                    "label": f"{t['name']} — {t['reciter_en']} (cloud)",
+                    "path": remote_url,
+                    "source": remote_url,
                     "id": t["id"],
                     "fajr": t.get("fajr", False),
                     "default": t.get("default", False),
@@ -609,12 +660,12 @@ def choose_fajr_adhan_sound():
 
     elif picked == "Custom path...":
         path = ask_text(
-            "Enter full path to Fajr audio file (mp3, m4a, wav):",
+            "Enter full path or URL to Fajr audio file (mp3, m4a, wav):",
             current_file or os.path.expanduser("~/Music/fajr-adhan.mp3")
         ).strip()
         if not path:
             return
-        if not os.path.isfile(os.path.expanduser(path)):
+        if not is_remote_source(path) and not os.path.isfile(os.path.expanduser(path)):
             run_osascript([
                 f'display dialog "File not found:\\n{applescript_escape(path)}" buttons {{"OK"}} default button "OK" with title "salah-bar"'
             ])
@@ -622,17 +673,30 @@ def choose_fajr_adhan_sound():
         config.setdefault("notifications", {})["fajr_adhan_file"] = path
         save_config(config)
         if ask_yes_no("Fajr sound set! Play a preview?", yes_label="Play", no_label="Skip"):
-            subprocess.Popen(["afplay", os.path.expanduser(path)], stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)
+            try:
+                playable = resolve_audio_source(path, track_id="fajr-custom")
+                subprocess.Popen(["afplay", playable], stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)
+            except Exception as exc:
+                run_osascript([
+                    f'display dialog "Failed to load audio:\\n{applescript_escape(str(exc))}" buttons {{"OK"}} default button "OK" with title "salah-bar"'
+                ])
         run_osascript([f'display notification "Fajr adhan set to {applescript_escape(os.path.basename(path))}" with title "salah-bar"'])
 
     else:
         track = next((t for t in sorted_tracks if t["label"] == picked_clean), None)
         if not track:
             return
-        config.setdefault("notifications", {})["fajr_adhan_file"] = track["path"]
+        source = track.get("source") or track["path"]
+        config.setdefault("notifications", {})["fajr_adhan_file"] = source
         save_config(config)
         if ask_yes_no("Fajr sound set! Play a preview?", yes_label="Play", no_label="Skip"):
-            subprocess.Popen(["afplay", track["path"]], stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)
+            try:
+                playable = resolve_audio_source(source, track_id=track.get("id", "fajr-track"))
+                subprocess.Popen(["afplay", playable], stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)
+            except Exception as exc:
+                run_osascript([
+                    f'display dialog "Failed to load audio:\\n{applescript_escape(str(exc))}" buttons {{"OK"}} default button "OK" with title "salah-bar"'
+                ])
         run_osascript([f'display notification "Fajr adhan set to: {applescript_escape(picked_clean)}" with title "salah-bar"'])
 
 
@@ -656,12 +720,12 @@ def choose_adhan_sound():
 
     elif picked == "Custom path...":
         path = ask_text(
-            "Enter full path to audio file (mp3, m4a, wav):",
+            "Enter full path or URL to audio file (mp3, m4a, wav):",
             current_file or os.path.expanduser("~/Music/adhan.mp3")
         ).strip()
         if not path:
             return
-        if not os.path.isfile(os.path.expanduser(path)):
+        if not is_remote_source(path) and not os.path.isfile(os.path.expanduser(path)):
             run_osascript([
                 f'display dialog "File not found:\\n{applescript_escape(path)}" buttons {{"OK"}} default button "OK" with title "salah-bar"'
             ])
@@ -670,7 +734,13 @@ def choose_adhan_sound():
         config["notifications"]["adhan_enabled"] = True
         save_config(config)
         if ask_yes_no("Sound set! Play a preview?", yes_label="Play", no_label="Skip"):
-            subprocess.Popen(["afplay", os.path.expanduser(path)], stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)
+            try:
+                playable = resolve_audio_source(path, track_id="adhan-custom")
+                subprocess.Popen(["afplay", playable], stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)
+            except Exception as exc:
+                run_osascript([
+                    f'display dialog "Failed to load audio:\\n{applescript_escape(str(exc))}" buttons {{"OK"}} default button "OK" with title "salah-bar"'
+                ])
         run_osascript([f'display notification "Adhan sound set to {applescript_escape(os.path.basename(path))}" with title "salah-bar"'])
 
     else:
@@ -678,12 +748,19 @@ def choose_adhan_sound():
         track = next((t for t in tracks if t["label"] == picked), None)
         if not track:
             return
-        config.setdefault("notifications", {})["adhan_file"] = track["path"]
+        source = track.get("source") or track["path"]
+        config.setdefault("notifications", {})["adhan_file"] = source
         config["notifications"]["adhan_enabled"] = True
         save_config(config)
         display_name = picked
         if ask_yes_no(f"Track set! Play a preview?", yes_label="Play", no_label="Skip"):
-            subprocess.Popen(["afplay", track["path"]], stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)
+            try:
+                playable = resolve_audio_source(source, track_id=track.get("id", "adhan-track"))
+                subprocess.Popen(["afplay", playable], stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)
+            except Exception as exc:
+                run_osascript([
+                    f'display dialog "Failed to load audio:\\n{applescript_escape(str(exc))}" buttons {{"OK"}} default button "OK" with title "salah-bar"'
+                ])
         run_osascript([f'display notification "Adhan set to: {applescript_escape(display_name)}" with title "salah-bar"'])
 
 

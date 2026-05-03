@@ -10,6 +10,9 @@ import json
 import os
 import subprocess
 import sys
+import hashlib
+import urllib.parse
+import urllib.request
 from datetime import datetime, timedelta, timezone
 from zoneinfo import ZoneInfo
 
@@ -29,6 +32,7 @@ CONFIG_TOOL = os.path.join(os.path.dirname(os.path.dirname(__file__)), "support"
 NOTIFY_STATE_FILE = os.path.join(CACHE_DIR, "notify_state.json")
 PYCACHE_DIR = os.path.join(os.path.dirname(__file__), "__pycache__")
 ADHAN_SOUND_FILE = os.path.join(os.path.dirname(os.path.dirname(__file__)), "assets", "sounds", "adhan-jazzi.mp3")
+REMOTE_SOUNDS_DIR = os.path.join(CACHE_DIR, "remote-sounds")
 
 PRAYERS = [
     ("Fajr",    "الفجر"),
@@ -38,6 +42,37 @@ PRAYERS = [
     ("Isha",    "العشاء"),
 ]
 PRAYER_KEYS = [p[0] for p in PRAYERS]
+
+
+def is_remote_source(path_or_url):
+    return isinstance(path_or_url, str) and path_or_url.startswith(("http://", "https://"))
+
+
+def _cache_filename_for_url(url, prefix="adhan"):
+    parsed = urllib.parse.urlparse(url)
+    ext = os.path.splitext(parsed.path)[1].lower()
+    if ext not in (".mp3", ".m4a", ".wav", ".aiff", ".aac"):
+        ext = ".mp3"
+    digest = hashlib.sha1(url.encode("utf-8")).hexdigest()[:12]
+    return f"{prefix}-{digest}{ext}"
+
+
+def resolve_audio_source(path_or_url, prefix="adhan"):
+    """Return a local playable file path; download remote URLs to cache if needed."""
+    if not path_or_url:
+        return ""
+
+    expanded = os.path.expanduser(path_or_url)
+    if not is_remote_source(expanded):
+        return expanded
+
+    os.makedirs(REMOTE_SOUNDS_DIR, exist_ok=True)
+    cached = os.path.join(REMOTE_SOUNDS_DIR, _cache_filename_for_url(expanded, prefix=prefix))
+    if os.path.isfile(cached) and os.path.getsize(cached) > 0:
+        return cached
+
+    urllib.request.urlretrieve(expanded, cached)
+    return cached
 
 
 def fetch_timings(config, city):
@@ -110,6 +145,12 @@ def play_adhan(config, prayer_key=""):
         sound_path = notifications["fajr_adhan_file"]
     else:
         sound_path = notifications.get("adhan_file") or ADHAN_SOUND_FILE
+
+    try:
+        sound_path = resolve_audio_source(sound_path, prefix="fajr" if is_fajr else "adhan")
+    except Exception as e:
+        logger.warning(f"Failed to resolve adhan source: {e}")
+        return
 
     sound_path = os.path.expanduser(sound_path)
     if not os.path.isfile(sound_path):
@@ -299,10 +340,16 @@ def main():
     )
     adhan_enabled = config.get("notifications", {}).get("adhan_enabled", True)
     adhan_file = config.get("notifications", {}).get("adhan_file", "")
-    adhan_name = os.path.basename(adhan_file) if adhan_file else "adhan-jazzi.mp3"
+    if is_remote_source(adhan_file):
+        adhan_name = "remote track"
+    else:
+        adhan_name = os.path.basename(adhan_file) if adhan_file else "adhan-jazzi.mp3"
     adhan_marker = " ✓" if adhan_enabled else " (silent)"
     fajr_file = config.get("notifications", {}).get("fajr_adhan_file", "")
-    fajr_name = os.path.basename(fajr_file) if fajr_file else "same as others"
+    if is_remote_source(fajr_file):
+        fajr_name = "remote track"
+    else:
+        fajr_name = os.path.basename(fajr_file) if fajr_file else "same as others"
     print(f"--Adhan sound{adhan_marker}  [{adhan_name}]")
     print(
         f"----Toggle on/off | bash='{py}' param1='{script}' param2=configure param3=toggle-adhan terminal=false refresh=true"

@@ -77,6 +77,8 @@ Open the menu bar icon → **Configure** for a categorized settings interface:
 
 #### 🔔 Notifications
 - **Prayer Notifications** — Enable/disable macOS alerts before prayer times
+- **Adhan Sound** — Pick built-in tracks, custom local files, custom URLs, or silent mode
+- **Fajr Adhan** — Optional separate Fajr-only track (falls back to default adhan if unset)
 - **Green Flash Alert** — Enable/disable the green highlight when prayer approaches
 - **Flash Alert Window** — Set alert window: 1, 3, 5, 10, or 15 minutes
 
@@ -111,7 +113,10 @@ Both surfaces read from it. It refreshes every 30 seconds.
   },
   "notifications": {
     "enabled": true,
-    "offsets_minutes": [10, 5, 0]
+    "offsets_minutes": [10, 5, 0],
+    "adhan_enabled": true,
+    "adhan_file": "",
+    "fajr_adhan_file": ""
   },
   "display": {
     "size": "Normal",
@@ -147,6 +152,9 @@ Both surfaces read from it. It refreshes every 30 seconds.
 | `flash_warning.minutes` | int | How many minutes before prayer to start flashing |
 | `notifications.enabled` | bool | Enable macOS notifications |
 | `notifications.offsets_minutes` | array | Minutes before prayer to notify; `0` = at prayer time |
+| `notifications.adhan_enabled` | bool | Enable/disable adhan sound at prayer time |
+| `notifications.adhan_file` | string | Local file path or remote URL for regular adhan |
+| `notifications.fajr_adhan_file` | string | Optional local file path or remote URL for Fajr-only adhan |
 | `display.size` | string | Widget size: "Compact", "Normal", or "Large" |
 | `display.theme` | string | Theme: "Light" or "Dark" |
 | `display.show_seconds` | bool | Show seconds in countdown timer |
@@ -199,6 +207,9 @@ Both surfaces read from it. It refreshes every 30 seconds.
 │   └── prayertimes.30s.py      # SwiftBar plugin (refreshes every 30s)
 ├── support/
 │   └── configure.py            # Config helper invoked by menu items
+├── assets/
+│   ├── sounds/                 # Built-in audio tracks bundled with the app
+│   └── tracks.json             # Track manifest (name/reciter/style + optional remote URL)
 ├── config.example.json         # Copied to ~/.config/salah-bar/config.json on install
 ├── preset-cities.json          # Bundled presets for Turkey, Egypt, Qatar
 ├── install.sh
@@ -209,7 +220,56 @@ Shared state:
 - **City selection**: `~/.prayertimes_city`
 - **Config**: `~/.config/salah-bar/config.json`
 - **API cache**: `~/Library/Caches/prayertimes/`
+- **Remote audio cache**: `~/Library/Caches/prayertimes/remote-sounds/`
 - **Notification state**: `~/Library/Caches/prayertimes/notify_state.json`
+
+---
+
+## Remote Track Hosting
+
+Use this to keep the repo small while offering a much larger audio library.
+
+### How it works
+
+- `tracks.json` can contain local files (`file`) and/or remote URLs (`url`).
+- If a track has no local file but has `url`, it still appears in the picker as a cloud track.
+- On first preview/play, the app downloads it once and caches it at:
+  `~/Library/Caches/prayertimes/remote-sounds/`
+- Later plays reuse the cached file.
+
+### Recommended hosting
+
+1. Create a GitHub Release (for example: `tracks-v1`) in your repo.
+2. Upload MP3 files as release assets.
+3. Copy each asset URL and add it to `assets/tracks.json`.
+
+Example remote entry:
+
+```json
+{
+  "id": "adhan-fajr-example",
+  "name": "أذان الفجر",
+  "reciter": "مثال",
+  "reciter_en": "Example Reciter",
+  "style": "Hijazi",
+  "url": "https://github.com/Abdalmoamen95/salah-bar/releases/download/tracks-v1/adhan-fajr-example.mp3",
+  "fajr": true
+}
+```
+
+Example local entry (existing behavior):
+
+```json
+{
+  "id": "adhan-jazzi",
+  "file": "adhan-jazzi.mp3",
+  "name": "حي على الصلاة",
+  "reciter": "محمد جازي عبدالله",
+  "reciter_en": "Muhammad Jazi Abdullah",
+  "style": "Makkah",
+  "default": true
+}
+```
 
 ---
 
