@@ -18,6 +18,7 @@ sys.path.insert(0, os.path.join(os.path.dirname(os.path.dirname(__file__)), "sup
 
 from config import load_config, load_city, save_city, CACHE_DIR, STATE_FILE, logger
 from api import APIClient
+from refresh import calculate_optimal_refresh_interval, get_refresh_hint_comment
 
 PRAYER_NAMES = {
     "en": ["Fajr", "Dhuhr", "Asr", "Maghrib", "Isha"],
@@ -199,6 +200,9 @@ def main():
     remaining_s = max(0, int((next_p[3] - now).total_seconds()))
     label = config["cities"][city]["label"]
     maybe_notify(config, label, next_p, now)
+    
+    # Calculate optimal refresh interval based on proximity to next prayer
+    refresh_interval, refresh_mode = calculate_optimal_refresh_interval(remaining_s)
     
     flash_warning = config.get("flash_warning", {})
     flash_enabled = flash_warning.get("enabled", True)

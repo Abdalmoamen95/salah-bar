@@ -119,6 +119,41 @@ class APIClient:
             logger.warning(f"Failed to find fallback cache for {city}: {e}")
         return None
 
+    def prefetch_week_ahead(self, config, city, tz_info):
+        """
+        Prefetch prayer times for the next 7 days.
+        Runs silently in the background; errors don't break the main flow.
+        """
+        try:
+            city_config = config["cities"][city]
+            lat = city_config["lat"]
+            lon = city_config["lon"]
+            now = datetime.now(tz_info)
+            
+            for days_ahead in range(1, 8):
+                future_date = now + timedelta(days=days_ahead)
+                date_str = future_date.strftime("%d-%m-%Y")
+                cache_path = self._get_cache_path(city, date_str)
+                
+                # Skip if cache already exists
+                if os.path.exists(cache_path) and os.path.getsize(cache_path) >= 100:
+                    continue
+                
+                url = (
+                    f"{self.API_BASE}/{date_str}"
+                    f"?latitude={lat}&longitude={lon}&method={config['method']}&school={config['school']}"
+                )
+                data = self._fetch_live(url, timeout=5)
+                if data:
+                    cache = CacheEntry(cache_path)
+                    cache.save(data)
+                    logger.debug(f"Prefetched {city} for {date_str}")
+                else:
+                    logger.warning(f"Failed to prefetch {city} for {date_str}")
+                    break  # Stop prefetching if one fails
+        except Exception as e:
+            logger.warning(f"Prefetch failed for {city}: {e}")
+
     def fetch_timings(self, config, city, tz_info):
         """
         Fetch prayer times for city.
@@ -143,6 +178,13 @@ class APIClient:
         if cache.load():
             self.cache_hit = True
             logger.debug(f"Cache hit for {city} on {date_str}")
+            # Prefetch future dates if we got a fresh cache
+            if not hasattr(self, '_prefetch_triggered'):
+                try:
+                    self.prefetch_week_ahead(config, city, tz_info)
+                    self._prefetch_triggered = True
+                except Exception:
+                    pass
             return cache.data, True, None
 
         # Try live API
@@ -153,6 +195,11 @@ class APIClient:
         data = self._fetch_live(url)
         if data:
             cache.save(data)
+            # Trigger week-ahead prefetch in background
+            try:
+                self.prefetch_week_ahead(config, city, tz_info)
+            except Exception:
+                pass
             return data, True, None
 
         # Fallback to any recent cache

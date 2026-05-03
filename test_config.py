@@ -216,6 +216,66 @@ class TestAPI:
         return self.failed == 0
 
 
+class TestRefresh:
+    """Test smart refresh interval calculation."""
+
+    def __init__(self):
+        self.passed = 0
+        self.failed = 0
+
+    def test_refresh_idle_interval(self):
+        """Test idle period (>2 hours) returns 300s refresh."""
+        sys.path.insert(0, os.path.join(os.path.dirname(__file__), "support"))
+        from refresh import calculate_optimal_refresh_interval
+        
+        # 3 hours away
+        interval, mode = calculate_optimal_refresh_interval(3 * 3600)
+        if interval == 300 and mode == "idle":
+            self.passed += 1
+            print("✓ Idle period (>2h) returns 300s refresh")
+        else:
+            self.failed += 1
+            print(f"✗ Idle refresh failed: {interval}s, mode={mode}")
+
+    def test_refresh_approaching_interval(self):
+        """Test approaching period (10min-2h) returns 60s refresh."""
+        sys.path.insert(0, os.path.join(os.path.dirname(__file__), "support"))
+        from refresh import calculate_optimal_refresh_interval
+        
+        # 30 minutes away
+        interval, mode = calculate_optimal_refresh_interval(30 * 60)
+        if interval == 60 and mode == "approaching":
+            self.passed += 1
+            print("✓ Approaching period (10m-2h) returns 60s refresh")
+        else:
+            self.failed += 1
+            print(f"✗ Approaching refresh failed: {interval}s, mode={mode}")
+
+    def test_refresh_imminent_interval(self):
+        """Test imminent period (<10min) returns 5s refresh."""
+        sys.path.insert(0, os.path.join(os.path.dirname(__file__), "support"))
+        from refresh import calculate_optimal_refresh_interval
+        
+        # 5 minutes away
+        interval, mode = calculate_optimal_refresh_interval(5 * 60)
+        if interval == 5 and mode == "imminent":
+            self.passed += 1
+            print("✓ Imminent period (<10m) returns 5s refresh")
+        else:
+            self.failed += 1
+            print(f"✗ Imminent refresh failed: {interval}s, mode={mode}")
+
+    def run(self):
+        """Run all tests."""
+        print("\n=== Refresh Tests ===\n")
+        self.test_refresh_idle_interval()
+        self.test_refresh_approaching_interval()
+        self.test_refresh_imminent_interval()
+
+        print(f"\nPassed: {self.passed}, Failed: {self.failed}")
+        return self.failed == 0
+
+
 def main():
     """Run all test suites."""
     print("Prayer Times Widget Test Suite")
@@ -227,9 +287,12 @@ def main():
     api_tests = TestAPI()
     api_ok = api_tests.run()
 
+    refresh_tests = TestRefresh()
+    refresh_ok = refresh_tests.run()
+
     print("\n" + "=" * 40)
-    total_passed = config_tests.passed + api_tests.passed
-    total_failed = config_tests.failed + api_tests.failed
+    total_passed = config_tests.passed + api_tests.passed + refresh_tests.passed
+    total_failed = config_tests.failed + api_tests.failed + refresh_tests.failed
     print(f"Total: {total_passed} passed, {total_failed} failed")
 
     if total_failed > 0:

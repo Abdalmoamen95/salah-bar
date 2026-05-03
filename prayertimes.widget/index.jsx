@@ -598,12 +598,22 @@ if (typeof window !== "undefined") {
   }
 
   // Ensure exactly one countdown ticker is active after widget reloads.
+  // Optimization: Only update DOM when minutes change, not every second
   if (window.__prayertimes_countdown_ticker) {
     clearInterval(window.__prayertimes_countdown_ticker);
   }
+  let lastMinute = -1;
   window.__prayertimes_countdown_ticker = setInterval(() => {
     if (typeof document !== "undefined" && document.hidden) return;
-    if (typeof updateLiveCountdown === "function") updateLiveCountdown();
+    
+    const now = new Date();
+    const currentMinute = now.getMinutes();
+    
+    // Only call updateLiveCountdown if minute changed
+    if (currentMinute !== lastMinute || lastMinute === -1) {
+      lastMinute = currentMinute;
+      if (typeof updateLiveCountdown === "function") updateLiveCountdown();
+    }
   }, COUNTDOWN_TICK_MS);
 }
 

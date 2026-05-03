@@ -14,7 +14,8 @@ sys.path.insert(0, os.path.dirname(__file__))
 # Import shared config module
 from config import (
     load_config, save_config, load_city, save_city, logger,
-    CONFIG_FILE, STATE_FILE, CACHE_DIR, DEFAULT_CONFIG
+    CONFIG_FILE, STATE_FILE, CACHE_DIR, DEFAULT_CONFIG,
+    detect_system_timezone, find_matching_city, suggest_timezone_city
 )
 
 PRESET_CITIES_FILE = os.path.join(os.path.dirname(os.path.dirname(__file__)), "preset-cities.json")
@@ -273,6 +274,36 @@ def reset_to_defaults():
     run_osascript([
         'display notification "Configuration reset to defaults" with title "salah-bar"'
     ])
+
+
+def handle_first_run():
+    """Offer to detect system timezone and set default city on first run."""
+    try:
+        suggested_city, system_tz = suggest_timezone_city()
+        
+        if suggested_city:
+            config = load_config()
+            city_label = config["cities"][suggested_city]["label"]
+            
+            if ask_yes_no(
+                f"Your system timezone is {system_tz}. Use {city_label} as your default city?",
+                yes_label="Use It",
+                no_label="Choose Another"
+            ):
+                config["default_city"] = suggested_city
+                save_config(config)
+                with open(STATE_FILE, "w") as f:
+                    f.write(suggested_city)
+                run_osascript([
+                    f'display notification "Default city set to {applescript_escape(city_label)}" with title "salah-bar"'
+                ])
+                return
+        
+        # If no system TZ match found or user rejected, show normal flow
+        choose_default_city()
+    except Exception as e:
+        logger.warning(f"First-run timezone detection failed: {e}")
+        choose_default_city()
 
 
 def main():

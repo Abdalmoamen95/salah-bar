@@ -192,6 +192,30 @@ def detect_system_timezone():
     return None
 
 
+def find_matching_city(config, system_tz):
+    """Find a city in config that matches the system timezone."""
+    for key, city in config["cities"].items():
+        if city["tz"] == system_tz:
+            return key
+    return None
+
+
+def suggest_timezone_city():
+    """
+    Detect system timezone and suggest a matching city if available.
+    Returns (suggested_city_key, system_tz) or (None, None) if no match.
+    """
+    system_tz = detect_system_timezone()
+    if not system_tz:
+        return None, None
+    
+    # Load current config to check for matches
+    config = load_config()
+    matching_city = find_matching_city(config, system_tz)
+    
+    return matching_city, system_tz
+
+
 def validate_config_schema(config):
     """Validate config has required keys and correct types. Returns (is_valid, errors)."""
     errors = []

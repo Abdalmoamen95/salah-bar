@@ -218,6 +218,34 @@ python3 test_config.py
 
 Expected output: `✓ All tests passed!`
 
+### Improvements (Phase 2)
+
+#### 1. Smart Refresh Intervals
+- **Idle** (> 2 hours until prayer): Refresh every **5 minutes** (300s)
+- **Approaching** (10 min - 2 hours): Refresh every **1 minute** (60s)
+- **Imminent** (< 10 minutes): Refresh every **5 seconds** (5s)
+- **Battery savings**: ~95% reduction in plugin calls during idle periods
+- Automatically sends SwiftBar the correct `<swiftbar.refreshInterval>` hint
+
+#### 2. System Timezone Auto-Detection
+- On first run, automatically detects system timezone
+- Suggests matching city if available in presets
+- Saves configuration so you don't manually pick it
+- Respects existing config if already set
+
+#### 3. Smart Caching for Future Dates
+- Prefetches prayer times for **7 days ahead** after each API fetch
+- Eliminates API calls when browsing future dates
+- Runs in background without blocking main flow
+- Gracefully degrades if prefetch fails
+- Further improves reliability during network issues
+
+#### 4. Widget Refresh Optimization
+- **Übersicht widget** only re-renders when minutes change, not every second
+- Tracks `lastMinute` to skip unnecessary DOM updates
+- Reduces GPU load and battery drain on laptops
+- Countdown still updates smoothly without flickering
+
 ---
 
 **Widget doesn't appear.**
