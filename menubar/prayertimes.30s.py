@@ -8,6 +8,7 @@
 
 import json
 import os
+import signal
 import subprocess
 import sys
 import hashlib
@@ -28,8 +29,15 @@ PRAYER_NAMES = {
     "tr": ["Sabah", "Öğle", "İkindi", "Akşam", "Yatsı"],
 }
 
+# Sunrise (Shuruq) is not a prayer — it marks the end of Fajr time.
+# We show it in the list for reference but never use it for countdowns or notifications.
+SUNRISE_KEY = "Sunrise"
+SUNRISE_AR = "الشروق"
+SUNRISE_NAMES = {"en": "Sunrise", "tr": "Güneş"}
+
 CONFIG_TOOL = os.path.join(os.path.dirname(os.path.dirname(__file__)), "support", "configure.py")
 NOTIFY_STATE_FILE = os.path.join(CACHE_DIR, "notify_state.json")
+ADHAN_PID_FILE = os.path.join(CACHE_DIR, "adhan.pid")
 PYCACHE_DIR = os.path.join(os.path.dirname(__file__), "__pycache__")
 ADHAN_SOUND_FILE = os.path.join(os.path.dirname(os.path.dirname(__file__)), "assets", "sounds", "adhan-jazzi.mp3")
 REMOTE_SOUNDS_DIR = os.path.join(CACHE_DIR, "remote-sounds")
@@ -96,13 +104,27 @@ def parse_hhmm(t):
     return t.split(" ")[0]
 
 
-def build_schedule(timings, now, tzinfo, lang="en"):
+def build_schedule(timings, now, tzinfo, lang="en", include_sunrise=False):
+    """Return list of (key, local_name, ar, datetime).
+
+    When include_sunrise=True, a Sunrise row is inserted after Fajr for display.
+    Sunrise rows are intentionally NOT prayers — callers must filter them out
+    when computing the next-prayer countdown or scheduling notifications.
+    """
     names = PRAYER_NAMES.get(lang, PRAYER_NAMES["en"])
     out = []
     for (key, ar), local_name in zip(PRAYERS, names):
         hh, mm = parse_hhmm(timings[key]).split(":")
         d = now.replace(hour=int(hh), minute=int(mm), second=0, microsecond=0)
         out.append((key, local_name, ar, d))
+    if include_sunrise and SUNRISE_KEY in timings:
+        try:
+            hh, mm = parse_hhmm(timings[SUNRISE_KEY]).split(":")
+            d = now.replace(hour=int(hh), minute=int(mm), second=0, microsecond=0)
+            sunrise_local = SUNRISE_NAMES.get(lang, SUNRISE_NAMES["en"])
+            out.insert(1, (SUNRISE_KEY, sunrise_local, SUNRISE_AR, d))
+        except Exception as e:
+            logger.debug(f"Skipping sunrise display: {e}")
     return out
 
 
@@ -157,13 +179,59 @@ def play_adhan(config, prayer_key=""):
         logger.warning(f"Adhan sound file not found: {sound_path}")
         return
     try:
-        subprocess.Popen(
+        proc = subprocess.Popen(
             ["afplay", sound_path],
             stdout=subprocess.DEVNULL,
             stderr=subprocess.DEVNULL,
         )
+        # Record PID so the adhan can be silenced from the menu/widget.
+        try:
+            with open(ADHAN_PID_FILE, "w") as f:
+                f.write(str(proc.pid))
+        except Exception as e:
+            logger.debug(f"Could not write adhan pid file: {e}")
     except Exception as e:
         logger.warning(f"Failed to play adhan: {e}")
+
+
+def is_adhan_playing():
+    """Return True if a tracked adhan process is currently alive.
+
+    Self-heals: if the PID file points at a dead/missing process, it is
+    treated as not playing (the stale file is harmless).
+    """
+    try:
+        with open(ADHAN_PID_FILE) as f:
+            pid = int(f.read().strip())
+    except Exception:
+        return False
+    try:
+        os.kill(pid, 0)  # signal 0 only checks existence
+        return True
+    except Exception:
+        return False
+
+
+def stop_adhan():
+    """Kill the currently-playing adhan, if any, and clear the PID file."""
+    try:
+        with open(ADHAN_PID_FILE) as f:
+            pid = int(f.read().strip())
+        os.kill(pid, signal.SIGTERM)
+    except Exception as e:
+        logger.debug(f"No tracked adhan pid to stop: {e}")
+    # Fallback: stop any stray afplay processes (best-effort).
+    try:
+        subprocess.run(["pkill", "-x", "afplay"], check=False,
+                       stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)
+    except Exception as e:
+        logger.debug(f"pkill afplay failed: {e}")
+    try:
+        os.remove(ADHAN_PID_FILE)
+    except FileNotFoundError:
+        pass
+    except Exception as e:
+        logger.debug(f"Could not remove adhan pid file: {e}")
 
 
 def notify(text, play_sound=False, config=None, prayer_key=""):
@@ -247,6 +315,9 @@ def main():
         action = sys.argv[2] if len(sys.argv) > 2 else ""
         subprocess.run([sys.executable, "-B", CONFIG_TOOL, action], check=False)
         return
+    if len(sys.argv) > 1 and sys.argv[1] == "stop-adhan":
+        stop_adhan()
+        return
 
     config = load_config()
     city = load_city(config)
@@ -263,13 +334,15 @@ def main():
         return
 
     lang = config.get("language", "en")
-    schedule = build_schedule(timings, now, tzinfo, lang)
-    upcoming = [s for s in schedule if s[3] > now]
+    schedule = build_schedule(timings, now, tzinfo, lang, include_sunrise=True)
+    # Sunrise is shown in the list but is never the "next prayer" target.
+    prayer_schedule = [s for s in schedule if s[0] != SUNRISE_KEY]
+    upcoming = [s for s in prayer_schedule if s[3] > now]
     if upcoming:
         next_p = upcoming[0]
     else:
         # Tomorrow's Fajr (close enough until next refresh)
-        first = schedule[0]
+        first = prayer_schedule[0]
         next_p = (first[0], first[1], first[2], first[3] + timedelta(days=1))
 
     countdown = fmt_countdown(next_p[3] - now)
@@ -299,18 +372,33 @@ def main():
 
     # Dropdown
     print("---")
+    if is_adhan_playing():
+        py = sys.executable
+        script = os.path.realpath(__file__)
+        print(
+            f"🔇 Silence adhan | bash='{py}' param1='{script}' param2=stop-adhan terminal=false refresh=true color=#ef4444"
+        )
+        print("---")
     if not is_fresh and error_msg:
         print(f"⚠ {error_msg} | color=#f59e0b")
         print("---")
-    
+
     print(f"City: {label} | size=12")
     next_display = f"{next_p[1]} / {next_p[2]}"
     print(f"Next: {next_display} at {next_p[3].strftime('%H:%M')} | size=12")
     print("---")
     for key, local_name, ar, d in schedule:
-        marker = "→" if key == next_p[0] and d.date() == next_p[3].date() else " "
+        is_sunrise = key == SUNRISE_KEY
+        if is_sunrise:
+            marker = "🌅"
+        else:
+            marker = "→" if key == next_p[0] and d.date() == next_p[3].date() else " "
         passed = d < now
-        opacity = " color=#888888" if passed and not (key == next_p[0]) else ""
+        if is_sunrise:
+            # Subtle styling — sunrise is informational, never highlighted.
+            opacity = " color=#888888" if passed else " color=#f59e0b"
+        else:
+            opacity = " color=#888888" if passed and not (key == next_p[0]) else ""
         print(f"{marker} {local_name} / {ar}  {d.strftime('%H:%M')} | font=Menlo size=13{opacity}")
     print("---")
     print("Switch city")
