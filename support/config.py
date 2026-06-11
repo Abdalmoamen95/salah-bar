@@ -146,20 +146,77 @@ def normalize_config(raw):
             config["cities"] = normalized
 
     default_city = raw.get("default_city")
-    if default_city in config["cities"]:
+    if default_city == "auto" or default_city in config["cities"]:
         config["default_city"] = default_city
 
     return config
 
 
+AUTO_CITY_KEY = "auto"
+
+
+def inject_auto_city(config, refresh="cached"):
+    """Add a synthetic 'auto' city resolved from IP geolocation.
+
+    refresh:
+      "cached" — use cached location only (no network); skip if no cache.
+      "fresh"  — return cached if fresh, else hit the network.
+      "force"  — always hit the network and overwrite cache.
+    """
+    try:
+        if refresh == "cached":
+            from geo import get_cached_location
+            loc = get_cached_location()
+        else:
+            from geo import detect_ip_location
+            loc = detect_ip_location(force_refresh=(refresh == "force"))
+    except Exception as e:
+        logger.debug(f"geo module unavailable: {e}")
+        return config
+
+    if not loc:
+        return config
+
+    config["cities"][AUTO_CITY_KEY] = {
+        "label": f"📍 {loc['label']}",
+        "lat": loc["lat"],
+        "lon": loc["lon"],
+        "tz": loc["tz"],
+    }
+    return config
+
+
 def load_config():
-    """Load and validate config from disk, fall back to defaults."""
+    """Load and validate config from disk, fall back to defaults.
+
+    Always attempts to inject the 'auto' city based on IP geolocation, so
+    prayer-time calculation can follow the user's current location. Uses
+    cached geo data on the hot path; only blocks on the network when the
+    user has selected 'auto' but no cache exists yet (cold start).
+    """
     try:
         with open(CONFIG_FILE) as f:
-            return normalize_config(json.load(f))
+            config = normalize_config(json.load(f))
     except Exception as e:
         logger.warning(f"Failed to load config from {CONFIG_FILE}: {e}, using defaults")
-        return normalize_config({})
+        config = normalize_config({})
+
+    inject_auto_city(config, refresh="cached")
+
+    if AUTO_CITY_KEY not in config["cities"]:
+        saved = _peek_saved_city()
+        if config.get("default_city") == AUTO_CITY_KEY or saved == AUTO_CITY_KEY:
+            inject_auto_city(config, refresh="fresh")
+
+    return config
+
+
+def _peek_saved_city():
+    """Read STATE_FILE without validating against config['cities']."""
+    try:
+        return open(STATE_FILE).read().strip()
+    except Exception:
+        return None
 
 
 def save_config(config):
