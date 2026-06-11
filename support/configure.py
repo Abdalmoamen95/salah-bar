@@ -17,7 +17,8 @@ sys.path.insert(0, os.path.dirname(__file__))
 # Import shared config module
 from config import (
     load_config, save_config, load_city, save_city, logger,
-    CONFIG_FILE, STATE_FILE, CACHE_DIR, DEFAULT_CONFIG,
+    CONFIG_FILE, STATE_FILE, CACHE_DIR, DEFAULT_CONFIG, AUTO_CITY_KEY,
+    inject_auto_city,
     detect_system_timezone, find_matching_city, suggest_timezone_city
 )
 
@@ -183,6 +184,46 @@ def choose_default_city():
     run_osascript([
         f'display notification "Default city set to {applescript_escape(picked_label)}" with title "salah-bar"'
     ])
+
+
+def use_auto_location():
+    """Detect location from IP and set as the default city."""
+    config = load_config()
+    inject_auto_city(config, refresh="force")
+    if AUTO_CITY_KEY not in config["cities"]:
+        run_osascript([
+            'display dialog "Could not detect your location. Check your internet connection." '
+            'buttons {"OK"} default button "OK" with title "salah-bar"'
+        ])
+        return
+    config["default_city"] = AUTO_CITY_KEY
+    save_config(config)
+    with open(STATE_FILE, "w") as f:
+        f.write(AUTO_CITY_KEY)
+    label = config["cities"][AUTO_CITY_KEY]["label"]
+    run_osascript([
+        f'display notification "Auto-location: {applescript_escape(label)}" with title "salah-bar"'
+    ])
+    _refresh_widget()
+
+
+def refresh_auto_location():
+    """Force a fresh location lookup (CoreLocation, falling back to IP)."""
+    config = load_config()
+    inject_auto_city(config, refresh="force")
+    if AUTO_CITY_KEY not in config["cities"]:
+        run_osascript([
+            'display dialog "Could not refresh location.\\n\\nFor accurate positioning, install CoreLocationCLI '
+            '(brew install corelocationcli) and grant Location Services access in System Settings > '
+            'Privacy & Security > Location Services.\\n\\nOtherwise check your internet connection." '
+            'buttons {"OK"} default button "OK" with title "salah-bar"'
+        ])
+        return
+    label = config["cities"][AUTO_CITY_KEY]["label"]
+    run_osascript([
+        f'display notification "Location refreshed: {applescript_escape(label)}" with title "salah-bar"'
+    ])
+    _refresh_widget()
 
 
 def open_config():
@@ -556,16 +597,22 @@ def main_menu():
 def cities_menu():
     """Cities management submenu."""
     cities_items = [
+        "Use Auto-Location (IP)",
+        "Refresh Auto-Location",
         "Set Default City",
         "Add Preset City",
         "Add Custom City",
         "View All Cities",
         "Remove City",
     ]
-    
-    picked = choose_from_list(cities_items, "Manage Cities", "Set Default City")
-    
-    if picked == "Set Default City":
+
+    picked = choose_from_list(cities_items, "Manage Cities", "Use Auto-Location (IP)")
+
+    if picked == "Use Auto-Location (IP)":
+        use_auto_location()
+    elif picked == "Refresh Auto-Location":
+        refresh_auto_location()
+    elif picked == "Set Default City":
         choose_default_city()
     elif picked == "Add Preset City":
         add_preset_city()
@@ -901,6 +948,10 @@ def main():
             add_custom_city()
         elif action == "choose-default":
             choose_default_city()
+        elif action == "use-auto-location":
+            use_auto_location()
+        elif action == "refresh-auto-location":
+            refresh_auto_location()
         elif action == "toggle-notifications":
             toggle_notifications()
         elif action == "toggle-flash-warning":
