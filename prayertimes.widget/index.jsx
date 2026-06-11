@@ -317,6 +317,9 @@ export const className = `
   }
   .row.active { background: rgba(125, 211, 252, 0.08); }
   .row.passed { opacity: 0.4; }
+  .row.sunrise { opacity: 0.7; font-style: italic; }
+  .row.sunrise .name-en { color: #f59e0b; }
+  .row.sunrise.passed { opacity: 0.35; }
   .name-en { font-weight: 500; }
   .name-ar { font-family: "SF Arabic", "Geeza Pro", sans-serif; opacity: 0.8; text-align: center; }
   .time { font-variant-numeric: tabular-nums; opacity: 0.85; text-align: right; }
@@ -547,6 +550,11 @@ const PRAYERS = [
   { key: "Isha",    ar: "العشاء"  }
 ];
 
+// Sunrise (Shuruq) — not a prayer. Shown in the list as a marker for the end
+// of Fajr time, but excluded from "next prayer" and notification logic.
+const SUNRISE = { key: "Sunrise", ar: "الشروق" };
+const SUNRISE_NAMES = { en: "Sunrise", tr: "Güneş" };
+
 const PRAYER_AYAH = "وَعَجِلْتُ إِلَيْكَ رَبِّ لِتَرْضَىٰ";
 const AYAH_WINDOW_MS = 2 * 60 * 1000;
 const FORCE_AYAH_TEST = true;
@@ -612,6 +620,16 @@ const saveCity = (c) => {
   // Also write to shared state file so the SwiftBar menu-bar plugin sees it.
   // Best-effort — silently no-ops if Übersicht's run() API isn't available.
   const cmd = `printf %s ${c} > "$HOME/.prayertimes_city"`;
+  try {
+    if (typeof run === "function") run(cmd);
+    else if (typeof window !== "undefined" && typeof window.run === "function") window.run(cmd);
+  } catch (e) {}
+};
+
+// Silence a playing adhan. Best-effort no-op if nothing is playing or run() is
+// unavailable. Kills afplay directly; the plugin's PID check self-heals.
+const silenceAdhan = () => {
+  const cmd = `pkill -x afplay`;
   try {
     if (typeof run === "function") run(cmd);
     else if (typeof window !== "undefined" && typeof window.run === "function") window.run(cmd);
@@ -798,19 +816,33 @@ const computeView = (city, output) => {
   const lang = config.language || "en";
   const ui = UI_STRINGS[lang] || UI_STRINGS.en;
   const names = PRAYER_NAMES[lang] || PRAYER_NAMES.en;
-  const schedule = PRAYERS.map((p, i) => ({
+  const prayerSchedule = PRAYERS.map((p, i) => ({
     ...p,
     localName: names[i],
     timeStr: cleanTime(timings[p.key]),
-    date: buildPrayerDate(cleanTime(timings[p.key]), tz)
+    date: buildPrayerDate(cleanTime(timings[p.key]), tz),
+    isSunrise: false
   }));
 
-  let next = schedule.find(p => p.date > now);
-  if (!next) {
-    next = { ...schedule[0], date: new Date(schedule[0].date.getTime() + 24*3600*1000) };
+  // Build display schedule with sunrise inserted between Fajr and Dhuhr.
+  const schedule = [...prayerSchedule];
+  if (timings && timings.Sunrise) {
+    schedule.splice(1, 0, {
+      ...SUNRISE,
+      localName: SUNRISE_NAMES[lang] || SUNRISE_NAMES.en,
+      timeStr: cleanTime(timings.Sunrise),
+      date: buildPrayerDate(cleanTime(timings.Sunrise), tz),
+      isSunrise: true
+    });
   }
 
-  const currentPrayer = schedule.find(p => {
+  // Sunrise must never be the "next prayer" target — filter it out for countdown logic.
+  let next = prayerSchedule.find(p => p.date > now);
+  if (!next) {
+    next = { ...prayerSchedule[0], date: new Date(prayerSchedule[0].date.getTime() + 24*3600*1000) };
+  }
+
+  const currentPrayer = prayerSchedule.find(p => {
     const diff = now - p.date;
     return diff >= 0 && diff < AYAH_WINDOW_MS;
   }) || null;
@@ -857,13 +889,14 @@ const rebuildWidget = () => {
   v.schedule.forEach((p, i) => {
     const row = rows[i];
     if (!row) return;
-    const isActive = v.showAyah
+    const isActive = p.isSunrise ? false : (v.showAyah
       ? !!v.currentPrayer && p.key === v.currentPrayer.key && v.currentPrayer.date.getTime() === p.date.getTime()
-      : p.key === v.next.key && v.next.date.getTime() === p.date.getTime();
+      : p.key === v.next.key && v.next.date.getTime() === p.date.getTime());
     const passed = p.date < new Date() && !isActive;
-    row.className = `row ${isActive ? "active" : ""} ${passed ? "passed" : ""}`.trim();
+    const sunriseCls = p.isSunrise ? "sunrise" : "";
+    row.className = `row ${isActive ? "active" : ""} ${passed ? "passed" : ""} ${sunriseCls}`.trim();
     const setInRow = (sel, text) => { const el = row.querySelector(sel); if (el) el.textContent = text; };
-    setInRow(".name-en", `${p.localName} / ${p.ar}`);
+    setInRow(".name-en", `${p.isSunrise ? "🌅 " : ""}${p.localName} / ${p.ar}`);
     setInRow(".name-ar", "");
     setInRow(".time", p.timeStr);
   });
@@ -961,7 +994,7 @@ export const render = ({ output, error }) => {
         </div>
       </div>
 
-      <div className={`next-block ${fiveMinAlert ? "five-min-alert" : ""}`.trim()}>
+      <div className={`next-block ${fiveMinAlert ? "five-min-alert" : ""}`.trim()} onClick={silenceAdhan} title="Click to silence adhan">
         <div className="ayah" style={{ display: showAyah ? "block" : "none" }}>{PRAYER_AYAH}</div>
         <div className="next-label">{ui.nextPrayer}</div>
         <div className="next-info">
@@ -975,13 +1008,14 @@ export const render = ({ output, error }) => {
 
       <div className="prayers">
         {schedule.map(p => {
-          const isActive = showAyah
+          const isActive = p.isSunrise ? false : (showAyah
             ? !!currentPrayer && p.key === currentPrayer.key && currentPrayer.date.getTime() === p.date.getTime()
-            : p.key === next.key && next.date.getTime() === p.date.getTime();
+            : p.key === next.key && next.date.getTime() === p.date.getTime());
           const passed = p.date < now && !isActive;
+          const sunriseCls = p.isSunrise ? "sunrise" : "";
           return (
-            <div key={p.key} className={`row ${isActive ? "active" : ""} ${passed ? "passed" : ""}`}>
-              <span className="name-en">{p.localName} / {p.ar}</span>
+            <div key={p.key} className={`row ${isActive ? "active" : ""} ${passed ? "passed" : ""} ${sunriseCls}`.trim()}>
+              <span className="name-en">{p.isSunrise ? "🌅 " : ""}{p.localName} / {p.ar}</span>
               <span className="name-ar"></span>
               <span className="time">{p.timeStr}</span>
             </div>
