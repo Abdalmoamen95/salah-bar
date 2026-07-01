@@ -79,9 +79,19 @@ export const command = `
   python3 - <<'PY'
 import json
 import os
+import ssl
 import urllib.request
 from datetime import datetime
 from zoneinfo import ZoneInfo
+
+def _ssl_context():
+  # python.org Python doesn't use the macOS keychain; without certs set up,
+  # HTTPS raises CERTIFICATE_VERIFY_FAILED. Prefer certifi's CA bundle if present.
+  try:
+    import certifi
+    return ssl.create_default_context(cafile=certifi.where())
+  except Exception:
+    return ssl.create_default_context()
 
 CONFIG_PATH = os.path.expanduser("~/.config/salah-bar/config.json")
 CACHE_DIR = os.path.expanduser("~/Library/Caches/prayertimes")
@@ -157,7 +167,7 @@ for key, city in config["cities"].items():
       f"?latitude={city['lat']}&longitude={city['lon']}"
       f"&method={config['method']}&school={config['school']}"
     )
-    with urllib.request.urlopen(url, timeout=10) as response:
+    with urllib.request.urlopen(url, timeout=10, context=_ssl_context()) as response:
       payload = response.read()
     with open(cache_file, "wb") as f:
       f.write(payload)
