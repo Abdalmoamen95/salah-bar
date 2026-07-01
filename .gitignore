@@ -16,3 +16,6 @@ __pycache__/
 .idea/
 *.swp
 *.swo
+
+# Claude Code local config
+.claude/

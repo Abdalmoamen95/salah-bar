@@ -195,19 +195,25 @@ def play_adhan(config, prayer_key=""):
 
 
 def is_adhan_playing():
-    """Return True if a tracked adhan process is currently alive.
+    """Return True if an adhan is currently playing.
 
-    Self-heals: if the PID file points at a dead/missing process, it is
-    treated as not playing (the stale file is harmless).
+    Checks our tracked PID first, then falls back to detecting ANY running
+    afplay process. The fallback means the silence control still appears even
+    for an adhan started before PID tracking existed, or started out-of-band.
+    Self-heals: a stale PID file is harmless.
     """
     try:
         with open(ADHAN_PID_FILE) as f:
             pid = int(f.read().strip())
-    except Exception:
-        return False
-    try:
         os.kill(pid, 0)  # signal 0 only checks existence
         return True
+    except Exception:
+        pass
+    # Fallback: any afplay process running counts as an adhan we can silence.
+    try:
+        result = subprocess.run(["pgrep", "-x", "afplay"],
+                                capture_output=True, text=True)
+        return bool(result.stdout.strip())
     except Exception:
         return False
 
@@ -220,10 +226,15 @@ def stop_adhan():
         os.kill(pid, signal.SIGTERM)
     except Exception as e:
         logger.debug(f"No tracked adhan pid to stop: {e}")
-    # Fallback: stop any stray afplay processes (best-effort).
+    # Fallback: stop any stray afplay processes (best-effort), escalating to
+    # SIGKILL if a polite SIGTERM doesn't take.
     try:
         subprocess.run(["pkill", "-x", "afplay"], check=False,
                        stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)
+        result = subprocess.run(["pgrep", "-x", "afplay"], capture_output=True, text=True)
+        if result.stdout.strip():
+            subprocess.run(["pkill", "-9", "-x", "afplay"], check=False,
+                           stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)
     except Exception as e:
         logger.debug(f"pkill afplay failed: {e}")
     try:
