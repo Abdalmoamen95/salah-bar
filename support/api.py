@@ -13,7 +13,7 @@ import urllib.error
 from datetime import datetime, timedelta
 from zoneinfo import ZoneInfo
 
-from config import CACHE_DIR, logger
+from config import CACHE_DIR, logger, ssl_context
 
 
 class CacheEntry:
@@ -84,7 +84,7 @@ class APIClient:
         """Fetch prayer times from live API with retries."""
         for attempt in range(self.MAX_RETRIES):
             try:
-                with urllib.request.urlopen(url, timeout=timeout) as response:
+                with urllib.request.urlopen(url, timeout=timeout, context=ssl_context()) as response:
                     data = response.read()
                     logger.debug(f"API fetch succeeded on attempt {attempt + 1}")
                     return json.loads(data)

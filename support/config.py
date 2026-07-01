@@ -7,6 +7,7 @@ Eliminates duplication across index.jsx, prayertimes.30s.py, and configure.py
 
 import json
 import os
+import ssl
 import logging
 from datetime import datetime
 from zoneinfo import ZoneInfo, available_timezones
@@ -34,6 +35,22 @@ if not logger.handlers:
         "%Y-%m-%d %H:%M:%S"
     ))
     logger.addHandler(handler)
+
+
+def ssl_context():
+    """Return an SSL context that can verify HTTPS certs across macOS Python builds.
+
+    python.org Python does NOT use the macOS system keychain; unless its
+    "Install Certificates.command" has been run, HTTPS raises
+    "CERTIFICATE_VERIFY_FAILED: unable to get local issuer certificate".
+    Preferring certifi's bundled CA store (when importable) makes prayer-times
+    and geo lookups work regardless of how Python was installed.
+    """
+    try:
+        import certifi
+        return ssl.create_default_context(cafile=certifi.where())
+    except Exception:
+        return ssl.create_default_context()
 
 
 # Default configuration

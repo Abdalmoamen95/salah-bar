@@ -15,7 +15,7 @@ import urllib.parse
 import urllib.request
 from zoneinfo import available_timezones
 
-from config import CACHE_DIR, logger
+from config import CACHE_DIR, logger, ssl_context
 
 GEO_CACHE_FILE = os.path.join(CACHE_DIR, "geo_location.json")
 GEO_CACHE_TTL = 6 * 3600  # 6 hours — long enough to avoid hammering free APIs, short enough to follow travel
@@ -151,7 +151,7 @@ def detect_ip_location(force_refresh=False):
     for url, parse in PROVIDERS:
         try:
             req = urllib.request.Request(url, headers={"User-Agent": "salah-bar/1.0"})
-            with urllib.request.urlopen(req, timeout=5) as resp:
+            with urllib.request.urlopen(req, timeout=5, context=ssl_context()) as resp:
                 data = json.load(resp)
             result = parse(data)
             if result and result["tz"] in valid_tzs:

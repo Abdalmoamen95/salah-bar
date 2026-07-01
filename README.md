@@ -375,6 +375,19 @@ chmod +x ./menubar/prayertimes.30s.py ./support/configure.py
 python3 ./menubar/prayertimes.30s.py | head -n 12
 ```
 
+**`API error: [SSL: CERTIFICATE_VERIFY_FAILED] ... unable to get local issuer certificate`.**
+Your Python can't verify TLS certificates — common with a **python.org** Python
+install, which doesn't use the macOS keychain and needs its certificates set up
+once. The installer now handles this automatically; if you hit it on an older
+install, fix it with either:
+```bash
+# python.org Python — run its bundled certificate installer (match your version):
+"/Applications/Python 3.14/Install Certificates.command"
+# …or just install certifi for whichever python3 SwiftBar uses:
+python3 -m pip install certifi
+```
+Then refresh the menu bar. (Re-running `./install.sh` also fixes it.)
+
 **Times look wrong.**
 Check that `method` and `school` match your local preference, and that your city's `tz` is the correct IANA timezone.
 

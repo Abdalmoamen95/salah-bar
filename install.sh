@@ -106,6 +106,43 @@ ensure_brew() {
   fi
 }
 
+ensure_python_certs() {
+  # macOS Python (especially python.org builds) can't verify TLS certificates
+  # until a CA bundle is set up, which makes api.aladhan.com fail with
+  # "CERTIFICATE_VERIFY_FAILED: unable to get local issuer certificate".
+  # The plugin prefers certifi's bundle, so make sure certifi is importable.
+  if python3 -c "import certifi" >/dev/null 2>&1; then
+    green "✓ Python TLS certificates present."
+    return
+  fi
+
+  # python.org framework builds ship an "Install Certificates.command".
+  local pyver cert_cmd
+  pyver="$(python3 -c 'import sys; print(f"{sys.version_info.major}.{sys.version_info.minor}")' 2>/dev/null || true)"
+  cert_cmd="/Applications/Python $pyver/Install Certificates.command"
+  if [ -f "$cert_cmd" ]; then
+    yellow "Setting up Python CA certificates (python.org)…"
+    /bin/bash "$cert_cmd" >/dev/null 2>&1 || true
+  fi
+
+  # Fallback: install certifi for whatever python3 is on PATH.
+  if ! python3 -c "import certifi" >/dev/null 2>&1; then
+    yellow "Installing certifi (Python TLS certificates)…"
+    python3 -m pip install --quiet certifi >/dev/null 2>&1 \
+      || python3 -m pip install --quiet --user certifi >/dev/null 2>&1 \
+      || python3 -m pip install --quiet --break-system-packages certifi >/dev/null 2>&1 \
+      || true
+  fi
+
+  if python3 -c "import certifi" >/dev/null 2>&1; then
+    green "✓ Python TLS certificates ready."
+  else
+    red "⚠ Python still can't verify TLS certificates."
+    red "  Fix: run  \"/Applications/Python $pyver/Install Certificates.command\""
+    red "  or:   python3 -m pip install certifi"
+  fi
+}
+
 install_ubersicht() {
   if [ ! -d "/Applications/Übersicht.app" ]; then
     yellow "Installing Übersicht.app via brew…"
@@ -135,6 +172,8 @@ install_swiftbar() {
     ensure_brew
     brew install python
   fi
+
+  ensure_python_certs
 
   if ! command -v CoreLocationCLI >/dev/null 2>&1; then
     yellow "Installing CoreLocationCLI (accurate Wi-Fi-based location for auto-detection)…"
