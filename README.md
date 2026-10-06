@@ -51,8 +51,8 @@ Free and ad-free, and it collects no data ([privacy policy](PRIVACY.md)). 💖 [
 
 3. Wait for **"✓ Salah Bar … was installed"**. Salah Bar opens by itself.
 4. When asked, click **Allow** for **Location** and **Notifications**. Your
-   location is used to calculate prayer times and the Qibla, and it never
-   leaves your Mac.
+   location is used to calculate prayer times and the Qibla, and Salah Bar
+   never collects or shares it ([privacy policy](PRIVACY.md)).
 5. Optional: add the desktop widget. Right-click the desktop → **Edit
    Widgets…** → search **Salah Bar** → drag in a size.
 
@@ -124,7 +124,7 @@ Updates…**. Updates install **without** any security warning.
 
 3. **"✓ Salah Bar … was installed"** yazısını bekleyin. Salah Bar kendiliğinden açılır.
 4. Sorulduğunda **Konum** ve **Bildirimler** için **İzin Ver**'e tıklayın. Konumunuz
-   yalnızca namaz vakitlerini ve kıbleyi hesaplamak için kullanılır, Mac'inizden çıkmaz.
+   yalnızca namaz vakitlerini ve kıbleyi hesaplamak için kullanılır; Salah Bar onu toplamaz veya paylaşmaz.
 5. İsteğe bağlı: masaüstüne sağ tıklayın → **Araç Takımlarını Düzenle…** →
    **Salah Bar** arayın → bir boyutu sürükleyip bırakın.
 
@@ -200,7 +200,7 @@ curl -fsSL https://raw.githubusercontent.com/be-liever95/salah-bar/main/install.
 
 3. انتظر ظهور رسالة **"✓ Salah Bar … was installed"**، وسيفتح Salah Bar تلقائيًا.
 4. عند السؤال، اضغط **سماح** للموقع والإشعارات. يُستخدم موقعك لحساب مواقيت الصلاة
-   واتجاه القبلة فقط، ولا يغادر جهازك أبدًا.
+   واتجاه القبلة فقط، ولا يجمعه Salah Bar ولا يشاركه.
 5. اختياري: انقر بزر الماوس الأيمن على سطح المكتب ← **تحرير الأدوات…** ← ابحث عن
    **Salah Bar** ← اسحب الحجم الذي تريده.
 
