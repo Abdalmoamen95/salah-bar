@@ -19,7 +19,7 @@ and lets you listen to the Quran from 242 reciters.
 - 📴 **Works offline**: times are calculated on your Mac, so no internet or account is needed (only Quran streaming uses the internet)
 - ✅ **Official Diyanet times**, checked against the published Diyanet tables ([details](#prayer-times-accuracy))
 
-Free and ad-free. 💖 [Support Salah Bar](#support-salah-bar)
+Free and ad-free, and it collects no data ([privacy policy](PRIVACY.md)). 💖 [Support Salah Bar](#support-salah-bar)
 
 | Menu panel | Large widget | بالعربية |
 |---|---|---|
