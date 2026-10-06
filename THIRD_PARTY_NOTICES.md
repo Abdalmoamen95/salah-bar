@@ -26,9 +26,11 @@ English quotes use **Sahih International**; Turkish quotes use the
 ## Quran recitations
 The Quran player streams (and, on request, downloads) recitations from
 **mp3quran.net**, https://mp3quran.net, using its public API. The reciters
-list bundled with the app comes from the same API. The
-recordings belong to their reciters and producers and are not covered by
-Salah Bar's license.
+list bundled with the app comes from the same API. mp3quran.net's policy
+(https://www.mp3quran.net/eng/privacy, "Copyrights") states: "All rights are
+available to everyone, and we allow any visitor or developer to copy any
+material or use any link on the websites". The recordings belong to their
+reciters and producers and are not covered by Salah Bar's license.
 
 ## Adhan recordings
 The adhan recordings, bundled and in the online library, belong to their
