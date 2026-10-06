@@ -1,0 +1,32 @@
+Salah Bar
+Copyright (c) 2026 Mumin Muhammedoglu. All rights reserved.
+
+This software and its source code are the property of the copyright holder.
+The source code is published in this repository so that it can be viewed.
+No permission is granted to copy, modify, merge, publish, distribute,
+sublicense, sell, or create derivative works from it, in whole or in part,
+except as stated below or with the copyright holder's prior written
+permission.
+
+You may download the official releases of Salah Bar from
+https://github.com/be-liever95/salah-bar/releases and use them on your own
+Macs, free of charge.
+
+Exceptions:
+
+1. Third-party components keep their own licenses. See
+   THIRD_PARTY_NOTICES.md. In particular, the prayer-time engine
+   (app/Packages/SalahCore/Sources/SalahCore/SolarModel.swift) is derived from
+   PrayTimes.js and is licensed under the GNU Lesser General Public License,
+   version 3.
+
+2. Earlier versions of this repository, up to and including the commit tagged
+   v2.5.0, were published under the MIT License. Copies of those versions
+   obtained under it remain under the MIT License; this notice applies to
+   everything published after them.
+
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+AUTHOR BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY ARISING FROM, OUT OF
+OR IN CONNECTION WITH THE SOFTWARE OR ITS USE.

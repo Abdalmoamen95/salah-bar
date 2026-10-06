@@ -1,0 +1,40 @@
+# Third-party notices
+
+Salah Bar is "all rights reserved" (see [LICENSE](LICENSE)), except for the
+components below, which keep their own licenses and owners.
+
+## Sparkle (auto-updates)
+Copyright (c) 2006–2013 Andy Matuschak and the Sparkle Project contributors.
+MIT License: https://github.com/sparkle-project/Sparkle/blob/2.x/LICENSE
+
+## PrayTimes.js (prayer-time calculation)
+Copyright (c) 2007–2011 PrayTimes.org (Hamid Zarrabi-Zadeh).
+Salah Bar's `SolarModel.swift` is a Swift port of its astronomical algorithm
+and, as a derived work, is licensed under the **GNU Lesser General Public
+License v3.0**: https://www.gnu.org/licenses/lgpl-3.0.html. Its source is
+published in [`third-party/SolarModel.swift`](third-party/SolarModel.swift).
+
+## The Quran text
+The Arabic of the Quranic quotes added in Salah Bar is from the **Tanzil Quran Text** (quran-simple),
+Copyright (c) 2007–2026 Tanzil Project, https://tanzil.net, used verbatim
+under its terms of use.
+
+## Translations
+English quotes use **Sahih International**; Turkish quotes use the
+**Diyanet İşleri Başkanlığı** translation. These belong to their publishers.
+
+## Quran recitations
+The Quran player streams (and, on request, downloads) recitations from
+**mp3quran.net**, https://mp3quran.net, using its public API. The reciters
+list bundled with the app comes from the same API. The
+recordings belong to their reciters and producers and are not covered by
+Salah Bar's license.
+
+## Adhan recordings
+The adhan recordings, bundled and in the online library, belong to their
+reciters and producers and are not covered by Salah Bar's license.
+
+## Official prayer-time data
+Salah Bar's accuracy-test data comes from
+Diyanet İşleri Başkanlığı (namazvakitleri.diyanet.gov.tr) and Aladhan
+(aladhan.com), and is used only to test accuracy.

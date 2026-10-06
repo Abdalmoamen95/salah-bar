@@ -1,0 +1,171 @@
+<?xml version="1.0" encoding="utf-8"?>
+<rss version="2.0" xmlns:sparkle="http://www.andymatuschak.org/xml-namespaces/sparkle">
+  <channel>
+    <title>Salah Bar</title>
+    <link>https://github.com/be-liever95/salah-bar</link>
+    <description>Salah Bar updates</description>
+    <item>
+      <title>Salah Bar 2.7.3</title>
+      <pubDate>Tue, 06 Oct 2026 19:09:12 +0300</pubDate>
+      <sparkle:version>161</sparkle:version>
+      <sparkle:shortVersionString>2.7.3</sparkle:shortVersionString>
+      <sparkle:minimumSystemVersion>14.0</sparkle:minimumSystemVersion>
+      <description><![CDATA[<ul><li>🛠 <b>Closing the lid stops the adhan:</b> putting the Mac to sleep now stops the adhan and pauses the Quran, so they no longer carry on by themselves when you open it again.</li></ul>]]></description>
+      <enclosure url="https://github.com/be-liever95/salah-bar/releases/download/v2.7.3/Salah-Bar-2.7.3.dmg" sparkle:edSignature="CIyK3H5UlNmDOLZSPrD4hl6S8Y+PIu0SpliEJSfK+ZJsyCDlcFSd3l0OOMexvGctSlEdonacFgzKMsEFxVn7DA==" length="27817462" type="application/octet-stream"/>
+    </item>
+    <item>
+      <title>Salah Bar 2.7.2</title>
+      <pubDate>Tue, 06 Oct 2026 16:31:16 +0300</pubDate>
+      <sparkle:version>156</sparkle:version>
+      <sparkle:shortVersionString>2.7.2</sparkle:shortVersionString>
+      <sparkle:minimumSystemVersion>14.0</sparkle:minimumSystemVersion>
+      <description><![CDATA[<ul><li>📖 <b>Quran mini-player:</b> click or drag its progress bar to jump anywhere in the surah, with the elapsed and total time under it.</li></ul>]]></description>
+      <enclosure url="https://github.com/be-liever95/salah-bar/releases/download/v2.7.2/Salah-Bar-2.7.2.dmg" sparkle:edSignature="XvUot4Qf7wRokTgB8+NAadTVsrS3B+ZBhzUFo2C8rm8RRC3EOj4emj1Cqjp7u9A0uGNlO4s7nCOa5fqf2F3RCA==" length="27814768" type="application/octet-stream"/>
+    </item>
+    <item>
+      <title>Salah Bar 2.7.1</title>
+      <pubDate>Tue, 06 Oct 2026 16:26:18 +0300</pubDate>
+      <sparkle:version>152</sparkle:version>
+      <sparkle:shortVersionString>2.7.1</sparkle:shortVersionString>
+      <sparkle:minimumSystemVersion>14.0</sparkle:minimumSystemVersion>
+      <description><![CDATA[<ul><li>🛠 <b>Large widget:</b> for two minutes after each prayer begins, the card now says <i>It's prayer time</i> with that prayer and the ayah, and the next prayer as a small line. Before, it still said "Next prayer: Maghrib" while Asr was highlighted below.</li></ul>]]></description>
+      <enclosure url="https://github.com/be-liever95/salah-bar/releases/download/v2.7.1/Salah-Bar-2.7.1.dmg" sparkle:edSignature="w/UqRHT8OT+l2YxG6C4k8HUX6b7DDqerx1t1PYfnPvAHpcMieey/lZXb093uxmTRTjhEAfaQA48buldjrbHNCA==" length="27842976" type="application/octet-stream"/>
+    </item>
+    <item>
+      <title>Salah Bar 2.7.0</title>
+      <pubDate>Tue, 06 Oct 2026 16:12:52 +0300</pubDate>
+      <sparkle:version>149</sparkle:version>
+      <sparkle:shortVersionString>2.7.0</sparkle:shortVersionString>
+      <sparkle:minimumSystemVersion>14.0</sparkle:minimumSystemVersion>
+      <description><![CDATA[<ul><li>📖 <b>Listen to the Quran:</b> 242 reciters, any surah. It streams by default; download surahs or a whole recitation to listen offline (on an external drive too).</li><li>Mini-player in the panel, media keys and Control Centre, resume where you stopped, repeat, sleep timer, favourites.</li><li>At prayer time the recitation fades out for the adhan, then carries on (Settings → Quran).</li><li>🔕 <b>Stop Flashing</b> in the panel, or click the reminder, to stop the blinking before a prayer.</li><li>🛠 Fixed a second adhan playing after stopping the first, when two copies of Salah Bar were open.</li></ul>]]></description>
+      <enclosure url="https://github.com/be-liever95/salah-bar/releases/download/v2.7.0/Salah-Bar-2.7.0.dmg" sparkle:edSignature="OZf10vRwjEa6y51A3XWtvu4U2D73ux/5A+bx7dZEa6UhOzxUiYf32vu1+Yippku7JDqFVWvMRt6XMTraZwcoBQ==" length="27829411" type="application/octet-stream"/>
+    </item>
+    <item>
+      <title>Salah Bar 2.6.2</title>
+      <pubDate>Tue, 06 Oct 2026 15:13:03 +0300</pubDate>
+      <sparkle:version>143</sparkle:version>
+      <sparkle:shortVersionString>2.6.2</sparkle:shortVersionString>
+      <sparkle:minimumSystemVersion>14.0</sparkle:minimumSystemVersion>
+      <description><![CDATA[<p><b>Large widget fix:</b> it could get stuck on a grey placeholder; it now prepares in about 2 seconds and refreshes reliably.</p>]]></description>
+      <enclosure url="https://github.com/be-liever95/salah-bar/releases/download/v2.6.2/Salah-Bar-2.6.2.dmg" sparkle:edSignature="OZSuefHqGVUNmKxcMPKk4y7Iy8JLIB8nWb3xtTfHpvBnfptbKGeOLrmw2JjUyMOZDDXULeejKTF9oNjY6gaJDQ==" length="27236125" type="application/octet-stream"/>
+    </item>
+    <item>
+      <title>Salah Bar 2.6.1</title>
+      <pubDate>Tue, 06 Oct 2026 15:05:44 +0300</pubDate>
+      <sparkle:version>140</sparkle:version>
+      <sparkle:shortVersionString>2.6.1</sparkle:shortVersionString>
+      <sparkle:minimumSystemVersion>14.0</sparkle:minimumSystemVersion>
+      <description><![CDATA[<p><b>Never miss an update:</b> Salah Bar checks every 6 hours and tells you when a new version is out, with an Update Now banner in the panel and a notification.</p>]]></description>
+      <enclosure url="https://github.com/be-liever95/salah-bar/releases/download/v2.6.1/Salah-Bar-2.6.1.dmg" sparkle:edSignature="dyJVGdLsCmEqABW+geHVQXXYuMFoLXkC+Z4rxn/VQA6J1f1QW1CQVAL+TOmpJoK7wGgTJ89nUUP0IiBuy1WyCQ==" length="27235726" type="application/octet-stream"/>
+    </item>
+    <item>
+      <title>Salah Bar 2.6.0</title>
+      <pubDate>Tue, 06 Oct 2026 15:00:01 +0300</pubDate>
+      <sparkle:version>138</sparkle:version>
+      <sparkle:shortVersionString>2.6.0</sparkle:shortVersionString>
+      <sparkle:minimumSystemVersion>14.0</sparkle:minimumSystemVersion>
+      <description><![CDATA[<p><b>The right times wherever you are:</b> the calculation method is now automatic by country. <b>No wrong city</b> when location is off, with an Allow Location button. <b>12-hour or 24-hour</b> times (Settings → General).</p>]]></description>
+      <enclosure url="https://github.com/be-liever95/salah-bar/releases/download/v2.6.0/Salah-Bar-2.6.0.dmg" sparkle:edSignature="UGuLO5y0mevpUSBXUeSjygzxB9hPIIlbc4vRXkqYqaT7hRn2sWK8L6RrxXXKAUfiOFrS6aOy0SvV4zXxW1b5CQ==" length="26897925" type="application/octet-stream"/>
+    </item>
+    <item>
+      <title>Salah Bar 2.5.2</title>
+      <pubDate>Mon, 05 Oct 2026 19:32:32 +0300</pubDate>
+      <sparkle:version>134</sparkle:version>
+      <sparkle:shortVersionString>2.5.2</sparkle:shortVersionString>
+      <sparkle:minimumSystemVersion>14.0</sparkle:minimumSystemVersion>
+      <description><![CDATA[<p>The Support Salah Bar button now opens Buy Me a Coffee: support by card or Apple Pay, no account needed.</p>]]></description>
+      <enclosure url="https://github.com/be-liever95/salah-bar/releases/download/v2.5.2/Salah-Bar-2.5.2.dmg" sparkle:edSignature="S1wtVVUjORJZqghcm+JJPLUPBfFoJnvsbaIGlVgKVWYPEgfTwPobnsBvwx6Au/jlYPTfMFVtxwb9i+vwxBU9Bg==" length="27241990" type="application/octet-stream"/>
+    </item>
+    <item>
+      <title>Salah Bar 2.5.1</title>
+      <pubDate>Mon, 05 Oct 2026 19:18:02 +0300</pubDate>
+      <sparkle:version>132</sparkle:version>
+      <sparkle:shortVersionString>2.5.1</sparkle:shortVersionString>
+      <sparkle:minimumSystemVersion>14.0</sparkle:minimumSystemVersion>
+      <description><![CDATA[<p>The Support Salah Bar button now opens the sponsorship page directly.</p>]]></description>
+      <enclosure url="https://github.com/be-liever95/salah-bar/releases/download/v2.5.1/Salah-Bar-2.5.1.dmg" sparkle:edSignature="6EFo19jEwTw2/7+ZoiPMKmgTfYC2a8hBvzbtvLqjnKbkjo+0iXrSrZLl86gMzspv21sehTD8Wx+iUJt0wyptCA==" length="27241964" type="application/octet-stream"/>
+    </item>
+    <item>
+      <title>Salah Bar 2.5.0</title>
+      <pubDate>Mon, 05 Oct 2026 18:59:58 +0300</pubDate>
+      <sparkle:version>126</sparkle:version>
+      <sparkle:shortVersionString>2.5.0</sparkle:shortVersionString>
+      <sparkle:minimumSystemVersion>14.0</sparkle:minimumSystemVersion>
+      <description><![CDATA[<p><b>A flash before the adhan:</b> a soft green glow pulses around your screens when the warning starts, and the menu bar icon blinks until the adhan. Settings → Appearance → Flash warning (with Preview).</p>]]></description>
+      <enclosure url="https://github.com/be-liever95/salah-bar/releases/download/v2.5.0/Salah-Bar-2.5.0.dmg" sparkle:edSignature="8+7toafeJIIbvRz2CshckpblnRX0oJR1H+DEGQG8GhUdFXa8iojUrlU9Db7vWp61/HjFX7B4XTAEwxL4roh0DA==" length="27266787" type="application/octet-stream"/>
+    </item>
+    <item>
+      <title>Salah Bar 2.4.2</title>
+      <pubDate>Mon, 05 Oct 2026 18:34:15 +0300</pubDate>
+      <sparkle:version>124</sparkle:version>
+      <sparkle:shortVersionString>2.4.2</sparkle:shortVersionString>
+      <sparkle:minimumSystemVersion>14.0</sparkle:minimumSystemVersion>
+      <description><![CDATA[<p><b>Desktop widget:</b> stays readable when macOS shows widgets faded or tinted, especially on light wallpapers.</p>]]></description>
+      <enclosure url="https://github.com/be-liever95/salah-bar/releases/download/v2.4.2/Salah-Bar-2.4.2.dmg" sparkle:edSignature="Pm8eZZyh8amS+djZWqQh5GqCmt4kWbUKpjT/Eyk7U0bFX3Pf2f/5gi/l/uQP0lMsHl0+RlrKBDSbaGiXHIzcBw==" length="26958989" type="application/octet-stream"/>
+    </item>
+    <item>
+      <title>Salah Bar 2.4.1</title>
+      <pubDate>Mon, 05 Oct 2026 14:13:31 +0300</pubDate>
+      <sparkle:version>115</sparkle:version>
+      <sparkle:shortVersionString>2.4.1</sparkle:shortVersionString>
+      <sparkle:minimumSystemVersion>14.0</sparkle:minimumSystemVersion>
+      <description><![CDATA[<p>Salah Bar moved to github.com/be-liever95/salah-bar. Updates, the adhan library and the Support link use the new address; your settings and adhans carry over.</p>]]></description>
+      <enclosure url="https://github.com/be-liever95/salah-bar/releases/download/v2.4.1/Salah-Bar-2.4.1.dmg" sparkle:edSignature="SVKj1kbliAn2HM3/D23Dh8UQcqRCzpkeV6ANi80E8n8M/qr3aZL+h7sV6M2RM8HmW3qdRxE3rSPQ9/+pyNm9AQ==" length="26942160" type="application/octet-stream"/>
+    </item>
+    <item>
+      <title>Salah Bar 2.4.0</title>
+      <pubDate>Mon, 05 Oct 2026 14:04:27 +0300</pubDate>
+      <sparkle:version>114</sparkle:version>
+      <sparkle:shortVersionString>2.4.0</sparkle:shortVersionString>
+      <sparkle:minimumSystemVersion>14.0</sparkle:minimumSystemVersion>
+      <description><![CDATA[<p><b>Support Salah Bar</b>: a new button in the menu panel and Settings → General. Salah Bar stays free and ad-free.</p>]]></description>
+      <enclosure url="https://github.com/be-liever95/salah-bar/releases/download/v2.4.0/Salah-Bar-2.4.0.dmg" sparkle:edSignature="tBtnt1P0KZy7d8K32XVtK9VlfAh5tasVi7I3Xpgb+nmNCBsvLY8P8VAKwTqScUcaPtf+LaeEObFf78O+fqn1Aw==" length="26941533" type="application/octet-stream"/>
+    </item>
+    <item>
+      <title>Salah Bar 2.3.1</title>
+      <pubDate>Mon, 05 Oct 2026 13:11:19 +0300</pubDate>
+      <sparkle:version>111</sparkle:version>
+      <sparkle:shortVersionString>2.3.1</sparkle:shortVersionString>
+      <sparkle:minimumSystemVersion>14.0</sparkle:minimumSystemVersion>
+      <description><![CDATA[<p>Small fixes: the Arabic widget's Qibla distance shows the Arabic thousands separator, and Arabic adhan names display right-to-left in English and Turkish settings.</p>]]></description>
+      <enclosure url="https://github.com/be-liever95/salah-bar/releases/download/v2.3.1/Salah-Bar-2.3.1.dmg" sparkle:edSignature="xhuw9TXovcInAdbKfgNrJ/S3acYSZrE4/UEgSkl85XpQ6uy5h81ID8/zxh8r+h8V2qPcVHF9NqosuQI9/xUkAg==" length="26923068" type="application/octet-stream"/>
+    </item>
+    <item>
+      <title>Salah Bar 2.3.0</title>
+      <pubDate>Mon, 05 Oct 2026 12:54:23 +0300</pubDate>
+      <sparkle:version>107</sparkle:version>
+      <sparkle:shortVersionString>2.3.0</sparkle:shortVersionString>
+      <sparkle:minimumSystemVersion>14.0</sparkle:minimumSystemVersion>
+      <description><![CDATA[<p><b>Trim the adhan</b>: choose exactly which part of any recording plays, with a waveform editor (✂︎ in Settings → Notifications). It fades out gently at your end point.</p>]]></description>
+      <enclosure url="https://github.com/be-liever95/salah-bar/releases/download/v2.3.0/Salah-Bar-2.3.0.dmg" sparkle:edSignature="H0sdeArH5WUzzeH9PG2PMZ2bilDefK6+78avuSxCzEK/poEYK1Ds/+FwiUJKBbrrwOjX2rElvvRIhgWpKn3wCw==" length="26952049" type="application/octet-stream"/>
+    </item>
+    <item>
+      <title>Salah Bar 2.2.0</title>
+      <pubDate>Mon, 05 Oct 2026 12:46:13 +0300</pubDate>
+      <sparkle:version>105</sparkle:version>
+      <sparkle:shortVersionString>2.2.0</sparkle:shortVersionString>
+      <sparkle:minimumSystemVersion>14.0</sparkle:minimumSystemVersion>
+      <description><![CDATA[<p><b>Add your own adhan</b>: use any audio file, or pick from 169 adhans in the online library (Settings → Notifications → My adhans).</p><p>Arabic Qibla line fixes.</p>]]></description>
+      <enclosure url="https://github.com/be-liever95/salah-bar/releases/download/v2.2.0/Salah-Bar-2.2.0.dmg" sparkle:edSignature="a+ZgY0f5XnasKiEeaU9J8N0wbf3YuV+Bps0lumQK+iyiWk4D0n/6HQvB8YDxMnch5feMMuPGep+0ynX+cSCgDg==" length="26962426" type="application/octet-stream"/>
+    </item>
+    <item>
+      <title>Salah Bar 2.1.0</title>
+      <pubDate>Mon, 05 Oct 2026 12:34:09 +0300</pubDate>
+      <sparkle:version>100</sparkle:version>
+      <sparkle:shortVersionString>2.1.0</sparkle:shortVersionString>
+      <sparkle:minimumSystemVersion>14.0</sparkle:minimumSystemVersion>
+      <description><![CDATA[<p><b>Arabic</b>: the whole app, right to left, with Arabic-Indic digits (switchable).</p>
+<p><b>A rotating ayah or dua</b>: 42 ayahs, Quranic duas and hadiths in the menu panel and Large widget, changing every 15 minutes to once a day (Settings → Appearance).</p>]]></description>
+      <enclosure url="https://github.com/be-liever95/salah-bar/releases/download/v2.1.0/Salah-Bar-2.1.0.dmg" sparkle:edSignature="IWW820UMGnZg19FwHQyATLt0LnH6+tEscuRXVXRBZQjQc9dx70JzIcbF0D74FxfwclhoOIPJJZVVKW+nYppMBA==" length="26985668" type="application/octet-stream"/>
+    </item>
+    <item>
+      <title>Salah Bar 2.0.0</title>
+      <pubDate>Mon, 05 Oct 2026 12:02:39 +0300</pubDate>
+      <sparkle:version>91</sparkle:version>
+      <sparkle:shortVersionString>2.0.0</sparkle:shortVersionString>
+      <sparkle:minimumSystemVersion>14.0</sparkle:minimumSystemVersion>
+      <description><![CDATA[<p>The first native version of Salah Bar: one app instead of SwiftBar, Übersicht and a shell installer.</p><ul><li>Menu bar countdown, prayer list, Hijri date and Qibla</li><li>Adhan with fade-in, reminders with a Silence button, quiet during calls</li><li>Desktop widgets in three sizes</li><li>Times calculated on your Mac and matched to the official Diyanet tables</li><li>Removes the old SwiftBar version for you</li></ul>]]></description>
+      <enclosure url="https://github.com/be-liever95/salah-bar/releases/download/v2.0.0/Salah-Bar-2.0.0.dmg" sparkle:edSignature="dUSSNy5wNSDK/xFbFM8sX74FABDLUurCWGg2nupiE7rZTzW6Gw+EM1vYCmwT9SfDOSWtJfi+WsEKahedi/6vCg==" length="26910019" type="application/octet-stream"/>
+    </item>
+  </channel>
+</rss>
