@@ -15,10 +15,10 @@ Macs, free of charge.
 Exceptions:
 
 1. Third-party components keep their own licenses. See
-   THIRD_PARTY_NOTICES.md. In particular, the prayer-time engine
-   (app/Packages/SalahCore/Sources/SalahCore/SolarModel.swift) is derived from
-   PrayTimes.js and is licensed under the GNU Lesser General Public License,
-   version 3.
+   THIRD_PARTY_NOTICES.md. Versions 2.0.0 to 2.7.3 included a prayer-time
+   engine derived from PrayTimes.js (third-party/SolarModel-2.0-2.7.3.swift),
+   licensed under the GNU Lesser General Public License, version 3. Later
+   versions don't include it.
 
 2. Earlier versions of this repository, up to and including the commit tagged
    v2.5.0, were published under the MIT License. Copies of those versions

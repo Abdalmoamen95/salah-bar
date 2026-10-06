@@ -7,12 +7,18 @@ components below, which keep their own licenses and owners.
 Copyright (c) 2006–2013 Andy Matuschak and the Sparkle Project contributors.
 MIT License: https://github.com/sparkle-project/Sparkle/blob/2.x/LICENSE
 
-## PrayTimes.js (prayer-time calculation)
-Copyright (c) 2007–2011 PrayTimes.org (Hamid Zarrabi-Zadeh).
-Salah Bar's `SolarModel.swift` is a Swift port of its astronomical algorithm
-and, as a derived work, is licensed under the **GNU Lesser General Public
-License v3.0**: https://www.gnu.org/licenses/lgpl-3.0.html. Its source is
-published in [`third-party/SolarModel.swift`](third-party/SolarModel.swift).
+## Prayer-time calculation
+Since 2.8.0 Salah Bar computes the sun's position with its own code, written
+from the U.S. Naval Observatory's public-domain "Approximate Solar
+Coordinates" (https://aa.usno.navy.mil/faq/sun_approx).
+
+Versions 2.0.0 to 2.7.3 instead used `SolarModel.swift`, a Swift port of the
+astronomical algorithm of **PrayTimes.js**, Copyright (c) 2007–2011
+PrayTimes.org (Hamid Zarrabi-Zadeh). As a derived work it is licensed under
+the **GNU Lesser General Public License v3.0**
+(https://www.gnu.org/licenses/lgpl-3.0.html), and its source stays published in
+[`third-party/SolarModel-2.0-2.7.3.swift`](third-party/SolarModel-2.0-2.7.3.swift)
+for those versions.
 
 ## The Quran text
 The Arabic of the Quranic quotes added in Salah Bar is from the **Tanzil Quran Text** (quran-simple),

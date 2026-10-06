@@ -567,10 +567,10 @@ Salah Bar's source code is private, and the app is "all rights reserved"
 (see [LICENSE](LICENSE)). This repository holds the downloads, the update
 feed and the installer.
 
-The one exception is the prayer-time algorithm port,
-[`third-party/SolarModel.swift`](third-party/SolarModel.swift), published here
-under the LGPL-3.0 as its licence requires (see
-[THIRD_PARTY_NOTICES.md](THIRD_PARTY_NOTICES.md)).
+The one exception is the prayer-time engine of versions 2.0.0 to 2.7.3,
+[`third-party/SolarModel-2.0-2.7.3.swift`](third-party/SolarModel-2.0-2.7.3.swift),
+published here under the LGPL-3.0 as its licence requires (see
+[THIRD_PARTY_NOTICES.md](THIRD_PARTY_NOTICES.md)). Later versions don't use it.
 
 ---
 
@@ -588,13 +588,12 @@ the menu panel and in **Settings → General** takes you straight there.
 
 ## License
 
-Copyright © 2026 Mumin Muhammedoglu. **All rights reserved.** The source code
-is published here so you can see how Salah Bar works; it may not be copied,
-modified or redistributed without permission. You're welcome to download and
-use the official releases on your own Macs, free of charge. See
+Copyright © 2026 Mumin Muhammedoglu. **All rights reserved.** Salah Bar may
+not be copied, modified or redistributed without permission. You're welcome to
+download and use the official releases on your own Macs, free of charge. See
 [LICENSE](LICENSE).
 
-Third-party parts keep their own licenses (Sparkle: MIT; the prayer-time
-engine, ported from PrayTimes.js: LGPL-3.0); see
+Third-party parts keep their own licenses (Sparkle: MIT; in versions 2.0.0 to
+2.7.3, a prayer-time engine ported from PrayTimes.js: LGPL-3.0); see
 [THIRD_PARTY_NOTICES.md](THIRD_PARTY_NOTICES.md). Versions up to v2.5.0 were
 published under the MIT License.

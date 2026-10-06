@@ -1,3 +1,6 @@
+// SolarModel.swift, as shipped in Salah Bar 2.0.0 to 2.7.3 (later versions
+// use their own code, SunSchedule.swift). Published here as the LGPL requires.
+//
 // SolarModel.swift: a Swift port of the PrayTimes.js astronomical algorithm.
 // Copyright (c) 2007-2011 PrayTimes.org; Swift port (c) 2026 Mumin Muhammedoglu.
 // This file is licensed under the GNU Lesser General Public License v3.0

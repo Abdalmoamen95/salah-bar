@@ -5,6 +5,15 @@
     <link>https://github.com/be-liever95/salah-bar</link>
     <description>Salah Bar updates</description>
     <item>
+      <title>Salah Bar 2.8.0</title>
+      <pubDate>Tue, 06 Oct 2026 20:33:59 +0300</pubDate>
+      <sparkle:version>166</sparkle:version>
+      <sparkle:shortVersionString>2.8.0</sparkle:shortVersionString>
+      <sparkle:minimumSystemVersion>14.0</sparkle:minimumSystemVersion>
+      <description><![CDATA[<ul><li>🧮 <b>New prayer-time engine:</b> Salah Bar now calculates the sun's position with its own code, built on the U.S. Naval Observatory's public formulas. Your prayer times stay exactly the same, to the second.</li></ul>]]></description>
+      <enclosure url="https://github.com/be-liever95/salah-bar/releases/download/v2.8.0/Salah-Bar-2.8.0.dmg" sparkle:edSignature="LyLET8aLogFke8s8tsdFNp7ICrmA0kheYMyJ+vXaCKrPXvIjVFW/LjQKfpLj1Bd/ijfOvDowsZ/43RtPWEBpBw==" length="27842125" type="application/octet-stream"/>
+    </item>
+    <item>
       <title>Salah Bar 2.7.3</title>
       <pubDate>Tue, 06 Oct 2026 19:09:12 +0300</pubDate>
       <sparkle:version>161</sparkle:version>
