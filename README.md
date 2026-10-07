@@ -28,7 +28,7 @@ and lets you listen to the Quran from 242 reciters.
 - 🖥 **Desktop widgets** in Small, Medium and Large
 - 📖 **A rotating ayah or dua**: 42 ayahs, Quranic duas and hadiths, changing every 15 minutes to once a day
 - 🌙 **Hijri date**, **Qibla** direction and **Ramadan** times (Imsak and an iftar countdown)
-- 🇬🇧 🇹🇷 🇸🇦 **English, Turkish or Arabic**, with a right-to-left layout and Arabic-Indic digits (٠١٢) in Arabic
+- 🌍 **7 languages**: English, Türkçe, العربية, اردو, Bahasa Indonesia, Bahasa Melayu and Français, with a right-to-left layout in Arabic and Urdu, and Arabic-Indic digits (٠١٢) in Arabic
 - 👋 **Easy to start**: a short welcome tour sets it up with you (language, location, notifications and the adhan) and shows what's inside ([more](#the-welcome-tour))
 - 📍 **Your location, your cities**: times follow where your Mac is, and you add only the cities you want
 - 📴 **Works offline**: times are calculated on your Mac, so no internet or account is needed (only Quran streaming uses the internet)
@@ -333,7 +333,7 @@ own icon, and the hadith at the top of **General**.
 
 | Page | What you can change |
 |---|---|
-| **General** | Language (English, Turkish or Arabic), Arabic-Indic digits, seconds in the menu bar, launch at login, automatic updates |
+| **General** | Language (English, Turkish, Arabic, Urdu, Indonesian, Malay or French), Arabic-Indic digits, seconds in the menu bar, launch at login, automatic updates |
 | **Location** | Automatic location or a saved city, city search, adding a city by coordinates |
 | **Prayer Times** | Calculation method, Asr school (Standard or Hanafi), per-prayer minute adjustments, Hijri date correction (±2 days), Ramadan mode |
 | **Iqama** | Your mosque's iqama for each prayer and for Jumu'ah, and a reminder before it |
@@ -395,6 +395,9 @@ Recitations are from [mp3quran.net](https://mp3quran.net).
   begun (or press **Prayed ✓** on the prayer's notification). **Prayer Log…** shows
   your streak and the last 7 or 30 days. Turn on **Count missed prayers as qada** to
   keep a count of prayers to make up. Everything stays on your Mac.
+  If you like, Salah Bar asks *"Did you pray Asr?"* when a prayer is still unmarked
+  15 to 60 minutes after it begins, or shortly before the next prayer (Settings →
+  Reminders, off by default); press **Prayed ✓** on that notification to mark it.
 - **Calendar** (Settings → Calendar, off by default): Salah Bar warns you
   when a meeting overlaps a prayer, e.g. *"Your 13:00 meeting overlaps Dhuhr (13:04)"*,
   and can add short busy "Dhuhr", "Asr"… blocks to a calendar you choose. It only

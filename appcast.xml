@@ -5,6 +5,15 @@
     <link>https://github.com/be-liever95/salah-bar</link>
     <description>Salah Bar updates</description>
     <item>
+      <title>Salah Bar 2.13.0</title>
+      <pubDate>Wed, 07 Oct 2026 22:42:34 +0300</pubDate>
+      <sparkle:version>200</sparkle:version>
+      <sparkle:shortVersionString>2.13.0</sparkle:shortVersionString>
+      <sparkle:minimumSystemVersion>14.0</sparkle:minimumSystemVersion>
+      <description><![CDATA[<ul><li>🌍 <b>Four new languages:</b> اردو, Bahasa Indonesia, Bahasa Melayu and Français, alongside English, Türkçe and العربية (Settings → General → Language).</li><li>✅ <b>"Did you pray Asr?"</b> An optional reminder when a prayer has not been ticked off, with a Prayed ✓ button (Settings → Reminders).</li><li>Turkish prayer notifications are now in Turkish.</li></ul>]]></description>
+      <enclosure url="https://github.com/be-liever95/salah-bar/releases/download/v2.13.0/Salah-Bar-2.13.0.dmg" sparkle:edSignature="xSdq9VUnBt9v+d3LVWQnvLnaiaG+RXXYix+lR8+RgT4j4eWAtm+hzy7Iq4SrnpoYcN1CSEh6vYe981Ah3TimBg==" length="47941626" type="application/octet-stream"/>
+    </item>
+    <item>
       <title>Salah Bar 2.12.1</title>
       <pubDate>Wed, 07 Oct 2026 21:55:54 +0300</pubDate>
       <sparkle:version>198</sparkle:version>
