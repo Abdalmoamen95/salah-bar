@@ -29,7 +29,7 @@ and lets you listen to the Quran from 242 reciters.
 - 📖 **A rotating ayah or dua**: 42 ayahs, Quranic duas and hadiths, changing every 15 minutes to once a day
 - 🌙 **A Ramadan companion**: your fasts and fasts to make up, a Quran khatm plan you can listen to, the iftar and Laylat al-Qadr duas, suhoor and Taraweeh reminders, an iftar countdown in the menu bar, then the six days of Shawwal ([more](#ramadan))
 - 🕋 **Hijri date** and **Qibla** direction
-- 🌍 **7 languages**: English, Türkçe, العربية, اردو, Bahasa Indonesia, Bahasa Melayu and Français, with a right-to-left layout in Arabic and Urdu, and Arabic-Indic digits (٠١٢) in Arabic
+- 🌍 **8 languages**: English, Türkçe, العربية, اردو, Bahasa Indonesia, Bahasa Melayu, Français and Русский, with a right-to-left layout in Arabic and Urdu, and Arabic-Indic digits (٠١٢) in Arabic
 - 👋 **Easy to start**: a short welcome tour sets it up with you (language, location, notifications and the adhan) and shows what's inside ([more](#the-welcome-tour))
 - 📍 **Your location, your cities**: times follow where your Mac is, and you add only the cities you want
 - 📴 **Works offline**: times are calculated on your Mac, so no internet or account is needed (only Quran streaming uses the internet)
@@ -334,7 +334,7 @@ own icon, and the hadith at the top of **General**.
 
 | Page | What you can change |
 |---|---|
-| **General** | Language (English, Turkish, Arabic, Urdu, Indonesian, Malay or French), Arabic-Indic digits, seconds in the menu bar, launch at login, automatic updates |
+| **General** | Language (English, Turkish, Arabic, Urdu, Indonesian, Malay, French or Russian), Arabic-Indic digits, seconds in the menu bar, launch at login, automatic updates |
 | **Location** | Automatic location or a saved city, city search, adding a city by coordinates |
 | **Prayer Times** | Calculation method, Asr school (Standard or Hanafi), per-prayer minute adjustments, Hijri date correction (±2 days) |
 | **Ramadan** | The Ramadan companion and each of its reminders, the iftar countdown in the menu bar, the khatm plan, fasts to make up, Ramadan mode |
