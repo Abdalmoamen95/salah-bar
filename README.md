@@ -4,6 +4,12 @@ Salah Bar is a small, free macOS app that lives in your menu bar. It shows a
 live countdown to the next prayer, plays the adhan when the prayer time comes,
 and lets you listen to the Quran from 242 reciters.
 
+> [!TIP]
+> 🪟 **On Windows?** Get **[Salah Bar for Windows](https://github.com/be-liever95/salah-bar-windows-releases/releases/latest)**: the same countdown,
+> adhan, reminders, Quran player and widgets, in the Windows notification area (Windows 11).
+> Direct downloads: [most PCs (x64)](https://github.com/be-liever95/salah-bar-windows-releases/releases/latest/download/SalahBar.Windows-win-x64-Setup.exe) ·
+> [Windows on Arm](https://github.com/be-liever95/salah-bar-windows-releases/releases/latest/download/SalahBar.Windows-win-arm64-Setup.exe).
+
 - 🕌 **Menu bar countdown**: `Dhuhr 01:22`, with a list of today's prayers one click away
 - 🔊 **Adhan** at prayer time, with volume, fade-in and a separate Fajr adhan
 - 🎙 **Your own adhan**: add any audio file, or pick from **169 adhans** in the online library
@@ -111,7 +117,7 @@ Updates…**. Updates install **without** any security warning.
 
 ### 🇹🇷 Türkçe kurulum
 
-**macOS 14 Sonoma veya üzeri gerekir.**
+**macOS 14 Sonoma veya üzeri gerekir.** Windows kullanıyorsanız: **[Windows için Salah Bar](https://github.com/be-liever95/salah-bar-windows-releases/releases/latest)**.
 
 **1. Yol: Terminal'de tek satır (en kolayı, uyarı yok)**
 
@@ -183,7 +189,7 @@ xattr -d com.apple.quarantine ~/Downloads/Salah-Bar-*.dmg
 
 ### 🇸🇦 التثبيت بالعربية
 
-**يتطلب macOS 14 Sonoma أو أحدث.**
+**يتطلب macOS 14 Sonoma أو أحدث.** على Windows؟ نزّل **[Salah Bar لنظام Windows](https://github.com/be-liever95/salah-bar-windows-releases/releases/latest)**.
 
 **الطريقة الأولى: سطر واحد في Terminal (الأسهل، بلا تحذيرات)**
 
@@ -349,7 +355,7 @@ Large widget says **It's prayer time** with that prayer and the ayah
 In **Settings → Notifications** pick the adhan for the five prayers and,
 optionally, a different one for Fajr. Press ▶ to hear it.
 
-- **Built in:** 11 adhans from Makkah, Egypt, Qatar, Morocco and more.
+- **Built in:** 17 adhans from Makkah, Madinah, Egypt, Qatar, Morocco and more, including 6 openly licensed recordings from Wikimedia Commons and Freesound (credited under the picker and in [THIRD_PARTY_NOTICES.md](THIRD_PARTY_NOTICES.md)).
 - **Your own recording:** under **My adhans**, choose **Add from File…** and pick
   any MP3, M4A, WAV or other audio file. Name it, then use it for the adhan or
   for Fajr. Salah Bar keeps its own copy, so moving or deleting the original is fine.

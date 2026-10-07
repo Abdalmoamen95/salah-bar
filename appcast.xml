@@ -5,6 +5,15 @@
     <link>https://github.com/be-liever95/salah-bar</link>
     <description>Salah Bar updates</description>
     <item>
+      <title>Salah Bar 2.8.1</title>
+      <pubDate>Wed, 07 Oct 2026 12:35:58 +0300</pubDate>
+      <sparkle:version>174</sparkle:version>
+      <sparkle:shortVersionString>2.8.1</sparkle:shortVersionString>
+      <sparkle:minimumSystemVersion>14.0</sparkle:minimumSystemVersion>
+      <description><![CDATA[<ul><li>🎙 <b>Six new adhans</b>, openly licensed and credited: the Prophet's Mosque in Madinah, the Great Mosque of Makkah, a Fajr adhan from Malmö, and recordings from Kazakhstan, the USA and Japan.</li><li>🇹🇷 Turkish Hijri dates use Diyanet's month names ("24 Rebiülahir 1448 H.").</li><li>Clearer wording about your location: Salah Bar doesn't collect or share it.</li></ul>]]></description>
+      <enclosure url="https://github.com/be-liever95/salah-bar/releases/download/v2.8.1/Salah-Bar-2.8.1.dmg" sparkle:edSignature="FTUoFdJuGPS4EF4AvRUA6+ndFPvde08byY7Dq/ymiC1vrFOyNBb3lOlNFO8zjQuamXuLkXzpbllNVsc5In4tAQ==" length="44006854" type="application/octet-stream"/>
+    </item>
+    <item>
       <title>Salah Bar 2.8.0</title>
       <pubDate>Tue, 06 Oct 2026 20:33:59 +0300</pubDate>
       <sparkle:version>166</sparkle:version>

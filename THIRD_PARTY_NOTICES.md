@@ -39,8 +39,28 @@ material or use any link on the websites". The recordings belong to their
 reciters and producers and are not covered by Salah Bar's license.
 
 ## Adhan recordings
-The adhan recordings, bundled and in the online library, belong to their
-reciters and producers and are not covered by Salah Bar's license.
+These bundled recordings are used under open licences (Salah Bar trims them,
+evens out their volume and converts them; the CC BY-SA ones stay under CC BY-SA):
+
+- "Call to prayer from the Prophet's Mosque" by ejaz215, CC BY 3.0
+  (https://creativecommons.org/licenses/by/3.0/), via Wikimedia Commons:
+  https://commons.wikimedia.org/wiki/File:33937_ejaz215_call-to-prayer-from-the-prophet-s-mo.ogg
+- "AZAAN in Makkah" by Seyfula Islam, CC BY 3.0, via Wikimedia Commons:
+  https://commons.wikimedia.org/wiki/File:Adhan,_Great_Mosque_of_Mecca_-_Jan_21,_2013.webm
+- "Eid al-Fitr Fajr azan at Malmö Mosque" (muezzin Besim Azemi) by Islamic
+  Center Malmö, CC BY 3.0, via Wikimedia Commons:
+  https://commons.wikimedia.org/wiki/File:Eid_al-Fitr_Fajr_azan_at_Malmö_Mosque_-_19_August_2012.webm
+- "Adhan in Shalqar mosque" by Esetok, CC BY-SA 4.0
+  (https://creativecommons.org/licenses/by-sa/4.0/), via Wikimedia Commons:
+  https://commons.wikimedia.org/wiki/File:Adhan_in_Shalqar_mosque.webm
+- "Islamic Call to Prayer (Dhuhr Adhan Audiophile Field Recording from
+  Hamtramck, MI)" by RJStefanski, CC BY 3.0, via Freesound:
+  https://freesound.org/people/RJStefanski/sounds/255231/
+- "adzan-forest" by bagustris (Bagus Tris Atmaja), CC0, via Freesound:
+  https://freesound.org/people/bagustris/sounds/508441/
+
+The other adhan recordings, bundled and in the online library, belong to
+their reciters and producers and are not covered by Salah Bar's license.
 
 ## Official prayer-time data
 Salah Bar's accuracy-test data comes from
