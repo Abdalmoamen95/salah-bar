@@ -17,6 +17,12 @@ and lets you listen to the Quran from 242 reciters.
 - 📖 **Listen to the Quran**: any surah from **242 reciters**, streamed, or downloaded for offline listening (even to an external drive), with a mini-player, media keys, resume, repeat and a sleep timer ([more](#listening-to-the-quran))
 - 🤲 **Quran and adhan together**: at prayer time the recitation fades out, the adhan plays, then the recitation carries on
 - 🔔 **Reminders** before each prayer, with a **Silence** button that stops the adhan
+- 🕌 **Iqama times** for your mosque, with a countdown to the jama'ah after each adhan
+- ✅ **Prayer log**: tick off prayers, keep a streak and, if you like, count qada to make up; private, on your Mac
+- 📅 **Calendar that respects prayer**: a warning when a meeting overlaps a prayer, and optional "busy" prayer blocks
+- 🕋 **Friday and Sunnah reminders**: Al-Kahf on Fridays, Monday/Thursday and White Days fasts, the last third of the night
+- 📖 **Hifz mode**: repeat ayat with the Arabic text highlighted, to memorise
+- 🗣 **Siri and Shortcuts**: "When is Asr in Salah Bar", "Play Surah Al-Kahf in Salah Bar"
 - ⚡ **A flash you won't miss**: a green glow pulses around your screen and the menu bar icon blinks before the adhan (**Stop Flashing** when you've seen it)
 - 🖥 **Desktop widgets** in Small, Medium and Large
 - 📖 **A rotating ayah or dua**: 42 ayahs, Quranic duas and hadiths, changing every 15 minutes to once a day
@@ -319,6 +325,11 @@ search in English, Arabic or Turkish), then press ▶ next to any surah.
 - **Sleep timer:** 15 to 90 minutes, or the end of the surah, fading out gently.
 - **Favourites** for reciters and surahs.
 - **Media keys and Control Centre** work while it plays.
+- **Hifz mode**: choose an ayah range, how many times to repeat each ayah and the
+  whole range, a pause between repeats and the speed. The Arabic text follows along
+  with the current ayah highlighted. It works with the many reciters that mp3quran.net
+  publishes ayah timings for, such as Alafasy, Husary, Minshawi, Abdul Basit, Sudais
+  and Ghamdi. Text from [Tanzil.net](https://tanzil.net).
 - **At prayer time** the recitation fades out, the adhan plays, then the
   recitation carries on. In **Settings → Quran** you can instead keep it paused
   after the adhan, or keep listening with no adhan.
@@ -328,6 +339,27 @@ Recitations are from [mp3quran.net](https://mp3quran.net).
 | Arabic, dark | Settings → Quran |
 |---|---|
 | ![The Quran window in Arabic](assets/screenshots/quran-ar-dark.png) | ![Quran settings](assets/screenshots/settings-quran-en.png) |
+
+### More for every prayer
+
+- **Iqama times** (Settings → Calculation → Iqama): set each prayer's iqama as minutes
+  after the adhan or a fixed time, plus a separate Jumu'ah time. The panel counts
+  down to the iqama after each adhan, and can remind you before it.
+- **Prayer log**: in the panel, click the circle next to a prayer once its time has
+  begun (or press **Prayed ✓** on the prayer's notification). **Prayer Log…** shows
+  your streak and the last 7 or 30 days. Turn on **Count missed prayers as qada** to
+  keep a count of prayers to make up. Everything stays on your Mac.
+- **Calendar** (Settings → General → Calendar, off by default): Salah Bar warns you
+  when a meeting overlaps a prayer, e.g. *"Your 13:00 meeting overlaps Dhuhr (13:04)"*,
+  and can add short busy "Dhuhr", "Asr"… blocks to a calendar you choose. It only
+  ever changes the blocks it made.
+- **Friday and Sunnah reminders** (Settings → Notifications): on Fridays, a reminder
+  to read Al-Kahf with a button to play it; optional reminders the evening before
+  Monday, Thursday and White Days (13–15) fasts, and for the last third of the night.
+- **Pause other audio during the adhan**: music or a video in another app pauses
+  while the adhan plays, then carries on.
+- **Siri and Shortcuts**: ask *"When is Asr in Salah Bar"*, *"Next prayer in Salah
+  Bar"* or *"Play Surah Al-Kahf in Salah Bar"*, or use the actions in Shortcuts.
 
 ### Desktop widgets
 

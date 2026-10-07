@@ -21,9 +21,16 @@ the **GNU Lesser General Public License v3.0**
 for those versions.
 
 ## The Quran text
-The Arabic of the Quranic quotes added in Salah Bar is from the **Tanzil Quran Text** (quran-simple),
-Copyright (c) 2007–2026 Tanzil Project, https://tanzil.net, used verbatim
-under its terms of use.
+The Arabic of the Quranic quotes added in Salah Bar, and the full Quran text
+shown in the Quran player's Hifz (memorisation) mode
+(`app/SalahBar/Resources/quran-text.json`, made by `scripts/gen-quran-text.py`),
+is from the **Tanzil Quran Text** (quran-simple, version 1.1),
+Copyright (c) 2007–2026 Tanzil Project, https://tanzil.net, licensed under
+Creative Commons Attribution 3.0 and used verbatim under its terms of use:
+the text is not changed, its source is credited with a link to tanzil.net in
+the Hifz view ("Text: Tanzil.net"), and Tanzil's copyright notice is kept in
+the bundled file. Ayah timings for Hifz mode come from mp3quran.net's API
+(see below).
 
 ## Translations
 English quotes use **Sahih International**; Turkish quotes use the
