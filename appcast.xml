@@ -5,6 +5,15 @@
     <link>https://github.com/be-liever95/salah-bar</link>
     <description>Salah Bar updates</description>
     <item>
+      <title>Salah Bar 2.12.0</title>
+      <pubDate>Wed, 07 Oct 2026 21:21:36 +0300</pubDate>
+      <sparkle:version>195</sparkle:version>
+      <sparkle:shortVersionString>2.12.0</sparkle:shortVersionString>
+      <sparkle:minimumSystemVersion>14.0</sparkle:minimumSystemVersion>
+      <description><![CDATA[<ul><li>🌕 <b>The White Days:</b> from the 12th to the 15th of each Hijri month, the panel shows the three moons and the hadith «إذا صمتَ من الشهر ثلاثة أيام فصُم ثلاث عشرة وأربع عشرة وخمس عشرة». One click turns on a reminder the evening before.</li><li>🔔 Sunnah fast reminders now quote the hadith for the White Days, Mondays and Thursdays.</li></ul>]]></description>
+      <enclosure url="https://github.com/be-liever95/salah-bar/releases/download/v2.12.0/Salah-Bar-2.12.0.dmg" sparkle:edSignature="ZEqkvJ22aS4RIGZZFrA1/6FCZzmaWt9BemRizOCFNGPNQ3gWnw+OybzhkBqnTuSLY4zAuI/WMQaYslu1+1ICAA==" length="47146408" type="application/octet-stream"/>
+    </item>
+    <item>
       <title>Salah Bar 2.11.0</title>
       <pubDate>Wed, 07 Oct 2026 20:38:50 +0300</pubDate>
       <sparkle:version>193</sparkle:version>

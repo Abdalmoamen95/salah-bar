@@ -388,6 +388,16 @@ Recitations are from [mp3quran.net](https://mp3quran.net).
 - **Friday and Sunnah reminders** (Settings → Reminders): on Fridays, a reminder
   to read Al-Kahf with a button to play it; optional reminders the evening before
   Monday, Thursday and White Days (13–15) fasts, and for the last third of the night.
+- **The White Days** (Ayyām al-Bīḍ): from the day before the 13th to the 15th of each
+  Hijri month, the panel shows the three moons with today's lit, and the hadith of
+  Abu Dharr: *"If you fast three days of the month, fast the 13th, 14th and 15th"*
+  (at-Tirmidhi 761). The fasting reminder quotes it too, and Monday and Thursday
+  reminders quote the hadith about deeds being presented on those days.
+
+  | English | العربية |
+  |---|---|
+  | ![The White Days card](assets/screenshots/white-days-en.png) | ![The White Days card in Arabic](assets/screenshots/white-days-ar.png) |
+
 - **Pause other audio during the adhan**: music or a video in another app pauses
   while the adhan plays, then carries on.
 - **Siri and Shortcuts**: ask *"When is Asr in Salah Bar"*, *"Next prayer in Salah
