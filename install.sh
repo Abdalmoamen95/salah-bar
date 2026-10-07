@@ -144,25 +144,31 @@ check_macos() {
 }
 
 # Prints "<tag>\t<dmg name>\t<dmg url>" for the newest release that has a
-# Salah-Bar-*.dmg asset, reading the GitHub releases JSON on stdin. The repo
+# Salah-Bar-*.dmg asset, reading the GitHub releases JSON file at $1. The repo
 # also has non-app releases (like tracks-v1), so "latest" can't be trusted.
+# JavaScript for Automation (osascript) is built into every Mac; python3 isn't
+# (/usr/bin/python3 is a stub that asks to install the developer tools).
 pick_release() {
-  /usr/bin/python3 -c '
-import fnmatch, json, sys
-releases = json.load(sys.stdin)
-if not isinstance(releases, list):
-    sys.exit(1)
-releases.sort(key=lambda r: r.get("published_at") or r.get("created_at") or "", reverse=True)
-for r in releases:
-    if r.get("draft") or r.get("prerelease"):
-        continue
-    for a in r.get("assets") or []:
-        name = a.get("name", "")
-        if fnmatch.fnmatch(name, "Salah-Bar-*.dmg"):
-            print("\t".join([r.get("tag_name", ""), name, a["browser_download_url"]]))
-            sys.exit(0)
-sys.exit(1)
-'
+  /usr/bin/osascript -l JavaScript - "$1" <<'JXA'
+function run(argv) {
+  ObjC.import('Foundation');
+  const text = $.NSString.stringWithContentsOfFileEncodingError(argv[0], $.NSUTF8StringEncoding, null);
+  if (!text || text.isNil()) throw new Error('unreadable');
+  const releases = JSON.parse(text.js);
+  if (!Array.isArray(releases)) throw new Error('not a list');
+  releases.sort((a, b) => (b.published_at || b.created_at || '').localeCompare(a.published_at || a.created_at || ''));
+  for (const r of releases) {
+    if (r.draft || r.prerelease) continue;
+    for (const a of r.assets || []) {
+      const name = a.name || '';
+      if (name.startsWith('Salah-Bar-') && name.endsWith('.dmg')) {
+        return [r.tag_name || '', name, a.browser_download_url].join('\t');
+      }
+    }
+  }
+  throw new Error('no release');
+}
+JXA
 }
 
 # ------------------------------------------------------------- install ---
@@ -172,7 +178,7 @@ do_install() {
   curl -fsSL --max-time 30 -H "Accept: application/vnd.github+json" "$RELEASES_URL" -o "$TMP_DIR/releases.json" \
     || die "Couldn't reach GitHub. Check your internet connection and try again."
   local picked tag dmg_name dmg_url version current
-  picked="$(pick_release < "$TMP_DIR/releases.json")" \
+  picked="$(pick_release "$TMP_DIR/releases.json" 2>/dev/null)" \
     || die "No Salah Bar release was found. See https://github.com/$REPO_SLUG/releases"
   IFS=$'\t' read -r tag dmg_name dmg_url <<< "$picked"
   version="${dmg_name#Salah-Bar-}"; version="${version%.dmg}"
