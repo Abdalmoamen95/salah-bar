@@ -20,7 +20,8 @@ and lets you listen to the Quran from 242 reciters.
 - 🕌 **Iqama times** for your mosque, with a countdown to the jama'ah after each adhan
 - ✅ **Prayer log**: tick off prayers, keep a streak and, if you like, count qada to make up; private, on your Mac
 - 📅 **Calendar that respects prayer**: a warning when a meeting overlaps a prayer, and optional "busy" prayer blocks
-- 🕋 **Friday and Sunnah reminders**: Al-Kahf on Fridays, Monday/Thursday and White Days fasts, the last third of the night
+- 🕋 **Friday and Sunnah reminders**: Al-Kahf on Fridays, Monday/Thursday and White Days fasts, the last third of the night, each with its hadith
+- 🌕 **The White Days**: from the 12th to the 15th of each Hijri month, the panel shows the three moons and the hadith of Abu Dharr ([more](#more-for-every-prayer))
 - 📖 **Hifz mode**: repeat ayat with the Arabic text highlighted, to memorise
 - 🗣 **Siri and Shortcuts**: "When is Asr in Salah Bar", "Play Surah Al-Kahf in Salah Bar"
 - ⚡ **A flash you won't miss**: a green glow pulses around your screen and the menu bar icon blinks before the adhan (**Stop Flashing** when you've seen it)
@@ -28,10 +29,16 @@ and lets you listen to the Quran from 242 reciters.
 - 📖 **A rotating ayah or dua**: 42 ayahs, Quranic duas and hadiths, changing every 15 minutes to once a day
 - 🌙 **Hijri date**, **Qibla** direction and **Ramadan** times (Imsak and an iftar countdown)
 - 🇬🇧 🇹🇷 🇸🇦 **English, Turkish or Arabic**, with a right-to-left layout and Arabic-Indic digits (٠١٢) in Arabic
+- 👋 **Easy to start**: a short welcome tour sets it up with you (language, location, notifications and the adhan) and shows what's inside ([more](#the-welcome-tour))
+- 📍 **Your location, your cities**: times follow where your Mac is, and you add only the cities you want
 - 📴 **Works offline**: times are calculated on your Mac, so no internet or account is needed (only Quran streaming uses the internet)
 - ✅ **Official Diyanet times**, checked against the published Diyanet tables ([details](#prayer-times-accuracy))
 
 Free and ad-free, and it collects no data ([privacy policy](PRIVACY.md)). 💖 [Support Salah Bar](#support-salah-bar)
+
+| Welcome tour | Settings | The White Days |
+|---|---|---|
+| ![The welcome tour](assets/screenshots/welcome-en.png) | ![Settings](assets/screenshots/settings-general-en.png) | ![The White Days](assets/screenshots/white-days-en.png) |
 
 | Menu panel | Large widget | بالعربية |
 |---|---|---|
@@ -61,8 +68,10 @@ Free and ad-free, and it collects no data ([privacy policy](PRIVACY.md)). 💖 [
    curl -fsSL https://raw.githubusercontent.com/be-liever95/salah-bar/main/install.sh | bash
    ```
 
-3. Wait for **"✓ Salah Bar … was installed"**. Salah Bar opens by itself.
-4. When asked, click **Allow** for **Location** and **Notifications**. Your
+3. Wait for **"✓ Salah Bar … was installed"**. Salah Bar opens by itself, with a
+   short **welcome tour** that sets it up with you. (Behind Terminal? Look for 🕌 at
+   the top of your screen.)
+4. In the tour, click **Allow** for **Location** and **Notifications**. Your
    location is used to calculate prayer times and the Qibla, and Salah Bar
    never collects or shares it ([privacy policy](PRIVACY.md)).
 5. Optional: add the desktop widget. Right-click the desktop → **Edit
@@ -134,8 +143,10 @@ Updates…**. Updates install **without** any security warning.
    curl -fsSL https://raw.githubusercontent.com/be-liever95/salah-bar/main/install.sh | bash
    ```
 
-3. **"✓ Salah Bar … was installed"** yazısını bekleyin. Salah Bar kendiliğinden açılır.
-4. Sorulduğunda **Konum** ve **Bildirimler** için **İzin Ver**'e tıklayın. Konumunuz
+3. **"✓ Salah Bar … was installed"** yazısını bekleyin. Salah Bar kendiliğinden açılır
+   ve kurulumu sizinle yapan kısa bir **tanıtım turu** başlar. (Terminal'in arkasında mı?
+   Ekranın üstünde 🕌'ye bakın.)
+4. Turda **Konum** ve **Bildirimler** için **İzin Ver**'e tıklayın. Konumunuz
    yalnızca namaz vakitlerini ve kıbleyi hesaplamak için kullanılır; Salah Bar onu toplamaz veya paylaşmaz.
 5. İsteğe bağlı: masaüstüne sağ tıklayın → **Araç Takımlarını Düzenle…** →
    **Salah Bar** arayın → bir boyutu sürükleyip bırakın.
@@ -210,8 +221,9 @@ curl -fsSL https://raw.githubusercontent.com/be-liever95/salah-bar/main/install.
 
 <div dir="rtl">
 
-3. انتظر ظهور رسالة **"✓ Salah Bar … was installed"**، وسيفتح Salah Bar تلقائيًا.
-4. عند السؤال، اضغط **سماح** للموقع والإشعارات. يُستخدم موقعك لحساب مواقيت الصلاة
+3. انتظر ظهور رسالة **"✓ Salah Bar … was installed"**، وسيفتح Salah Bar تلقائيًا
+   مع **جولة تعريفية** قصيرة تُعِدّه معك. (إن كانت خلف نافذة Terminal فابحث عن 🕌 أعلى الشاشة.)
+4. في الجولة، اضغط **سماح** للموقع والإشعارات. يُستخدم موقعك لحساب مواقيت الصلاة
    واتجاه القبلة فقط، ولا يجمعه Salah Bar ولا يشاركه.
 5. اختياري: انقر بزر الماوس الأيمن على سطح المكتب ← **تحرير الأدوات…** ← ابحث عن
    **Salah Bar** ← اسحب الحجم الذي تريده.
@@ -300,6 +312,8 @@ On first launch, a short tour sets Salah Bar up with you, one step at a time:
 6. **Done**: open Salah Bar when you log in, if you like.
 
 Each step can be skipped, and **Settings → General → Welcome tour** shows it again.
+Already using Salah Bar from before the tour? The menu panel offers it once:
+**New: a quick tour → Take the Tour**.
 
 > I asked the Prophet ﷺ: *"Which deed is most beloved to Allah?"* He said:
 > **"Prayer at its time."** (Ibn Masʿud; Sahih al-Bukhari 527, Sahih Muslim 85)

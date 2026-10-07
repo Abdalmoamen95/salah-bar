@@ -220,9 +220,14 @@ do_install() {
     green "✓ $APP_NAME $version was reinstalled."
   elif [ -n "$current" ]; then
     green "✓ $APP_NAME was updated from $current to $version."
+    # The welcome tour came in 2.11; earlier installs never saw it.
+    if [ "$(printf '%s\n' "$current" 2.11.0 | sort -V | head -1)" != "2.11.0" ]; then
+      say "  • New: a short welcome tour. Click 🕌 in the menu bar, then Take the Tour."
+    fi
   else
     green "✓ $APP_NAME $version is installed."
-    say "  • Allow Location and Notifications when it asks."
+    say "  • A short welcome tour opens to set it up: language, location and the adhan."
+    say "    (Behind this window? Look for 🕌 at the top of your screen.)"
     say "  • Optional: add the desktop widget (right-click the desktop → Edit Widgets…)."
   fi
   # curl doesn't add the com.apple.quarantine flag that browsers add, so

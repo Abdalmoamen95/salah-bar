@@ -5,6 +5,15 @@
     <link>https://github.com/be-liever95/salah-bar</link>
     <description>Salah Bar updates</description>
     <item>
+      <title>Salah Bar 2.12.1</title>
+      <pubDate>Wed, 07 Oct 2026 21:55:54 +0300</pubDate>
+      <sparkle:version>198</sparkle:version>
+      <sparkle:shortVersionString>2.12.1</sparkle:shortVersionString>
+      <sparkle:minimumSystemVersion>14.0</sparkle:minimumSystemVersion>
+      <description><![CDATA[<ul><li>🛠 <b>Fixed:</b> Salah Bar could close when switching to or from Arabic while the Quran window was open.</li><li>👋 Set Salah Bar up before the welcome tour existed? The menu panel now offers it once.</li><li>In English, sources read "Quran 20:114", "Bukhari" and "Muslim".</li></ul>]]></description>
+      <enclosure url="https://github.com/be-liever95/salah-bar/releases/download/v2.12.1/Salah-Bar-2.12.1.dmg" sparkle:edSignature="RtI7k2x+Q8S2SkrddNgrPrEMYmJ97n0BH1TvMMuhkJhvCtQEKnKZOV1giuJH6oifwtcoRtjk8PikGa/hodB4AA==" length="47176277" type="application/octet-stream"/>
+    </item>
+    <item>
       <title>Salah Bar 2.12.0</title>
       <pubDate>Wed, 07 Oct 2026 21:21:36 +0300</pubDate>
       <sparkle:version>195</sparkle:version>
