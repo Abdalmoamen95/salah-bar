@@ -288,19 +288,31 @@ Click the countdown in the menu bar to open the panel. It shows:
   surah, and a progress bar you can click or drag to jump within the surah
 - **Quran…**, **Settings…** and **Quit Salah Bar**
 
-### Welcome
+### The welcome tour
 
-On first launch, Salah Bar greets you with the hadith it's built around, and
-asks for Location (to calculate your prayer times) and Notifications:
+On first launch, a short tour sets Salah Bar up with you, one step at a time:
+
+1. **Welcome**: the hadith Salah Bar is built around, and your language (English, Türkçe or العربية).
+2. **Location**: use your location, or choose a city instead.
+3. **Notifications and the adhan**: allow reminders, and listen to the adhan.
+4. **The menu bar**: where to find the countdown and what the panel shows.
+5. **What's inside**: the Quran, Hifz, iqama, the prayer log, widgets and more.
+6. **Done**: open Salah Bar when you log in, if you like.
+
+Each step can be skipped, and **Settings → General → Welcome tour** shows it again.
 
 > I asked the Prophet ﷺ: *"Which deed is most beloved to Allah?"* He said:
 > **"Prayer at its time."** (Ibn Masʿud; Sahih al-Bukhari 527, Sahih Muslim 85)
 
-| Welcome | Settings |
+| Welcome | The menu bar |
 |---|---|
-| ![The welcome window](assets/screenshots/welcome-en.png) | ![Settings, General](assets/screenshots/settings-general-en.png) |
+| ![The welcome tour](assets/screenshots/welcome-en.png) | ![The menu bar step](assets/screenshots/tour-menubar-en.png) |
+| **Location** | **What's inside** |
+| ![The location step](assets/screenshots/tour-location-en.png) | ![The features step](assets/screenshots/tour-features-en.png) |
 
 ### Settings
+
+![Settings, General](assets/screenshots/settings-general-en.png)
 
 Settings is laid out like System Settings: pages in a sidebar, each with its
 own icon, and the hadith at the top of **General**.

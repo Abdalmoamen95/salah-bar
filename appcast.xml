@@ -5,6 +5,15 @@
     <link>https://github.com/be-liever95/salah-bar</link>
     <description>Salah Bar updates</description>
     <item>
+      <title>Salah Bar 2.11.0</title>
+      <pubDate>Wed, 07 Oct 2026 20:38:50 +0300</pubDate>
+      <sparkle:version>193</sparkle:version>
+      <sparkle:shortVersionString>2.11.0</sparkle:shortVersionString>
+      <sparkle:minimumSystemVersion>14.0</sparkle:minimumSystemVersion>
+      <description><![CDATA[<ul><li>👋 <b>A welcome tour</b> that guides new users step by step: language, location, notifications and the adhan, and what is inside. Open it again from Settings → General.</li><li>🌙 The hadith «الصلاة على وقتها» in the Amiri typeface.</li><li>📍 No more preset cities (İzmir, Doha, Cairo): Salah Bar follows your location and you add the cities you want. Unused presets are removed; ones you use stay.</li></ul>]]></description>
+      <enclosure url="https://github.com/be-liever95/salah-bar/releases/download/v2.11.0/Salah-Bar-2.11.0.dmg" sparkle:edSignature="otg3E1f0bPpmgy3IJC4B2R22mIO3xSxzXvyPTU+Sohb6fTyVNqnr7mYubYWjTEdEz3gJ+jJLQnCPI7DLsBHJBw==" length="47179015" type="application/octet-stream"/>
+    </item>
+    <item>
       <title>Salah Bar 2.10.0</title>
       <pubDate>Wed, 07 Oct 2026 19:34:10 +0300</pubDate>
       <sparkle:version>190</sparkle:version>

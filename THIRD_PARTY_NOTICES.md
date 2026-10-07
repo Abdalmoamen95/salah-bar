@@ -32,6 +32,14 @@ the Hifz view ("Text: Tanzil.net"), and Tanzil's copyright notice is kept in
 the bundled file. Ayah timings for Hifz mode come from mp3quran.net's API,
 and ayah-by-ayah audio from EveryAyah.com (see below).
 
+## The Amiri font
+
+The hadith on the welcome tour and in Settings is set in
+[Amiri](https://github.com/aliftype/amiri) 1.000 by Khaled Hosny, bundled
+unmodified (`Amiri-Bold.ttf`, `Amiri-Regular.ttf`) under the
+[SIL Open Font License 1.1](https://openfontlicense.org); its licence text ships
+with the app as `Amiri-OFL.txt`.
+
 ## Translations
 English quotes use **Sahih International**; Turkish quotes use the
 **Diyanet İşleri Başkanlığı** translation. These belong to their publishers.
