@@ -288,15 +288,33 @@ Click the countdown in the menu bar to open the panel. It shows:
   surah, and a progress bar you can click or drag to jump within the surah
 - **Quran…**, **Settings…** and **Quit Salah Bar**
 
+### Welcome
+
+On first launch, Salah Bar greets you with the hadith it's built around, and
+asks for Location (to calculate your prayer times) and Notifications:
+
+> I asked the Prophet ﷺ: *"Which deed is most beloved to Allah?"* He said:
+> **"Prayer at its time."** (Ibn Masʿud; Sahih al-Bukhari 527, Sahih Muslim 85)
+
+| Welcome | Settings |
+|---|---|
+| ![The welcome window](assets/screenshots/welcome-en.png) | ![Settings, General](assets/screenshots/settings-general-en.png) |
+
 ### Settings
 
-| Tab | What you can change |
+Settings is laid out like System Settings: pages in a sidebar, each with its
+own icon, and the hadith at the top of **General**.
+
+| Page | What you can change |
 |---|---|
 | **General** | Language (English, Turkish or Arabic), Arabic-Indic digits, seconds in the menu bar, launch at login, automatic updates |
 | **Location** | Automatic location or a saved city, city search, adding a city by coordinates |
-| **Calculation** | Calculation method, Asr school (Standard or Hanafi), per-prayer minute adjustments, Hijri date correction (±2 days), Ramadan mode |
-| **Notifications** | When to remind you (10, 5 and 0 minutes before, or your own), adhan on/off, volume, fade-in, adhan and Fajr adhan tracks with preview and trimming, **My adhans** (your own files and the online library), staying quiet during calls |
+| **Prayer Times** | Calculation method, Asr school (Standard or Hanafi), per-prayer minute adjustments, Hijri date correction (±2 days), Ramadan mode |
+| **Iqama** | Your mosque's iqama for each prayer and for Jumu'ah, and a reminder before it |
+| **Reminders** | When to remind you (10, 5 and 0 minutes before, or your own), and the Friday and Sunnah reminders |
+| **Adhan** | Adhan on/off, volume, fade-in, staying quiet during calls, pausing other audio, adhan and Fajr adhan tracks with preview and trimming, **My adhans** (your own files and the online library) |
 | **Quran** | What happens when the adhan is due while the Quran plays, playing on to the next surah, downloads and the space they use |
+| **Calendar** | Warnings when a meeting overlaps a prayer, and prayer blocks in your calendar |
 | **Appearance** | The "prayer is near" flash warning (minutes before, menu bar blink, screen-edge glow with a Preview), the ayah & dua (on/off, change every 15 min to once a day, which kinds) and the theme (System, Light or Dark) |
 | **Advanced** | Remove the old SwiftBar version, import its settings again, open the logs folder |
 
@@ -329,7 +347,9 @@ search in English, Arabic or Turkish), then press ▶ next to any surah.
   whole range, a pause between repeats and the speed. The Arabic text follows along
   with the current ayah highlighted. It works with the many reciters that mp3quran.net
   publishes ayah timings for, such as Alafasy, Husary, Minshawi, Abdul Basit, Sudais
-  and Ghamdi. Text from [Tanzil.net](https://tanzil.net).
+  and Ghamdi, plus more (Mohammed Jibreel, Yasser Salamah, Maher Al-Muaiqly…) with
+  ayah-by-ayah audio from [EveryAyah.com](https://everyayah.com). Text from
+  [Tanzil.net](https://tanzil.net).
 - **At prayer time** the recitation fades out, the adhan plays, then the
   recitation carries on. In **Settings → Quran** you can instead keep it paused
   after the adhan, or keep listening with no adhan.
@@ -342,18 +362,18 @@ Recitations are from [mp3quran.net](https://mp3quran.net).
 
 ### More for every prayer
 
-- **Iqama times** (Settings → Calculation → Iqama): set each prayer's iqama as minutes
+- **Iqama times** (Settings → Iqama): set each prayer's iqama as minutes
   after the adhan or a fixed time, plus a separate Jumu'ah time. The panel counts
   down to the iqama after each adhan, and can remind you before it.
 - **Prayer log**: in the panel, click the circle next to a prayer once its time has
   begun (or press **Prayed ✓** on the prayer's notification). **Prayer Log…** shows
   your streak and the last 7 or 30 days. Turn on **Count missed prayers as qada** to
   keep a count of prayers to make up. Everything stays on your Mac.
-- **Calendar** (Settings → General → Calendar, off by default): Salah Bar warns you
+- **Calendar** (Settings → Calendar, off by default): Salah Bar warns you
   when a meeting overlaps a prayer, e.g. *"Your 13:00 meeting overlaps Dhuhr (13:04)"*,
   and can add short busy "Dhuhr", "Asr"… blocks to a calendar you choose. It only
   ever changes the blocks it made.
-- **Friday and Sunnah reminders** (Settings → Notifications): on Fridays, a reminder
+- **Friday and Sunnah reminders** (Settings → Reminders): on Fridays, a reminder
   to read Al-Kahf with a button to play it; optional reminders the evening before
   Monday, Thursday and White Days (13–15) fasts, and for the last third of the night.
 - **Pause other audio during the adhan**: music or a video in another app pauses
@@ -382,9 +402,9 @@ Large widget says **It's prayer time** with that prayer and the ayah
 
 ### Choosing your adhan
 
-![Notifications settings](assets/screenshots/settings-notifications-en.png)
+![Adhan settings](assets/screenshots/settings-notifications-en.png)
 
-In **Settings → Notifications** pick the adhan for the five prayers and,
+In **Settings → Adhan** pick the adhan for the five prayers and,
 optionally, a different one for Fajr. Press ▶ to hear it.
 
 - **Built in:** 17 adhans from Makkah, Madinah, Egypt, Qatar, Morocco and more, including 6 openly licensed recordings from Wikimedia Commons and Freesound (credited under the picker and in [THIRD_PARTY_NOTICES.md](THIRD_PARTY_NOTICES.md)).
@@ -444,7 +464,7 @@ is running), it quits by itself.
 
 ### Staying quiet during calls
 
-With **Settings → Notifications → Stay quiet during calls or while the camera
+With **Settings → Adhan → Stay quiet during calls or while the camera
 is on**, Salah Bar doesn't play the adhan while your microphone or camera is in
 use. You still get the notification, and the panel tells you why the adhan was
 muted.
@@ -581,7 +601,7 @@ Salah Bar calculates prayer times on your Mac. It doesn't download them.
   [Aladhan](https://aladhan.com) within 1 minute. Other methods use the same
   calculation, but haven't been checked against official tables yet, so they
   are marked *(approx.)* in Settings.
-- **Adjustments** in **Settings → Calculation** are added on top of the
+- **Adjustments** in **Settings → Prayer Times** are added on top of the
   method's own built-in adjustments. For example, Diyanet already moves Dhuhr
   by +5 minutes, so +1 there gives +6 in total.
 
@@ -616,7 +636,7 @@ published here under the LGPL-3.0 as its licence requires (see
 
 Salah Bar is free and has no ads. If it helps you keep your
 prayers, you can support its development. The **♥ Support Salah Bar** button in
-the menu panel and in **Settings → General** takes you straight there.
+the menu panel and in **Settings → Support Salah Bar** takes you straight there.
 
 - ☕ **[Buy Me a Coffee](https://buymeacoffee.com/be_liever95)**: a one-time or monthly gift by card or Apple Pay, no account needed
 - 💖 **[Sponsor on GitHub](https://github.com/sponsors/be-liever95)**: if you have a GitHub account

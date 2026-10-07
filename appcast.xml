@@ -5,6 +5,15 @@
     <link>https://github.com/be-liever95/salah-bar</link>
     <description>Salah Bar updates</description>
     <item>
+      <title>Salah Bar 2.10.0</title>
+      <pubDate>Wed, 07 Oct 2026 19:34:10 +0300</pubDate>
+      <sparkle:version>190</sparkle:version>
+      <sparkle:shortVersionString>2.10.0</sparkle:shortVersionString>
+      <sparkle:minimumSystemVersion>14.0</sparkle:minimumSystemVersion>
+      <description><![CDATA[<ul><li>⚙️ <b>New Settings window</b>, laid out like System Settings: a sidebar of pages for General, Prayer Times, Iqama, Reminders, Adhan, Quran, Calendar and more.</li><li>🌙 A new welcome with the hadith «الصلاة على وقتها»: "Prayer at its time" is the deed most beloved to Allah.</li><li>📖 <b>Hifz</b> for six more recitations, with ayah-by-ayah audio from EveryAyah.com.</li></ul>]]></description>
+      <enclosure url="https://github.com/be-liever95/salah-bar/releases/download/v2.10.0/Salah-Bar-2.10.0.dmg" sparkle:edSignature="x00ok+Km4j4zj2M3XGw0C4pGoLCSiHzWEQw4DHxL0k9IWQvbbdCTY7YuLAY0CC99LM3XMGy+5k/BCkVKeiRYBA==" length="46453552" type="application/octet-stream"/>
+    </item>
+    <item>
       <title>Salah Bar 2.9.1</title>
       <pubDate>Wed, 07 Oct 2026 18:59:31 +0300</pubDate>
       <sparkle:version>187</sparkle:version>

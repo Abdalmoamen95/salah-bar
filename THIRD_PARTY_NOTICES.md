@@ -29,8 +29,8 @@ Copyright (c) 2007–2026 Tanzil Project, https://tanzil.net, licensed under
 Creative Commons Attribution 3.0 and used verbatim under its terms of use:
 the text is not changed, its source is credited with a link to tanzil.net in
 the Hifz view ("Text: Tanzil.net"), and Tanzil's copyright notice is kept in
-the bundled file. Ayah timings for Hifz mode come from mp3quran.net's API
-(see below).
+the bundled file. Ayah timings for Hifz mode come from mp3quran.net's API,
+and ayah-by-ayah audio from EveryAyah.com (see below).
 
 ## Translations
 English quotes use **Sahih International**; Turkish quotes use the
@@ -44,6 +44,23 @@ list bundled with the app comes from the same API. mp3quran.net's policy
 available to everyone, and we allow any visitor or developer to copy any
 material or use any link on the websites". The recordings belong to their
 reciters and producers and are not covered by Salah Bar's license.
+
+## EveryAyah (Hifz mode)
+For recitations that mp3quran.net has no ayah timings for, Hifz
+(memorisation) mode downloads the ayahs it repeats, one MP3 per ayah, from
+**EveryAyah.com** (formerly VerseByVerseQuran.com), https://everyayah.com,
+and keeps them on the Mac (Application Support/Salah Bar/Quran/everyayah).
+Which EveryAyah folder belongs to which recitation is listed in
+`app/Packages/SalahCore/Sources/SalahCore/Quran/EveryAyah.swift`.
+EveryAyah publishes no terms of use on its site today. Its timing files
+(https://everyayah.com/data/timings_files/000_disclaimer.txt) ask products
+that use them to link back to the site, and its former licence page
+(versebyversequran.com/site/license, 2012) pointed to Creative Commons
+Attribution-NonCommercial 2.5 Canada. Salah Bar credits it with a link in
+the Hifz view ("Audio: EveryAyah.com"), plays the recordings unchanged
+(only the files' ID3 tags, and any stray bytes before the audio, are
+removed) and is free. The recordings belong to their reciters and producers
+and are not covered by Salah Bar's license.
 
 ## Adhan recordings
 These bundled recordings are used under open licences (Salah Bar trims them,
