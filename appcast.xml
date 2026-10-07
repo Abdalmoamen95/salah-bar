@@ -5,6 +5,15 @@
     <link>https://github.com/be-liever95/salah-bar</link>
     <description>Salah Bar updates</description>
     <item>
+      <title>Salah Bar 2.9.1</title>
+      <pubDate>Wed, 07 Oct 2026 18:59:31 +0300</pubDate>
+      <sparkle:version>187</sparkle:version>
+      <sparkle:shortVersionString>2.9.1</sparkle:shortVersionString>
+      <sparkle:minimumSystemVersion>14.0</sparkle:minimumSystemVersion>
+      <description><![CDATA[<ul><li>📅 <b>Calendar:</b> "Calendars to check" opens again, and turning prayer blocks off now says how many it removed.</li><li>🗣 Siri: more ways to ask ("Salah Bar next prayer").</li></ul>]]></description>
+      <enclosure url="https://github.com/be-liever95/salah-bar/releases/download/v2.9.1/Salah-Bar-2.9.1.dmg" sparkle:edSignature="cnZTFI1zDpwivkkawTFK8rGKDUxmAqQgIUFi33dBmUkbVF1B0qXzhkKmxCSKEsQF7rH11l5dRusEP+F+5UNDDg==" length="46235847" type="application/octet-stream"/>
+    </item>
+    <item>
       <title>Salah Bar 2.9.0</title>
       <pubDate>Wed, 07 Oct 2026 18:18:00 +0300</pubDate>
       <sparkle:version>185</sparkle:version>
