@@ -53,6 +53,15 @@ available to everyone, and we allow any visitor or developer to copy any
 material or use any link on the websites". The recordings belong to their
 reciters and producers and are not covered by Salah Bar's license.
 
+## Duas (Hisn al-Muslim)
+The Duas window has the Arabic text and chapters of **Hisn al-Muslim** (Fortress
+of the Muslim) by Sa'id ibn Wahf al-Qahtani, as published by
+**hisnmuslim.com** (https://www.hisnmuslim.com) through its public API, and
+streams (and, on request, downloads) that site's recording of each dua. The
+chapter titles and meanings in every language were translated from the Arabic
+for Salah Bar. The recordings belong to their producers and are not covered by
+Salah Bar's license.
+
 ## EveryAyah (Hifz mode)
 For recitations that mp3quran.net has no ayah timings for, Hifz
 (memorisation) mode downloads the ayahs it repeats, one MP3 per ayah, from

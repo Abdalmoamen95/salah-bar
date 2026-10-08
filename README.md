@@ -28,12 +28,13 @@ and lets you listen to the Quran from 242 reciters.
 - 🖥 **Desktop widgets** in Small, Medium and Large
 - 📖 **A rotating ayah or dua**: 42 ayahs, Quranic duas and hadiths, changing every 15 minutes to once a day
 - ✨ **Dhikr cards**: now and then a quiet card with a dhikr or dua from the Quran and Sunnah, at the hours you choose, never during meetings ([more](#dhikr-cards))
+- 🤲 **Duas you can listen to**: all of Hisn al-Muslim (Fortress of the Muslim), 267 duas in 132 chapters by topic, each with its Arabic, its meaning and a recording; play a chapter, count repetitions, keep it offline ([more](#duas))
 - 🌙 **A Ramadan companion**: your fasts and fasts to make up, a Quran khatm plan you can listen to, the iftar and Laylat al-Qadr duas, suhoor and Taraweeh reminders, an iftar countdown in the menu bar, then the six days of Shawwal ([more](#ramadan))
 - 🕋 **Hijri date** and **Qibla** direction
-- 🌍 **8 languages**: English, Türkçe, العربية, اردو, Bahasa Indonesia, Bahasa Melayu, Français and Русский, with a right-to-left layout in Arabic and Urdu, and Arabic-Indic digits (٠١٢) in Arabic
+- 🌍 **12 languages**: English, Türkçe, العربية, اردو, Bahasa Indonesia, Bahasa Melayu, Français, Русский, Deutsch, বাংলা, فارسی and Español, with a right-to-left layout in Arabic, Urdu and Persian, and Arabic-Indic digits (٠١٢) in Arabic
 - 👋 **Easy to start**: a short welcome tour sets it up with you (language, location, notifications and the adhan) and shows what's inside ([more](#the-welcome-tour))
 - 📍 **Your location, your cities**: times follow where your Mac is, and you add only the cities you want
-- 📴 **Works offline**: times are calculated on your Mac, so no internet or account is needed (only Quran streaming uses the internet)
+- 📴 **Works offline**: times are calculated on your Mac, so no internet or account is needed (only Quran and dua streaming use the internet)
 - ✅ **Official Diyanet times**, checked against the published Diyanet tables ([details](#prayer-times-accuracy))
 
 Free and ad-free, and it collects no data ([privacy policy](PRIVACY.md)). 💖 [Support Salah Bar](#support-salah-bar)
@@ -56,7 +57,7 @@ Free and ad-free, and it collects no data ([privacy policy](PRIVACY.md)). 💖 [
 
 ## Install
 
-🇹🇷 [Türkçe kurulum](#kurulum-tr) · 🇸🇦 [التثبيت بالعربية](#install-ar) · 🇵🇰 [اردو میں انسٹال کریں](#install-ur) · 🇮🇩 [Pemasangan dalam Bahasa Indonesia](#install-id) · 🇲🇾 [Pemasangan dalam Bahasa Melayu](#install-ms) · 🇫🇷 [Installation en français](#install-fr) · 🇷🇺 [Установка на русском](#install-ru)
+🇹🇷 [Türkçe kurulum](#kurulum-tr) · 🇸🇦 [التثبيت بالعربية](#install-ar) · 🇵🇰 [اردو میں انسٹال کریں](#install-ur) · 🇮🇩 [Pemasangan dalam Bahasa Indonesia](#install-id) · 🇲🇾 [Pemasangan dalam Bahasa Melayu](#install-ms) · 🇫🇷 [Installation en français](#install-fr) · 🇷🇺 [Установка на русском](#install-ru) · 🇮🇷 [نصب به فارسی](#install-fa)
 
 > [!IMPORTANT]
 > You need **macOS 14 Sonoma or later**.
@@ -650,6 +651,86 @@ xattr -d com.apple.quarantine ~/Downloads/Salah-Bar-*.dmg
 **Обновление:** Salah Bar обновляется сам. Он проверяет обновления раз в день, или выберите
 **🕌 → Проверить обновления…**. Обновления устанавливаются **без** предупреждений безопасности.
 
+<a id="install-fa"></a>
+
+<div dir="rtl">
+
+### 🇮🇷 نصب به فارسی
+
+**macOS 14 Sonoma یا جدیدتر لازم است.** Windows دارید؟ **[Salah Bar برای Windows](https://github.com/be-liever95/salah-bar-windows-releases/releases/latest)** را دانلود کنید.
+
+**روش ۱: یک خط در Terminal (ساده‌ترین، بدون هشدار)**
+
+1. **Terminal** را باز کنید (Applications ← Utilities ← Terminal).
+2. این خط را بچسبانید و **Return** را بزنید:
+
+</div>
+
+```bash
+curl -fsSL https://raw.githubusercontent.com/be-liever95/salah-bar/main/install.sh | bash
+```
+
+<div dir="rtl">
+
+3. منتظر پیام **"✓ Salah Bar … was installed"** بمانید. Salah Bar خودش باز می‌شود و یک
+   **تور خوش‌آمدگویی** کوتاه آن را همراه شما تنظیم می‌کند. (پشت Terminal پنهان شده؟ 🕌 را
+   بالای صفحه پیدا کنید.)
+4. در تور، برای **موقعیت مکانی** و **اعلان‌ها** روی **Allow** کلیک کنید. موقعیت شما فقط برای
+   محاسبهٔ اوقات نماز و قبله به کار می‌رود؛ Salah Bar هرگز آن را جمع‌آوری یا ارسال نمی‌کند.
+5. اختیاری: روی دسکتاپ راست‌کلیک کنید ← **Edit Widgets…** ← **Salah Bar** را جستجو کنید ←
+   اندازهٔ دلخواه را بکشید.
+
+> 💡 **نکته:** با این روش **هیچ هشدار امنیتی نمی‌بینید**، چون فایلی که Terminal دانلود می‌کند
+> نشان «دانلودشده از اینترنت» نمی‌گیرد. برای نصب دوباره یا به‌روزرسانی، همین خط را هر وقت
+> خواستید دوباره اجرا کنید.
+
+**روش ۲: دانلود فایل ‎.dmg**
+
+1. **‎`Salah-Bar-<version>.dmg`** را از
+   [آخرین نسخه](https://github.com/be-liever95/salah-bar/releases/latest) دانلود کنید.
+2. روی آن دوبار کلیک کنید. **macOS بار اول آن را مسدود می‌کند** (هشدار پایین را ببینید).
+3. یک بار اجازه دهید (مراحل پایین)، سپس ‎`.dmg` را دوباره باز کنید.
+4. **Salah Bar** را به **Applications** بکشید، از همان‌جا بازش کنید و مراحل ۴ و ۵ روش ۱
+   را انجام دهید.
+
+> ⚠️ **هشدار: هنگام اولین باز کردن فایل دانلودشده، macOS می‌گوید Apple نتوانسته آن را
+> «بررسی کند».** این طبیعی است: Salah Bar رایگان است و توسط Apple نوتارایز نشده (این کار به
+> حساب توسعه‌دهندهٔ پولی نیاز دارد). **روی "Move to Trash" کلیک نکنید.** روی **Done** کلیک
+> کنید و یک بار به روش زیر اجازه دهید. به‌روزرسانی‌های بعدی بدون هشدار نصب می‌شوند.
+>
+> <img src="assets/screenshots/gatekeeper-warning.png" alt="هشدار macOS: Apple نتوانست Salah-Bar.dmg را بررسی کند" width="260">
+
+**یک بار اجازه دهید**
+
+*macOS 15 Sequoia و جدیدتر*
+
+1. در هشدار روی **Done** کلیک کنید.
+2. **System Settings ← Privacy & Security** را باز کنید و تا بخش **Security** پایین بروید.
+3. کنار پیام *"Salah-Bar-….dmg" was blocked* روی **Open Anyway** کلیک کنید.
+4. با **Open Anyway** و رمز Mac خود تأیید کنید، سپس ‎`.dmg` را دوباره باز کنید.
+
+*macOS 14 Sonoma*
+
+روی ‎`.dmg` راست‌کلیک کنید (یا با Control کلیک کنید)، **Open** را انتخاب کنید، سپس روی **Open** کلیک کنید.
+
+*هر نسخهٔ macOS: از Terminal*
+
+</div>
+
+```bash
+xattr -d com.apple.quarantine ~/Downloads/Salah-Bar-*.dmg
+```
+
+<div dir="rtl">
+
+> ℹ️ **توجه:** این فرمان **در صورت موفقیت چیزی نشان نمی‌دهد**. فقط ‎`.dmg` را دوباره باز کنید.
+> اگر *No such file* دیدید، نام یا محل فایل دانلودشده فرق دارد؛ برای پیدا کردنش
+> ‎`ls ~/Downloads/Salah*`‎ را اجرا کنید.
+
+**به‌روزرسانی:** Salah Bar خودش به‌روز می‌شود. روزی یک بار بررسی می‌کند، یا
+**🕌 ← بررسی به‌روزرسانی‌ها…** را انتخاب کنید. به‌روزرسانی‌ها **بدون** هیچ هشدار امنیتی نصب می‌شوند.
+
+</div>
 
 ---
 
@@ -673,12 +754,19 @@ Click the countdown in the menu bar to open the panel. It shows:
 
 On first launch, a short tour sets Salah Bar up with you, one step at a time:
 
-1. **Welcome**: the hadith Salah Bar is built around, and your language (English, Türkçe or العربية).
+1. **Welcome**: the hadith Salah Bar is built around, and your language (any of the 12).
 2. **Location**: use your location, or choose a city instead.
-3. **Notifications and the adhan**: allow reminders, and listen to the adhan.
-4. **The menu bar**: where to find the countdown and what the panel shows.
-5. **What's inside**: the Quran, Hifz, iqama, the prayer log, widgets and more.
-6. **Done**: open Salah Bar when you log in, if you like.
+3. **Prayer times**: today's times for that place, the calculation method (automatic
+   for your country, or one you choose) and the Asr school.
+4. **Notifications and the adhan**: allow reminders, and listen to the adhan.
+5. **The menu bar**: where to find the countdown and what the panel shows.
+6. **Make it yours**: a switch for each optional feature: Sunnah prayer tracking,
+   "Did you pray?" reminders, dhikr cards, the Friday Al-Kahf and Sunnah fast reminders,
+   the flash before the adhan, quiet in calls, and the Ramadan companion. Links open
+   the iqama and calendar settings.
+7. **Listen and remember**: the Quran and the Duas, each with a button to open it.
+8. **Widgets and Siri**: how to add a widget and what to ask Siri.
+9. **Done**: open Salah Bar when you log in, if you like.
 
 Each step can be skipped, and **Settings → General → Welcome tour** shows it again.
 Already using Salah Bar from before the tour? The menu panel offers it once:
@@ -687,11 +775,11 @@ Already using Salah Bar from before the tour? The menu panel offers it once:
 > I asked the Prophet ﷺ: *"Which deed is most beloved to Allah?"* He said:
 > **"Prayer at its time."** (Ibn Masʿud; Sahih al-Bukhari 527, Sahih Muslim 85)
 
-| Welcome | The menu bar |
+| Welcome | Prayer times |
 |---|---|
-| ![The welcome tour](assets/screenshots/welcome-en.png) | ![The menu bar step](assets/screenshots/tour-menubar-en.png) |
-| **Location** | **What's inside** |
-| ![The location step](assets/screenshots/tour-location-en.png) | ![The features step](assets/screenshots/tour-features-en.png) |
+| ![The welcome tour](assets/screenshots/welcome-en.png) | ![The prayer times step](assets/screenshots/tour-prayer-times-en.png) |
+| **Make it yours** | **Listen and remember** |
+| ![The make it yours step](assets/screenshots/tour-your-day-en.png) | ![The Quran and Duas step](assets/screenshots/tour-listen-en.png) |
 
 ### Settings
 
@@ -702,7 +790,7 @@ own icon, and the hadith at the top of **General**.
 
 | Page | What you can change |
 |---|---|
-| **General** | Language (English, Turkish, Arabic, Urdu, Indonesian, Malay, French or Russian), Arabic-Indic digits, seconds in the menu bar, launch at login, automatic updates |
+| **General** | Language (English, Turkish, Arabic, Urdu, Indonesian, Malay, French, Russian, German, Bengali, Persian or Spanish), Arabic-Indic digits, seconds in the menu bar, launch at login, automatic updates |
 | **Location** | Automatic location or a saved city, city search, adding a city by coordinates |
 | **Prayer Times** | Calculation method, Asr school (Standard or Hanafi), per-prayer minute adjustments, Hijri date correction (±2 days) |
 | **Ramadan** | The Ramadan companion and each of its reminders, the iftar countdown in the menu bar, the khatm plan, fasts to make up, Ramadan mode |
@@ -756,6 +844,26 @@ Recitations are from [mp3quran.net](https://mp3quran.net).
 |---|---|
 | ![The Quran window in Arabic](assets/screenshots/quran-ar-dark.png) | ![Quran settings](assets/screenshots/settings-quran-en.png) |
 
+### Duas
+
+**Duas…** in the panel opens the whole of *Hisn al-Muslim* (Fortress of the Muslim,
+by Sa'id al-Qahtani): 267 duas in 132 chapters, grouped by topic (morning and evening,
+sleep, prayer, travel, worry and hardship, illness, food and fasting, Hajj…) and
+searchable, in Arabic too, with or without vowel marks.
+
+- Each dua shows the Arabic, its meaning in your language, its number in the book and
+  how many times to say it. Click **×3** (or ×33, ×100) to count as you say it.
+- **▶** plays a dua's recording; **Play all** plays the chapter in order.
+  **Repeat as said** plays each dua as many times as it's said (up to 10).
+- The recordings stream from [hisnmuslim.com](https://www.hisnmuslim.com); **Offline**
+  downloads all of them (about 120 MB) to listen without the internet.
+- At prayer time a dua pauses for the adhan like the Quran does, and the Quran and the
+  duas never play over each other.
+
+| English | العربية |
+|---|---|
+| ![The Duas window](assets/screenshots/duas-en-light.png) | ![The Duas window in Arabic](assets/screenshots/duas-ar-dark.png) |
+
 ### More for every prayer
 
 - **Iqama times** (Settings → Iqama): set each prayer's iqama as minutes
@@ -800,9 +908,10 @@ in at the top of the screen with one dhikr or dua: the Arabic, its meaning and
 its source (al-Bukhari, Muslim, Abu Dawud, at-Tirmidhi, Ibn Majah or the Quran),
 with the number of times to say it where the hadith gives one. It makes no sound,
 never takes focus, stays out of full-screen apps and fades after a minute (or
-stays until you close it). **✓ Read** closes it and counts it for the day.
+stays until you close it). **✓ Read** closes it and counts it for the day, and
+**▶ Listen** plays its Hisn al-Muslim recording, where there is one.
 
-- **When:** every 30 minutes to 4 hours between the hours you pick (9:00–21:00 by
+- **When:** every 10 minutes to 12 hours between the hours you pick (9:00–21:00 by
   default), or at times you set. Never within 10 minutes of a prayer.
 - **Morning and evening adhkar:** half an hour after Fajr and after Asr, one of the
   morning or evening adhkar, such as Sayyid al-Istighfar.

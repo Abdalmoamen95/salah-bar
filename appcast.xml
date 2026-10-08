@@ -5,6 +5,15 @@
     <link>https://github.com/be-liever95/salah-bar</link>
     <description>Salah Bar updates</description>
     <item>
+      <title>Salah Bar 2.16.0</title>
+      <pubDate>Thu, 08 Oct 2026 15:17:11 +0300</pubDate>
+      <sparkle:version>236</sparkle:version>
+      <sparkle:shortVersionString>2.16.0</sparkle:shortVersionString>
+      <sparkle:minimumSystemVersion>14.0</sparkle:minimumSystemVersion>
+      <description><![CDATA[<ul><li>🤲 <b>Duas you can listen to:</b> all of Hisn al-Muslim, 267 duas in 132 chapters by topic, each with its Arabic, its meaning and a recording. Play a chapter, count repetitions, keep them offline (🕌 → Duas…).</li><li>▶ <b>Listen on dhikr cards</b>, where Hisn al-Muslim has a recording of the same words.</li><li>👋 <b>A new welcome tour</b> that sets everything up: your prayer times and method, the adhan, and a switch for each optional feature. Take it from the card in the panel.</li><li>🌍 <b>Four new languages:</b> Deutsch, বাংলা, فارسی and Español (12 in all).</li><li>🛠 Long prayer names no longer wrap in the panel, and translations are more consistent.</li></ul>]]></description>
+      <enclosure url="https://github.com/be-liever95/salah-bar/releases/download/v2.16.0/Salah-Bar-2.16.0.dmg" sparkle:edSignature="9wd1kzePbpTxbDx/+g3KjMsjX/prrN2qwSydsKmXydjFThj9zyTg9us/Pi6AXz48giVylK2wi43kOGRQpgGuCg==" length="53105141" type="application/octet-stream"/>
+    </item>
+    <item>
       <title>Salah Bar 2.15.1</title>
       <pubDate>Thu, 08 Oct 2026 13:08:53 +0300</pubDate>
       <sparkle:version>213</sparkle:version>

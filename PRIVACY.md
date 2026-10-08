@@ -6,7 +6,7 @@
 ads and no tracking. Your settings and your location stay on your Mac. The
 developer never receives any of your data.
 
-[Türkçe](#türkçe) · [العربية](#العربية)
+English · [Türkçe](PRIVACY.tr.md) · [العربية](PRIVACY.ar.md) · [اردو](PRIVACY.ur.md) · [Bahasa Indonesia](PRIVACY.id.md) · [Bahasa Melayu](PRIVACY.ms.md) · [Français](PRIVACY.fr.md) · [Русский](PRIVACY.ru.md)
 
 ## What stays on your Mac
 
@@ -32,6 +32,7 @@ request they see your Mac's IP address.
 |---|---|---|
 | **Apple** (macOS location services) | When your location changes | Your coordinates, to turn them into a place name such as "Manisa, TR" (Apple's own [privacy policy](https://www.apple.com/legal/privacy/) applies) |
 | **mp3quran.net** | Only when you use the Quran player | Requests for the reciters list (at most once a week) and for the surahs you play or download |
+| **hisnmuslim.com** | Only when you play a dua (Duas window, or Listen on a dhikr card) or download them for offline use | Requests for the recordings you play or download |
 | **GitHub** | When you add an adhan from the online library; in the version downloaded from GitHub, when it checks for updates (every 6 hours) | Requests for the adhan file, or for the update feed |
 
 Pressing **Support Salah Bar** opens Buy Me a Coffee or GitHub Sponsors in
@@ -51,63 +52,3 @@ a new date.
 
 Questions about privacy: open an issue at
 https://github.com/be-liever95/salah-bar/issues.
-
----
-
-## Türkçe
-
-**Kısaca: Salah Bar hiçbir veri toplamaz.** Hesap, analiz, reklam ve takip
-yoktur. Ayarlarınız ve konumunuz Mac'inizde kalır; geliştirici hiçbir
-verinizi almaz.
-
-- **Konumunuz**, izninizle namaz vakitlerini ve kıbleyi hesaplamak için
-  kullanılır. Hesaplama Mac'inizde yapılır; son konumunuz yalnızca Mac'inizde
-  saklanır.
-- **Ayarlarınız**, kendi ezan dosyalarınız, Kuran favorileriniz, surelerde
-  kaldığınız yer ve indirdiğiniz sureler Mac'inizde kalır.
-- **Meşgul olup olmadığınız:** görüşme sırasında sessiz kalmak için Salah
-  Bar, vakit geldiğinde mikrofonun veya kameranın kullanılıp kullanılmadığına
-  ya da bir Odak modunun açık olup olmadığına bakar. Hiçbir şeyi kaydetmez,
-  dinlemez veya görmez.
-
-İnternete yalnızca şunlar için bağlanır (bu hizmetler, her web isteğinde olduğu
-gibi IP adresinizi görür):
-
-- **Apple:** konumunuz değiştiğinde, koordinatları yer adına çevirmek için
-  (ör. "Manisa, TR").
-- **mp3quran.net:** yalnızca Kuran oynatıcıyı kullandığınızda; kâri listesi
-  (en fazla haftada bir) ve dinlediğiniz ya da indirdiğiniz sureler için.
-- **GitHub:** çevrimiçi kütüphaneden ezan eklediğinizde ve GitHub'dan
-  indirilen sürümde güncellemeleri denetlerken (6 saatte bir).
-
-Sorular için: https://github.com/be-liever95/salah-bar/issues
-
----
-
-## العربية
-
-<div dir="rtl">
-
-**باختصار: لا يجمع Salah Bar أي بيانات.** لا حسابات ولا تحليلات ولا إعلانات ولا
-تتبّع. تبقى إعداداتك وموقعك على جهازك، ولا يتلقى المطوّر أي شيء من بياناتك.
-
-- **موقعك** يُستخدم بإذنك لحساب مواقيت الصلاة واتجاه القبلة، ويجري الحساب على
-  جهازك. يُحفظ آخر موقع لك على جهازك فقط.
-- **إعداداتك** وملفات الأذان الخاصة بك ومفضّلات القرآن وموضع توقفك في كل سورة
-  والسور التي تنزّلها تبقى كلها على جهازك.
-- **انشغالك:** ليبقى صامتًا أثناء المكالمات، يتحقق Salah Bar عند حلول وقت الصلاة
-  مما إذا كان الميكروفون أو الكاميرا قيد الاستخدام أو كان وضع التركيز مفعّلًا.
-  لا يسجّل شيئًا ولا يستمع ولا يرى.
-
-لا يتصل بالإنترنت إلا لما يلي (وترى هذه الخدمات عنوان IP لجهازك كما في أي طلب
-على الويب):
-
-- **Apple:** عند تغيّر موقعك، لتحويل الإحداثيات إلى اسم المكان (مثل "Manisa, TR").
-- **mp3quran.net:** عند استخدام مشغّل القرآن فقط، لقائمة القرّاء (مرة في الأسبوع
-  على الأكثر) وللسور التي تستمع إليها أو تنزّلها.
-- **GitHub:** عند إضافة أذان من المكتبة على الإنترنت، وفي النسخة المنزّلة من
-  GitHub عند التحقق من التحديثات (كل ٦ ساعات).
-
-للأسئلة: https://github.com/be-liever95/salah-bar/issues
-
-</div>
