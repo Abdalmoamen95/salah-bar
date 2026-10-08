@@ -55,7 +55,7 @@ Free and ad-free, and it collects no data ([privacy policy](PRIVACY.md)). 💖 [
 
 ## Install
 
-🇹🇷 [Türkçe kurulum](#kurulum-tr) · 🇸🇦 [التثبيت بالعربية](#install-ar)
+🇹🇷 [Türkçe kurulum](#kurulum-tr) · 🇸🇦 [التثبيت بالعربية](#install-ar) · 🇵🇰 [اردو میں انسٹال کریں](#install-ur) · 🇮🇩 [Pemasangan dalam Bahasa Indonesia](#install-id) · 🇲🇾 [Pemasangan dalam Bahasa Melayu](#install-ms) · 🇫🇷 [Installation en français](#install-fr) · 🇷🇺 [Установка на русском](#install-ru)
 
 > [!IMPORTANT]
 > You need **macOS 14 Sonoma or later**.
@@ -282,6 +282,373 @@ xattr -d com.apple.quarantine ~/Downloads/Salah-Bar-*.dmg
 **🕌 ← التحقق من وجود تحديثات…**. تُثبَّت التحديثات **دون أي تحذير**.
 
 </div>
+
+<a id="install-ur"></a>
+
+<div dir="rtl">
+
+### 🇵🇰 اردو میں انسٹال کریں
+
+**macOS 14 Sonoma یا اس سے نیا درکار ہے۔** Windows پر ہیں؟ **[Windows کے لیے Salah Bar](https://github.com/be-liever95/salah-bar-windows-releases/releases/latest)** ڈاؤن لوڈ کریں۔
+
+**پہلا طریقہ: Terminal میں ایک سطر (سب سے آسان، کوئی وارننگ نہیں)**
+
+1. **Terminal** کھولیں (Applications ← Utilities ← Terminal)۔
+2. یہ سطر پیسٹ کریں اور **Return** دبائیں:
+
+</div>
+
+```bash
+curl -fsSL https://raw.githubusercontent.com/be-liever95/salah-bar/main/install.sh | bash
+```
+
+<div dir="rtl">
+
+3. **"✓ Salah Bar … was installed"** کا انتظار کریں۔ Salah Bar خود کھل جائے گا، اور ایک
+   مختصر **تعارفی جائزہ** آپ کے ساتھ اسے سیٹ کرے گا۔ (Terminal کے پیچھے ہے؟ اسکرین کے
+   اوپر 🕌 تلاش کریں۔)
+4. جائزے میں **مقام** اور **اطلاعات** کے لیے **Allow** پر کلک کریں۔ آپ کا مقام صرف نماز کے
+   اوقات اور قبلے کے حساب کے لیے استعمال ہوتا ہے؛ Salah Bar اسے کبھی جمع یا شیئر نہیں کرتا۔
+5. اختیاری: ڈیسک ٹاپ پر رائٹ کلک کریں ← **Edit Widgets…** ← **Salah Bar** تلاش کریں ←
+   کوئی سائز ڈریگ کریں۔
+
+> 💡 **مشورہ:** اس طریقے سے **کوئی سیکیورٹی وارننگ نہیں آتی**، کیونکہ Terminal سے ڈاؤن لوڈ کی گئی
+> فائل پر «انٹرنیٹ سے ڈاؤن لوڈ شدہ» کا نشان نہیں لگتا۔ دوبارہ انسٹال یا اپ ڈیٹ کرنے کے لیے
+> یہی سطر کسی بھی وقت دوبارہ چلائیں۔
+
+**دوسرا طریقہ: ‎.dmg فائل ڈاؤن لوڈ کریں**
+
+1. [تازہ ترین ریلیز](https://github.com/be-liever95/salah-bar/releases/latest) سے
+   **‎`Salah-Bar-<version>.dmg`** ڈاؤن لوڈ کریں۔
+2. اس پر ڈبل کلک کریں۔ **macOS پہلی بار اسے روک دے گا** (نیچے وارننگ دیکھیں)۔
+3. ایک بار اجازت دیں (نیچے کے مراحل)، پھر ‎`.dmg` دوبارہ کھولیں۔
+4. **Salah Bar** کو **Applications** میں ڈریگ کریں، وہاں سے کھولیں، اور پہلے طریقے کے
+   مراحل ۴–۵ پر عمل کریں۔
+
+> ⚠️ **وارننگ: ڈاؤن لوڈ کو پہلی بار کھولنے پر macOS کہتا ہے کہ Apple اس کی «تصدیق نہیں کر
+> سکا»۔** یہ متوقع ہے: Salah Bar مفت ہے اور Apple سے نوٹرائزڈ نہیں (اس کے لیے ادائیگی والا
+> ڈیویلپر اکاؤنٹ درکار ہے)۔ **"Move to Trash" پر کلک نہ کریں۔** **Done** پر کلک کریں اور
+> نیچے دکھائے گئے طریقے سے ایک بار اجازت دیں۔ اس کے بعد اپ ڈیٹس بغیر کسی وارننگ کے انسٹال ہوتی ہیں۔
+>
+> <img src="assets/screenshots/gatekeeper-warning.png" alt="macOS وارننگ: Apple Salah-Bar.dmg کی تصدیق نہیں کر سکا" width="260">
+
+**ایک بار اجازت دیں**
+
+*macOS 15 Sequoia اور اس کے بعد*
+
+1. وارننگ پر **Done** پر کلک کریں۔
+2. **System Settings ← Privacy & Security** کھولیں اور نیچے **Security** تک جائیں۔
+3. *"Salah-Bar-….dmg" was blocked* کے ساتھ **Open Anyway** پر کلک کریں۔
+4. **Open Anyway** اور اپنے Mac کے پاس ورڈ سے تصدیق کریں، پھر ‎`.dmg` دوبارہ کھولیں۔
+
+*macOS 14 Sonoma*
+
+‎`.dmg` پر رائٹ کلک (یا Control کے ساتھ کلک) کریں، **Open** منتخب کریں، پھر **Open** پر کلک کریں۔
+
+*کسی بھی macOS پر: Terminal سے*
+
+</div>
+
+```bash
+xattr -d com.apple.quarantine ~/Downloads/Salah-Bar-*.dmg
+```
+
+<div dir="rtl">
+
+> ℹ️ **نوٹ:** یہ کمانڈ **کامیاب ہونے پر کچھ نہیں دکھاتی**۔ اس کے بعد بس ‎`.dmg` دوبارہ کھولیں۔
+> اگر *No such file* آئے تو ڈاؤن لوڈ کا نام یا جگہ مختلف ہے؛ اسے تلاش کرنے کے لیے
+> ‎`ls ~/Downloads/Salah*`‎ چلائیں۔
+
+**اپ ڈیٹ:** Salah Bar خود کو اپ ڈیٹ کرتا ہے۔ یہ دن میں ایک بار چیک کرتا ہے، یا
+**🕌 ← اپ ڈیٹس چیک کریں…** منتخب کریں۔ اپ ڈیٹس **بغیر کسی** سیکیورٹی وارننگ کے انسٹال ہوتی ہیں۔
+
+</div>
+
+<a id="install-id"></a>
+
+### 🇮🇩 Pemasangan dalam Bahasa Indonesia
+
+**Memerlukan macOS 14 Sonoma atau yang lebih baru.** Memakai Windows? Unduh **[Salah Bar untuk Windows](https://github.com/be-liever95/salah-bar-windows-releases/releases/latest)**.
+
+**Cara 1: satu baris di Terminal (paling mudah, tanpa peringatan)**
+
+1. Buka **Terminal** (Aplikasi → Utilitas → Terminal).
+2. Tempel baris ini dan tekan **Return**:
+
+   ```bash
+   curl -fsSL https://raw.githubusercontent.com/be-liever95/salah-bar/main/install.sh | bash
+   ```
+
+3. Tunggu sampai muncul **"✓ Salah Bar … was installed"**. Salah Bar terbuka sendiri,
+   dengan **tur perkenalan** singkat yang menyiapkannya bersama Anda. (Tertutup
+   Terminal? Cari 🕌 di bagian atas layar.)
+4. Dalam tur, klik **Izinkan** untuk **Lokasi** dan **Notifikasi**. Lokasi Anda hanya
+   dipakai untuk menghitung waktu salat dan arah kiblat; Salah Bar tidak pernah
+   mengumpulkan atau membagikannya.
+5. Opsional: tambahkan widget desktop. Klik kanan desktop → **Edit Widget…** →
+   cari **Salah Bar** → seret salah satu ukuran.
+
+> 💡 **Tips:** Cara ini **tidak memunculkan peringatan keamanan**, karena berkas yang
+> diunduh lewat Terminal tidak ditandai "diunduh dari internet". Jalankan baris yang
+> sama kapan saja untuk memasang ulang atau memperbarui.
+
+**Cara 2: unduh berkas .dmg**
+
+1. Unduh **`Salah-Bar-<versi>.dmg`** dari
+   [rilis terbaru](https://github.com/be-liever95/salah-bar/releases/latest).
+2. Klik dua kali. **macOS akan memblokirnya pada kali pertama** (lihat peringatan di bawah).
+3. Izinkan sekali (langkah di bawah), lalu buka `.dmg` lagi.
+4. Seret **Salah Bar** ke **Aplikasi**, buka dari sana, lalu ikuti langkah 4–5 pada Cara 1.
+
+> ⚠️ **Peringatan: saat pertama kali membuka unduhan, macOS mengatakan Apple "tidak dapat
+> memverifikasi" bahwa berkas itu bebas malware.** Ini wajar: Salah Bar gratis dan tidak
+> dinotarisasi oleh Apple (yang memerlukan akun pengembang berbayar). **Jangan klik
+> "Pindahkan ke Tempat Sampah".** Klik **Selesai** dan izinkan sekali seperti di bawah.
+> Pembaruan selanjutnya terpasang tanpa peringatan.
+>
+> <img src="assets/screenshots/gatekeeper-warning.png" alt="Peringatan macOS: Apple tidak dapat memverifikasi Salah-Bar.dmg" width="260">
+
+**Izinkan sekali**
+
+*macOS 15 Sequoia dan yang lebih baru*
+
+1. Klik **Selesai** pada peringatan.
+2. Buka **Pengaturan Sistem → Privasi & Keamanan**, lalu gulir ke **Keamanan**.
+3. Di sebelah *"Salah-Bar-….dmg" diblokir*, klik **Tetap Buka**.
+4. Konfirmasi dengan **Tetap Buka** dan kata sandi Mac Anda, lalu buka `.dmg` lagi.
+
+*macOS 14 Sonoma*
+
+Klik kanan (atau klik sambil menekan Control) berkas `.dmg`, pilih **Buka**, lalu klik **Buka**.
+
+*macOS versi apa pun: lewat Terminal*
+
+```bash
+xattr -d com.apple.quarantine ~/Downloads/Salah-Bar-*.dmg
+```
+
+> ℹ️ **Catatan:** Perintah ini **tidak menampilkan apa pun jika berhasil**. Cukup buka
+> `.dmg` lagi setelahnya. Jika muncul *No such file*, nama atau lokasi unduhannya
+> berbeda; jalankan `ls ~/Downloads/Salah*` untuk menemukannya.
+
+**Pembaruan:** Salah Bar memperbarui dirinya sendiri. Ia memeriksa sekali sehari, atau
+pilih **🕌 → Periksa Pembaruan…**. Pembaruan terpasang **tanpa** peringatan keamanan.
+
+<a id="install-ms"></a>
+
+### 🇲🇾 Pemasangan dalam Bahasa Melayu
+
+**Memerlukan macOS 14 Sonoma atau lebih baharu.** Menggunakan Windows? Muat turun **[Salah Bar untuk Windows](https://github.com/be-liever95/salah-bar-windows-releases/releases/latest)**.
+
+**Cara 1: satu baris dalam Terminal (paling mudah, tiada amaran)**
+
+1. Buka **Terminal** (Aplikasi → Utiliti → Terminal).
+2. Tampal baris ini dan tekan **Return**:
+
+   ```bash
+   curl -fsSL https://raw.githubusercontent.com/be-liever95/salah-bar/main/install.sh | bash
+   ```
+
+3. Tunggu sehingga **"✓ Salah Bar … was installed"** muncul. Salah Bar dibuka sendiri,
+   dengan **lawatan pengenalan** ringkas yang menyediakannya bersama anda. (Di belakang
+   Terminal? Cari 🕌 di bahagian atas skrin.)
+4. Dalam lawatan itu, klik **Benarkan** untuk **Lokasi** dan **Pemberitahuan**. Lokasi anda
+   hanya digunakan untuk mengira waktu solat dan arah kiblat; Salah Bar tidak pernah
+   mengumpul atau berkongsinya.
+5. Pilihan: tambah widget desktop. Klik kanan desktop → **Edit Widget…** → cari
+   **Salah Bar** → seret satu saiz.
+
+> 💡 **Petua:** Cara ini **tidak menunjukkan sebarang amaran keselamatan**, kerana fail
+> yang dimuat turun oleh Terminal tidak ditanda sebagai "dimuat turun dari internet".
+> Jalankan baris yang sama pada bila-bila masa untuk memasang semula atau mengemas kini.
+
+**Cara 2: muat turun fail .dmg**
+
+1. Muat turun **`Salah-Bar-<versi>.dmg`** daripada
+   [keluaran terkini](https://github.com/be-liever95/salah-bar/releases/latest).
+2. Dwiklik padanya. **macOS akan menyekatnya pada kali pertama** (lihat amaran di bawah).
+3. Benarkan sekali (langkah di bawah), kemudian buka `.dmg` semula.
+4. Seret **Salah Bar** ke **Aplikasi**, buka dari sana, dan ikut langkah 4–5 Cara 1.
+
+> ⚠️ **Amaran: kali pertama anda membuka muat turun itu, macOS berkata Apple "tidak dapat
+> mengesahkan" bahawa ia bebas daripada perisian hasad.** Ini dijangka: Salah Bar percuma
+> dan tidak dinotari oleh Apple (yang memerlukan akaun pembangun berbayar). **Jangan klik
+> "Alih ke Sampah".** Klik **Selesai** dan benarkan sekali seperti di bawah. Kemas kini
+> selepas itu dipasang tanpa amaran.
+>
+> <img src="assets/screenshots/gatekeeper-warning.png" alt="Amaran macOS: Apple tidak dapat mengesahkan Salah-Bar.dmg" width="260">
+
+**Benarkan sekali**
+
+*macOS 15 Sequoia dan lebih baharu*
+
+1. Klik **Selesai** pada amaran.
+2. Buka **Seting Sistem → Privasi & Keselamatan**, dan tatal ke **Keselamatan**.
+3. Di sebelah *"Salah-Bar-….dmg" disekat*, klik **Buka Juga**.
+4. Sahkan dengan **Buka Juga** dan kata laluan Mac anda, kemudian buka `.dmg` semula.
+
+*macOS 14 Sonoma*
+
+Klik kanan (atau klik sambil menekan Control) fail `.dmg`, pilih **Buka**, kemudian klik **Buka**.
+
+*Mana-mana macOS: dengan Terminal*
+
+```bash
+xattr -d com.apple.quarantine ~/Downloads/Salah-Bar-*.dmg
+```
+
+> ℹ️ **Nota:** Perintah ini **tidak mencetak apa-apa apabila berjaya**. Buka sahaja `.dmg`
+> semula selepas itu. Jika ia berkata *No such file*, nama atau lokasi muat turun itu
+> berbeza; jalankan `ls ~/Downloads/Salah*` untuk mencarinya.
+
+**Kemas kini:** Salah Bar mengemas kini dirinya sendiri. Ia menyemak sekali sehari, atau
+pilih **🕌 → Semak Kemas Kini…**. Kemas kini dipasang **tanpa** sebarang amaran keselamatan.
+
+<a id="install-fr"></a>
+
+### 🇫🇷 Installation en français
+
+**macOS 14 Sonoma ou plus récent est requis.** Sous Windows ? Téléchargez **[Salah Bar pour Windows](https://github.com/be-liever95/salah-bar-windows-releases/releases/latest)**.
+
+**Méthode 1 : une ligne dans le Terminal (la plus simple, sans avertissement)**
+
+1. Ouvrez le **Terminal** (Applications → Utilitaires → Terminal).
+2. Collez cette ligne et appuyez sur **Retour** :
+
+   ```bash
+   curl -fsSL https://raw.githubusercontent.com/be-liever95/salah-bar/main/install.sh | bash
+   ```
+
+3. Attendez **« ✓ Salah Bar … was installed »**. Salah Bar s'ouvre tout seul, avec une
+   courte **visite de bienvenue** qui le configure avec vous. (Caché derrière le
+   Terminal ? Cherchez 🕌 en haut de l'écran.)
+4. Dans la visite, cliquez sur **Autoriser** pour la **localisation** et les
+   **notifications**. Votre position sert uniquement à calculer les horaires de prière et
+   la qibla ; Salah Bar ne la collecte ni ne la partage jamais.
+5. Facultatif : ajoutez le widget de bureau. Clic droit sur le bureau → **Modifier les
+   widgets…** → cherchez **Salah Bar** → faites glisser une taille.
+
+> 💡 **Astuce :** cette méthode **n'affiche aucun avertissement de sécurité**, car un
+> fichier téléchargé par le Terminal n'est pas marqué comme « téléchargé depuis
+> Internet ». Relancez la même ligne à tout moment pour réinstaller ou mettre à jour.
+
+**Méthode 2 : télécharger l'image disque (.dmg)**
+
+1. Téléchargez **`Salah-Bar-<version>.dmg`** depuis la
+   [dernière version](https://github.com/be-liever95/salah-bar/releases/latest).
+2. Double-cliquez dessus. **macOS le bloque la première fois** (voir l'avertissement ci-dessous).
+3. Autorisez-le une fois (étapes ci-dessous), puis rouvrez le `.dmg`.
+4. Faites glisser **Salah Bar** dans **Applications**, ouvrez-le depuis là, puis suivez
+   les étapes 4–5 de la méthode 1.
+
+> ⚠️ **Avertissement : à la première ouverture du téléchargement, macOS indique qu'Apple
+> « n'a pas pu vérifier » qu'il est exempt de logiciels malveillants.** C'est normal :
+> Salah Bar est gratuit et n'est pas notarié par Apple (ce qui exige un compte développeur
+> payant). **Ne cliquez pas sur « Placer dans la corbeille ».** Cliquez sur **Terminé** et
+> autorisez-le une fois comme indiqué ci-dessous. Les mises à jour suivantes s'installent
+> sans avertissement.
+>
+> <img src="assets/screenshots/gatekeeper-warning.png" alt="Avertissement macOS : Apple n'a pas pu vérifier Salah-Bar.dmg" width="260">
+
+**L'autoriser une fois**
+
+*macOS 15 Sequoia et plus récent*
+
+1. Cliquez sur **Terminé** dans l'avertissement.
+2. Ouvrez **Réglages Système → Confidentialité et sécurité**, puis descendez jusqu'à **Sécurité**.
+3. À côté de *« Salah-Bar-….dmg » a été bloqué*, cliquez sur **Ouvrir quand même**.
+4. Confirmez avec **Ouvrir quand même** et le mot de passe de votre Mac, puis rouvrez le `.dmg`.
+
+*macOS 14 Sonoma*
+
+Clic droit (ou clic avec la touche Contrôle) sur le `.dmg`, choisissez **Ouvrir**, puis
+cliquez sur **Ouvrir**.
+
+*Toute version de macOS : avec le Terminal*
+
+```bash
+xattr -d com.apple.quarantine ~/Downloads/Salah-Bar-*.dmg
+```
+
+> ℹ️ **Remarque :** cette commande **n'affiche rien quand elle réussit**. Rouvrez simplement
+> le `.dmg` ensuite. Si elle indique *No such file*, le téléchargement a un autre nom ou
+> un autre emplacement ; lancez `ls ~/Downloads/Salah*` pour le trouver.
+
+**Mise à jour :** Salah Bar se met à jour tout seul. Il vérifie une fois par jour, ou
+choisissez **🕌 → Rechercher des mises à jour…**. Les mises à jour s'installent **sans**
+aucun avertissement de sécurité.
+
+<a id="install-ru"></a>
+
+### 🇷🇺 Установка на русском
+
+**Требуется macOS 14 Sonoma или новее.** У вас Windows? Скачайте **[Salah Bar для Windows](https://github.com/be-liever95/salah-bar-windows-releases/releases/latest)**.
+
+**Способ 1: одна строка в Терминале (самый простой, без предупреждений)**
+
+1. Откройте **Терминал** (Программы → Утилиты → Терминал).
+2. Вставьте эту строку и нажмите **Return**:
+
+   ```bash
+   curl -fsSL https://raw.githubusercontent.com/be-liever95/salah-bar/main/install.sh | bash
+   ```
+
+3. Дождитесь надписи **«✓ Salah Bar … was installed»**. Salah Bar откроется сам, а короткий
+   **вводный тур** настроит его вместе с вами. (Скрылся за Терминалом? Ищите 🕌 в верхней
+   части экрана.)
+4. В туре нажмите **Разрешить** для **геопозиции** и **уведомлений**. Геопозиция нужна
+   только для расчёта времени намазов и киблы; Salah Bar никогда не собирает и не передаёт её.
+5. По желанию: добавьте виджет на рабочий стол. Правый клик по рабочему столу →
+   **Редактировать виджеты…** → найдите **Salah Bar** → перетащите нужный размер.
+
+> 💡 **Совет:** при этом способе **не появляется предупреждение безопасности**, потому что
+> файл, скачанный Терминалом, не помечается как «загруженный из интернета». Запускайте
+> ту же строку в любое время, чтобы переустановить или обновить.
+
+**Способ 2: скачать образ диска (.dmg)**
+
+1. Скачайте **`Salah-Bar-<версия>.dmg`** из
+   [последнего выпуска](https://github.com/be-liever95/salah-bar/releases/latest).
+2. Дважды нажмите на него. **В первый раз macOS его заблокирует** (см. предупреждение ниже).
+3. Разрешите один раз (шаги ниже), затем снова откройте `.dmg`.
+4. Перетащите **Salah Bar** в **Программы**, откройте оттуда и выполните шаги 4–5 из способа 1.
+
+> ⚠️ **Предупреждение: при первом открытии загрузки macOS сообщает, что Apple «не удалось
+> проверить» файл на отсутствие вредоносного ПО.** Это ожидаемо: Salah Bar бесплатен и не
+> нотаризован Apple (для этого нужна платная учётная запись разработчика). **Не нажимайте
+> «Переместить в Корзину».** Нажмите **Готово** и разрешите один раз, как показано ниже.
+> Последующие обновления устанавливаются без предупреждений.
+>
+> <img src="assets/screenshots/gatekeeper-warning.png" alt="Предупреждение macOS: Apple не удалось проверить Salah-Bar.dmg" width="260">
+
+**Разрешить один раз**
+
+*macOS 15 Sequoia и новее*
+
+1. Нажмите **Готово** в предупреждении.
+2. Откройте **Системные настройки → Конфиденциальность и безопасность** и прокрутите до
+   раздела **Безопасность**.
+3. Рядом с сообщением *«Salah-Bar-….dmg» заблокирован* нажмите **Всё равно открыть**.
+4. Подтвердите кнопкой **Всё равно открыть** и паролем Mac, затем снова откройте `.dmg`.
+
+*macOS 14 Sonoma*
+
+Нажмите на `.dmg` правой кнопкой (или с зажатой клавишей Control), выберите **Открыть**,
+затем нажмите **Открыть**.
+
+*Любая версия macOS: через Терминал*
+
+```bash
+xattr -d com.apple.quarantine ~/Downloads/Salah-Bar-*.dmg
+```
+
+> ℹ️ **Примечание:** при успехе эта команда **ничего не выводит**. Просто откройте `.dmg`
+> снова. Если она пишет *No such file*, у загрузки другое имя или расположение; выполните
+> `ls ~/Downloads/Salah*`, чтобы найти её.
+
+**Обновление:** Salah Bar обновляется сам. Он проверяет обновления раз в день, или выберите
+**🕌 → Проверить обновления…**. Обновления устанавливаются **без** предупреждений безопасности.
+
 
 ---
 
