@@ -5,6 +5,15 @@
     <link>https://github.com/be-liever95/salah-bar</link>
     <description>Salah Bar updates</description>
     <item>
+      <title>Salah Bar 2.14.0</title>
+      <pubDate>Thu, 08 Oct 2026 11:42:49 +0300</pubDate>
+      <sparkle:version>205</sparkle:version>
+      <sparkle:shortVersionString>2.14.0</sparkle:shortVersionString>
+      <sparkle:minimumSystemVersion>14.0</sparkle:minimumSystemVersion>
+      <description><![CDATA[<ul><li>🌙 <b>A Ramadan companion</b> (Settings → Ramadan, all optional): your fasts and fasts to make up, the iftar and Laylat al-Qadr duas, a Quran khatm plan you can listen to, suhoor / Taraweeh / Laylat al-Qadr reminders, waking the Mac for suhoor, an iftar countdown in the menu bar, iftar and Taraweeh in your calendar, a Ramadan widget, and the six days of Shawwal.</li><li>✅ <b>Sunnah prayers:</b> an optional small check beside each prayer for its Sunnah (Settings → Reminders → Prayer Log).</li><li>The widgets show the Salah Bar icon in the widget gallery.</li></ul>]]></description>
+      <enclosure url="https://github.com/be-liever95/salah-bar/releases/download/v2.14.0/Salah-Bar-2.14.0.dmg" sparkle:edSignature="grHgaIYXPy9ooP6UOmX1RhsJ56w8gAs9weRE1tYoekQjRF3ibBEpZ42C3xRZzOiUKS9N1n9m2m5Z0gCRgo/4Cg==" length="50381951" type="application/octet-stream"/>
+    </item>
+    <item>
       <title>Salah Bar 2.13.0</title>
       <pubDate>Wed, 07 Oct 2026 22:42:34 +0300</pubDate>
       <sparkle:version>200</sparkle:version>

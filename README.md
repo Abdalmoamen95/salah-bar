@@ -27,7 +27,8 @@ and lets you listen to the Quran from 242 reciters.
 - ⚡ **A flash you won't miss**: a green glow pulses around your screen and the menu bar icon blinks before the adhan (**Stop Flashing** when you've seen it)
 - 🖥 **Desktop widgets** in Small, Medium and Large
 - 📖 **A rotating ayah or dua**: 42 ayahs, Quranic duas and hadiths, changing every 15 minutes to once a day
-- 🌙 **Hijri date**, **Qibla** direction and **Ramadan** times (Imsak and an iftar countdown)
+- 🌙 **A Ramadan companion**: your fasts and fasts to make up, a Quran khatm plan you can listen to, the iftar and Laylat al-Qadr duas, suhoor and Taraweeh reminders, an iftar countdown in the menu bar, then the six days of Shawwal ([more](#ramadan))
+- 🕋 **Hijri date** and **Qibla** direction
 - 🌍 **7 languages**: English, Türkçe, العربية, اردو, Bahasa Indonesia, Bahasa Melayu and Français, with a right-to-left layout in Arabic and Urdu, and Arabic-Indic digits (٠١٢) in Arabic
 - 👋 **Easy to start**: a short welcome tour sets it up with you (language, location, notifications and the adhan) and shows what's inside ([more](#the-welcome-tour))
 - 📍 **Your location, your cities**: times follow where your Mac is, and you add only the cities you want
@@ -335,7 +336,8 @@ own icon, and the hadith at the top of **General**.
 |---|---|
 | **General** | Language (English, Turkish, Arabic, Urdu, Indonesian, Malay or French), Arabic-Indic digits, seconds in the menu bar, launch at login, automatic updates |
 | **Location** | Automatic location or a saved city, city search, adding a city by coordinates |
-| **Prayer Times** | Calculation method, Asr school (Standard or Hanafi), per-prayer minute adjustments, Hijri date correction (±2 days), Ramadan mode |
+| **Prayer Times** | Calculation method, Asr school (Standard or Hanafi), per-prayer minute adjustments, Hijri date correction (±2 days) |
+| **Ramadan** | The Ramadan companion and each of its reminders, the iftar countdown in the menu bar, the khatm plan, fasts to make up, Ramadan mode |
 | **Iqama** | Your mosque's iqama for each prayer and for Jumu'ah, and a reminder before it |
 | **Reminders** | When to remind you (10, 5 and 0 minutes before, or your own), and the Friday and Sunnah reminders |
 | **Adhan** | Adhan on/off, volume, fade-in, staying quiet during calls, pausing other audio, adhan and Fajr adhan tracks with preview and trimming, **My adhans** (your own files and the online library) |
@@ -398,6 +400,9 @@ Recitations are from [mp3quran.net](https://mp3quran.net).
   If you like, Salah Bar asks *"Did you pray Asr?"* when a prayer is still unmarked
   15 to 60 minutes after it begins, or shortly before the next prayer (Settings →
   Reminders, off by default); press **Prayed ✓** on that notification to mark it.
+  Turn on **Track Sunnah prayers** there too for a second, smaller gold check beside
+  Fajr, Dhuhr, Maghrib and Isha (and Asr, if you include the 4 before it) for their
+  regular Sunnah, logged apart so your streak and qada stay as they are.
 - **Calendar** (Settings → Calendar, off by default): Salah Bar warns you
   when a meeting overlaps a prayer, e.g. *"Your 13:00 meeting overlaps Dhuhr (13:04)"*,
   and can add short busy "Dhuhr", "Asr"… blocks to a calendar you choose. It only
@@ -419,6 +424,44 @@ Recitations are from [mp3quran.net](https://mp3quran.net).
   while the adhan plays, then carries on.
 - **Siri and Shortcuts**: ask *"When is Asr in Salah Bar"*, *"Next prayer in Salah
   Bar"* or *"Play Surah Al-Kahf in Salah Bar"*, or use the actions in Shortcuts.
+
+### Ramadan
+
+From mid-Sha'ban the menu shows how many days are left until Ramadan (and any
+fasts you still have to make up). During Ramadan, a card shows:
+
+- **the day of Ramadan** and a dot for each day, gold for each day you fasted.
+  Tick **Fasting today**, or **Not today** to add one to your fasts to make up;
+  Salah Bar keeps that count all year (Settings → Ramadan).
+- **the iftar dua** at Maghrib, *«ذهب الظمأ وابتلّت العروق وثبت الأجر إن شاء الله»*
+  (Abu Dawud 2357), also with the Maghrib notification.
+- on the **odd nights of the last ten**, Laylat al-Qadr with the dua
+  *«اللهم إنك عفوٌّ تحب العفو فاعفُ عني»* (at-Tirmidhi 3513).
+- with the **khatm plan** on, today's juz ("Juz 12: Hud 6 → Yusuf 52"): **▶** plays it
+  from its first ayah with your reciter, **✓** marks it read, and it tells you if you're behind.
+  Finish the Quran once, twice or three times.
+- from the 27th, a reminder to give **Zakat al-Fitr** before the Eid prayer; on Eid,
+  *«تقبّل الله منّا ومنكم»*; then the **six days of Shawwal** with a counter.
+
+Optional reminders: **suhoor** before Imsak, **Taraweeh** after Isha, **Laylat
+al-Qadr** at the start of the last third of the odd nights, and **Zakat al-Fitr** on
+the 27th. **Wake the Mac for suhoor** asks once for your password and schedules a
+wake before each suhoor reminder of the month, so you hear it even if the Mac was
+asleep (not in the App Store version). With prayer blocks on (Settings → Calendar),
+**Iftar and Taraweeh in my calendar** stretches the Maghrib block over iftar and the
+Isha block over Taraweeh. The **Ramadan widget** (Small or Medium) shows the day, a
+live countdown to iftar (or to the end of suhoor), your fasts and today's juz;
+outside Ramadan it counts the days until it. **Iftar in the menu bar**
+counts down to iftar while you fast, instead of to the next prayer. Siri: *"When is
+iftar in Salah Bar"*, *"When does suhoor end in Salah Bar"*. All of it is optional,
+in **Settings → Ramadan**, which also has the Hijri adjustment for when Ramadan
+starts a day earlier or later where you live.
+
+| The 27th night | Iftar, in Arabic |
+|---|---|
+| ![The Ramadan card on the 27th night](assets/screenshots/ramadan-en.png) | ![The Ramadan card at iftar, in Arabic](assets/screenshots/ramadan-ar.png) |
+| **The Ramadan widget** | |
+| ![The Ramadan widget, Medium](assets/screenshots/widget-ramadan-medium-en.png) | ![The Ramadan widget, Small, in Arabic](assets/screenshots/widget-ramadan-small-ar.png) |
 
 ### Desktop widgets
 
