@@ -32,6 +32,11 @@ the Hifz view ("Text: Tanzil.net"), and Tanzil's copyright notice is kept in
 the bundled file. Ayah timings for Hifz mode come from mp3quran.net's API,
 and ayah-by-ayah audio from EveryAyah.com (see below).
 
+Where each page of the Madani mushaf begins, for the daily wird
+(`QuranPagesGenerated.swift`, made by `scripts/gen-quran-pages.py`), is from
+Tanzil's **Quran Metadata** (version 1.0), Copyright (C) 2008–2009 Tanzil.info,
+licensed under Creative Commons Attribution 3.0.
+
 ## The Amiri font
 
 The hadith on the welcome tour and in Settings is set in

@@ -5,6 +5,15 @@
     <link>https://github.com/be-liever95/salah-bar</link>
     <description>Salah Bar updates</description>
     <item>
+      <title>Salah Bar 2.17.0</title>
+      <pubDate>Fri, 09 Oct 2026 01:02:05 +0300</pubDate>
+      <sparkle:version>244</sparkle:version>
+      <sparkle:shortVersionString>2.17.0</sparkle:shortVersionString>
+      <sparkle:minimumSystemVersion>14.0</sparkle:minimumSystemVersion>
+      <description><![CDATA[<ul><li>🕰️ <b>Routines and a daily wird</b> (Settings → Routines): read the whole Quran a few pages a day from where you stopped, with today's pages in the panel; and have the wird, a surah, the morning adhkar or a Hifz review start after a prayer, at a set time, or when a Focus turns on. A routine asks first (Play or Later) or starts by itself, and waits during calls, meetings and the adhan.</li><li>⚡ <b>Run Routine</b> in Shortcuts, and a Salah Bar filter for any Focus.</li></ul>]]></description>
+      <enclosure url="https://github.com/be-liever95/salah-bar/releases/download/v2.17.0/Salah-Bar-2.17.0.dmg" sparkle:edSignature="Ov1yFZesRcBirsXyRIC0XmKmE/XKuPQAz0mfWgM4M8+cbKQGsLCfHnOK77HP0UuVD+rujm44EAic9ckjNSChDA==" length="53831788" type="application/octet-stream"/>
+    </item>
+    <item>
       <title>Salah Bar 2.16.0</title>
       <pubDate>Thu, 08 Oct 2026 15:17:11 +0300</pubDate>
       <sparkle:version>236</sparkle:version>

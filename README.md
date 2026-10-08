@@ -28,6 +28,7 @@ and lets you listen to the Quran from 242 reciters.
 - 🖥 **Desktop widgets** in Small, Medium and Large
 - 📖 **A rotating ayah or dua**: 42 ayahs, Quranic duas and hadiths, changing every 15 minutes to once a day
 - ✨ **Dhikr cards**: now and then a quiet card with a dhikr or dua from the Quran and Sunnah, at the hours you choose, never during meetings ([more](#dhikr-cards))
+- 🕰️ **Routines and a daily wird**: read the whole Quran a few pages a day from where you stopped, and have the Quran, a surah or the morning adhkar ready after Fajr, at a set time or when a Focus turns on ([more](#routines-and-the-daily-wird))
 - 🤲 **Duas you can listen to**: all of Hisn al-Muslim (Fortress of the Muslim), 267 duas in 132 chapters by topic, each with its Arabic, its meaning and a recording; play a chapter, count repetitions, keep it offline ([more](#duas))
 - 🌙 **A Ramadan companion**: your fasts and fasts to make up, a Quran khatm plan you can listen to, the iftar and Laylat al-Qadr duas, suhoor and Taraweeh reminders, an iftar countdown in the menu bar, then the six days of Shawwal ([more](#ramadan))
 - 🕋 **Hijri date** and **Qibla** direction
@@ -843,6 +844,31 @@ Recitations are from [mp3quran.net](https://mp3quran.net).
 | Arabic, dark | Settings → Quran |
 |---|---|
 | ![The Quran window in Arabic](assets/screenshots/quran-ar-dark.png) | ![Quran settings](assets/screenshots/settings-quran-en.png) |
+
+### Routines and the daily wird
+
+**Settings → Routines** keeps you reading every day.
+
+- **The daily wird**: a plan through the whole Quran, 1 to 40 pages a day (20 is a
+  juz, a khatm a month), from wherever you start. The panel shows today's pages, for
+  example *Pages 241–244 · Yusuf 44 → Yusuf 78*, with ▶ to listen from the first ayah
+  and a check once read; tomorrow carries on from there. Settings shows how many
+  days are left and your streak.
+- **Routines**: what to play and when. Play the daily wird, carry on the Quran where
+  you stopped, a surah (Al-Mulk after Isha, say), a dua chapter such as the morning
+  and evening adhkar, or a Hifz review. Start it at a time, before or after a prayer
+  (it moves with the prayer times), on the days you choose.
+- At its time a routine **asks first** with a notification (**Play** or **Later**),
+  or starts by itself with the sound fading in. It waits while you're in a call or a
+  meeting and during the adhan, never cuts into something playing, and runs once a
+  day.
+- **Focus and Shortcuts**: add Salah Bar to a Focus (System Settings → Focus → Add
+  Filter) to start a routine when that Focus turns on, or use **Run Routine** in
+  Shortcuts, for example in an automation when your AirPods connect.
+
+| Settings → Routines | The panel |
+|---|---|
+| ![Settings, Routines](assets/screenshots/settings-routines-en.png) | ![Today's wird](assets/screenshots/wird-card-en.png) |
 
 ### Duas
 
