@@ -5,6 +5,15 @@
     <link>https://github.com/be-liever95/salah-bar</link>
     <description>Salah Bar updates</description>
     <item>
+      <title>Salah Bar 2.15.0</title>
+      <pubDate>Thu, 08 Oct 2026 12:40:33 +0300</pubDate>
+      <sparkle:version>211</sparkle:version>
+      <sparkle:shortVersionString>2.15.0</sparkle:shortVersionString>
+      <sparkle:minimumSystemVersion>14.0</sparkle:minimumSystemVersion>
+      <description><![CDATA[<ul><li>✨ <b>Dhikr cards</b> (Settings → Adhkar, off until you turn it on): now and then a quiet card with a dhikr or dua from the Quran and the Sunnah, at the hours you choose, with the morning and evening adhkar. Never during meetings, calls or Focus.</li><li>🇷🇺 <b>Русский:</b> Russian is the eighth language.</li><li>A small legend shows which check is the Sunnah and which the fard.</li><li>Ayah and hadith sources in your language.</li></ul>]]></description>
+      <enclosure url="https://github.com/be-liever95/salah-bar/releases/download/v2.15.0/Salah-Bar-2.15.0.dmg" sparkle:edSignature="AJCH5UytGbT8KUQtugDlJ5fHY5HmpKKvCKXJvJRbVMx47tVeOHeThPZQYAiN/pumMfICHLWhQr+P/Aj5RuMsBQ==" length="50834645" type="application/octet-stream"/>
+    </item>
+    <item>
       <title>Salah Bar 2.14.0</title>
       <pubDate>Thu, 08 Oct 2026 11:42:49 +0300</pubDate>
       <sparkle:version>205</sparkle:version>
