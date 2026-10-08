@@ -5,6 +5,15 @@
     <link>https://github.com/be-liever95/salah-bar</link>
     <description>Salah Bar updates</description>
     <item>
+      <title>Salah Bar 2.15.1</title>
+      <pubDate>Thu, 08 Oct 2026 13:08:53 +0300</pubDate>
+      <sparkle:version>213</sparkle:version>
+      <sparkle:shortVersionString>2.15.1</sparkle:shortVersionString>
+      <sparkle:minimumSystemVersion>14.0</sparkle:minimumSystemVersion>
+      <description><![CDATA[<ul><li>✨ <b>Dhikr cards at any interval:</b> choose hours and minutes yourself (10 minutes to 12 hours) within your period (Settings → Adhkar).</li><li>🛠 <b>Fixed:</b> after an update the desktop widget could stay blank until the Mac restarted.</li></ul>]]></description>
+      <enclosure url="https://github.com/be-liever95/salah-bar/releases/download/v2.15.1/Salah-Bar-2.15.1.dmg" sparkle:edSignature="TaYk/RVahWJ/YZ/6LVXKvRzqxxvZG/viqOEJUKU2q3gUhw+qGlCGQ0q9mAzIwcQ49EskuB4o1BW/JKLiflyyCQ==" length="50834309" type="application/octet-stream"/>
+    </item>
+    <item>
       <title>Salah Bar 2.15.0</title>
       <pubDate>Thu, 08 Oct 2026 12:40:33 +0300</pubDate>
       <sparkle:version>211</sparkle:version>
