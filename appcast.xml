@@ -5,6 +5,15 @@
     <link>https://github.com/be-liever95/salah-bar</link>
     <description>Salah Bar updates</description>
     <item>
+      <title>Salah Bar 2.18.0</title>
+      <pubDate>Fri, 09 Oct 2026 15:25:31 +0300</pubDate>
+      <sparkle:version>249</sparkle:version>
+      <sparkle:shortVersionString>2.18.0</sparkle:shortVersionString>
+      <sparkle:minimumSystemVersion>14.0</sparkle:minimumSystemVersion>
+      <description><![CDATA[<ul><li>📖 <b>A floating Mushaf</b>: the page being recited, above your other windows (even full-screen ones) without taking focus, turning by itself, with the ayah being recited highlighted for reciters with ayah timings and in Hifz mode. Click an ayah to listen from it.</li><li>✍️ Two styles: Uthmani (Madani) or Simple (Naskh); light, sepia or dark; text size and see-through. Open it from 📖 in the panel's Quran player, the Quran window or the daily wird card.</li></ul>]]></description>
+      <enclosure url="https://github.com/be-liever95/salah-bar/releases/download/v2.18.0/Salah-Bar-2.18.0.dmg" sparkle:edSignature="s4fzsMM21IO2cGWpvtajA0zxKB1gDgf2PC9nHdsFcOiH4BO/Ma+alNCq8TyodGuprI+P60fooR0FuWIoai7uCQ==" length="54787017" type="application/octet-stream"/>
+    </item>
+    <item>
       <title>Salah Bar 2.17.0</title>
       <pubDate>Fri, 09 Oct 2026 01:02:05 +0300</pubDate>
       <sparkle:version>244</sparkle:version>

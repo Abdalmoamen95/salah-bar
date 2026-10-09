@@ -32,6 +32,18 @@ the Hifz view ("Text: Tanzil.net"), and Tanzil's copyright notice is kept in
 the bundled file. Ayah timings for Hifz mode come from mp3quran.net's API,
 and ayah-by-ayah audio from EveryAyah.com (see below).
 
+The floating Mushaf shows the **Tanzil Quran Text** in the Uthmani script
+(quran-uthmani, version 1.1; `app/SalahBar/Resources/quran-uthmani.json`, made by
+`scripts/gen-quran-text.py --uthmani`) under the same terms: verbatim, with
+Tanzil's copyright notice in the file.
+
+The floating Mushaf's **Shamarly** style shows the printed pages of the Mushaf
+al-Shamarly and their ayah positions from **Quran for Android**
+(https://github.com/quran/quran_android; files.quran.app), contributed to that
+project by Waleed Ibrahim. They are downloaded only when the style is used, never
+bundled, and not covered by Salah Bar's license. No license is published for these
+images: the style stays hidden in released builds until permission is confirmed.
+
 Where each page of the Madani mushaf begins, for the daily wird
 (`QuranPagesGenerated.swift`, made by `scripts/gen-quran-pages.py`), is from
 Tanzil's **Quran Metadata** (version 1.0), Copyright (C) 2008–2009 Tanzil.info,
@@ -41,7 +53,8 @@ licensed under Creative Commons Attribution 3.0.
 
 The hadith on the welcome tour and in Settings is set in
 [Amiri](https://github.com/aliftype/amiri) 1.000 by Khaled Hosny, bundled
-unmodified (`Amiri-Bold.ttf`, `Amiri-Regular.ttf`) under the
+unmodified (`Amiri-Bold.ttf`, `Amiri-Regular.ttf`, and `AmiriQuran.ttf` for the
+floating Mushaf) under the
 [SIL Open Font License 1.1](https://openfontlicense.org); its licence text ships
 with the app as `Amiri-OFL.txt`.
 
