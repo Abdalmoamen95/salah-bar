@@ -5,6 +5,15 @@
     <link>https://github.com/be-liever95/salah-bar</link>
     <description>Salah Bar updates</description>
     <item>
+      <title>Salah Bar 2.20.0</title>
+      <pubDate>Fri, 09 Oct 2026 20:02:17 +0300</pubDate>
+      <sparkle:version>260</sparkle:version>
+      <sparkle:shortVersionString>2.20.0</sparkle:shortVersionString>
+      <sparkle:minimumSystemVersion>14.0</sparkle:minimumSystemVersion>
+      <description><![CDATA[<ul><li>The floating Mushaf has a <b>Turkish</b> style: the pages of the Diyanet mushaf (ayet berkenar, 605 pages), in the Uthmani script.</li><li>No focus ring around the Mushaf's next-page button when the window opens.</li><li>The Duas button now shows 🤲🏻.</li></ul>]]></description>
+      <enclosure url="https://github.com/be-liever95/salah-bar/releases/download/v2.20.0/Salah-Bar-2.20.0.dmg" sparkle:edSignature="/qMWEuqg+9ELX5JkUk0IOVXFRpPB+lCKbKyD9+vdjG9jpA6XCvfhJRmv+B+34waFvNbY9IafB77COxdfXxAGAw==" length="54817881" type="application/octet-stream"/>
+    </item>
+    <item>
       <title>Salah Bar 2.19.0</title>
       <pubDate>Fri, 09 Oct 2026 19:32:51 +0300</pubDate>
       <sparkle:version>256</sparkle:version>

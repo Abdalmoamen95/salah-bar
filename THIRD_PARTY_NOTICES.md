@@ -49,6 +49,12 @@ Where each page of the Madani mushaf begins, for the daily wird
 Tanzil's **Quran Metadata** (version 1.0), Copyright (C) 2008–2009 Tanzil.info,
 licensed under Creative Commons Attribution 3.0.
 
+The **Turkish** text style uses the page breaks of the **Diyanet İşleri Başkanlığı**
+mushaf (ayet berkenar, 605 pages), read from https://kuran.diyanet.gov.tr/mushaf:
+only which ayah begins each page (`data/turkish-mushaf-pages.json`, made into
+`TurkishPagesGenerated.swift` by `scripts/gen-turkish-pages.py`). No text or images
+from that mushaf are used; the text is Tanzil's Uthmani text, in Amiri Quran.
+
 ## The Amiri font
 
 The hadith on the welcome tour and in Settings is set in

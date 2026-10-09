@@ -859,14 +859,15 @@ full-screen apps, without taking focus from what you're doing.
   it follows page by page.
 - **Click an ayah** to listen from it. Turn pages with the arrows or the ← → keys;
   **Follow** brings it back to the recitation.
-- **Styles:** Uthmani (Madani) or Simple (Naskh) text, or the **printed pages** of the
+- **Styles:** Uthmani (Madani) or Simple (Naskh) text, the **Turkish** mushaf's pages
+  (ayet berkenar, 605 pages, as in Diyanet's mushaf), or the **printed pages** of the
   Madani, **Shamarly** or **IndoPak** mushaf, downloaded as you read (or all at once
   for offline), with the ayah being recited boxed on the page.
 - **One page or two side by side**, like an open mushaf.
 - Text size, **light, sepia or dark**, and see-through levels; it remembers its size
   and place. The daily wird's card opens it at today's pages.
 
-Text: Tanzil (Uthmani and simple). Font: Amiri Quran. Printed pages: Quran for Android.
+Text: Tanzil (Uthmani and simple). Font: Amiri Quran. Turkish page breaks: Diyanet's mushaf. Printed pages: Quran for Android.
 
 | Al-Baqarah, ayah 3 being recited | An-Naba', sepia, in Arabic |
 |---|---|
