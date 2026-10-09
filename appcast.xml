@@ -5,6 +5,15 @@
     <link>https://github.com/be-liever95/salah-bar</link>
     <description>Salah Bar updates</description>
     <item>
+      <title>Salah Bar 2.21.0</title>
+      <pubDate>Sat, 10 Oct 2026 00:19:53 +0300</pubDate>
+      <sparkle:version>263</sparkle:version>
+      <sparkle:shortVersionString>2.21.0</sparkle:shortVersionString>
+      <sparkle:minimumSystemVersion>14.0</sparkle:minimumSystemVersion>
+      <description><![CDATA[<ul><li><b>Morning and evening adhkar</b> is now a reminder of its own (Settings → Adhkar), with or without the dhikr cards. Its card asks whether to recite them all aloud; only if you accept, it plays Hisn al-Muslim's recordings and opens them in the Duas window to read along.</li><li>In Arabic, the Quran window's Hifz, Mushaf and Downloads buttons were hidden in the toolbar's » menu. They now show, as do the Duas window's.</li></ul>]]></description>
+      <enclosure url="https://github.com/be-liever95/salah-bar/releases/download/v2.21.0/Salah-Bar-2.21.0.dmg" sparkle:edSignature="XmQFOVa1e+2DP/oL7oGEvRjj7ElwWblhA4gdHtQmIGeyzt/frIqpQfuIAYkLBMZUiM9n9E+D9D0RfxkgUv7XDg==" length="54674818" type="application/octet-stream"/>
+    </item>
+    <item>
       <title>Salah Bar 2.20.0</title>
       <pubDate>Fri, 09 Oct 2026 20:02:17 +0300</pubDate>
       <sparkle:version>260</sparkle:version>

@@ -763,7 +763,7 @@ On first launch, a short tour sets Salah Bar up with you, one step at a time:
 4. **Notifications and the adhan**: allow reminders, and listen to the adhan.
 5. **The menu bar**: where to find the countdown and what the panel shows.
 6. **Make it yours**: a switch for each optional feature: Sunnah prayer tracking,
-   "Did you pray?" reminders, dhikr cards, the Friday Al-Kahf and Sunnah fast reminders,
+   "Did you pray?" reminders, dhikr cards, the morning and evening adhkar, the Friday Al-Kahf and Sunnah fast reminders,
    the flash before the adhan, quiet in calls, and the Ramadan companion. Links open
    the iqama and calendar settings.
 7. **Listen and remember**: the Quran and the Duas, each with a button to open it.
@@ -967,8 +967,12 @@ stays until you close it). **✓ Read** closes it and counts it for the day, and
 
 - **When:** every 10 minutes to 12 hours between the hours you pick (9:00–21:00 by
   default), or at times you set. Never within 10 minutes of a prayer.
-- **Morning and evening adhkar:** half an hour after Fajr and after Asr, one of the
-  morning or evening adhkar, such as Sayyid al-Istighfar.
+- **Morning and evening adhkar** (a reminder of its own, with or without the other
+  cards: **Settings → Adhkar → Morning and evening adhkar**): half an hour after Fajr
+  and after Asr, a card with one of the morning or evening adhkar, such as Sayyid
+  al-Istighfar. It asks whether to **recite them all aloud**; only if you accept, it
+  plays Hisn al-Muslim's 24 recordings one after another and opens them in the Duas
+  window to read along.
 - **Not during meetings:** no card while a calendar event is on, in a call, with the
   camera or microphone in use, or with Focus on. It waits until you're free.
 
