@@ -28,7 +28,7 @@ and lets you listen to the Quran from 242 reciters.
 - 🖥 **Desktop widgets** in Small, Medium and Large
 - 📖 **A rotating ayah or dua**: 42 ayahs, Quranic duas and hadiths, changing every 15 minutes to once a day
 - ✨ **Dhikr cards**: now and then a quiet card with a dhikr or dua from the Quran and Sunnah, at the hours you choose, never during meetings ([more](#dhikr-cards))
-- 📖 **A floating Mushaf**: the page being recited, above your other windows, with the ayah highlighted as the reciter reads it; click an ayah to play from it ([more](#the-floating-mushaf))
+- 📖 **A floating Mushaf**: the page being recited, above your other windows, with the ayah highlighted as the reciter reads it; text or printed pages (Madani, Shamarly, IndoPak), one page or two; click an ayah to play from it ([more](#the-floating-mushaf))
 - 🕰️ **Routines and a daily wird**: read the whole Quran a few pages a day from where you stopped, and have the Quran, a surah or the morning adhkar ready after Fajr, at a set time or when a Focus turns on ([more](#routines-and-the-daily-wird))
 - 🤲 **Duas you can listen to**: all of Hisn al-Muslim (Fortress of the Muslim), 267 duas in 132 chapters by topic, each with its Arabic, its meaning and a recording; play a chapter, count repetitions, keep it offline ([more](#duas))
 - 🌙 **A Ramadan companion**: your fasts and fasts to make up, a Quran khatm plan you can listen to, the iftar and Laylat al-Qadr duas, suhoor and Taraweeh reminders, an iftar countdown in the menu bar, then the six days of Shawwal ([more](#ramadan))
@@ -859,10 +859,14 @@ full-screen apps, without taking focus from what you're doing.
   it follows page by page.
 - **Click an ayah** to listen from it. Turn pages with the arrows or the ← → keys;
   **Follow** brings it back to the recitation.
+- **Styles:** Uthmani (Madani) or Simple (Naskh) text, or the **printed pages** of the
+  Madani, **Shamarly** or **IndoPak** mushaf, downloaded as you read (or all at once
+  for offline), with the ayah being recited boxed on the page.
+- **One page or two side by side**, like an open mushaf.
 - Text size, **light, sepia or dark**, and see-through levels; it remembers its size
   and place. The daily wird's card opens it at today's pages.
 
-Text: Tanzil (Uthmani). Font: Amiri Quran.
+Text: Tanzil (Uthmani and simple). Font: Amiri Quran. Printed pages: Quran for Android.
 
 | Al-Baqarah, ayah 3 being recited | An-Naba', sepia, in Arabic |
 |---|---|

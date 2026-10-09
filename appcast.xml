@@ -5,6 +5,15 @@
     <link>https://github.com/be-liever95/salah-bar</link>
     <description>Salah Bar updates</description>
     <item>
+      <title>Salah Bar 2.19.0</title>
+      <pubDate>Fri, 09 Oct 2026 19:32:51 +0300</pubDate>
+      <sparkle:version>256</sparkle:version>
+      <sparkle:shortVersionString>2.19.0</sparkle:shortVersionString>
+      <sparkle:minimumSystemVersion>14.0</sparkle:minimumSystemVersion>
+      <description><![CDATA[<ul><li>📖 <b>Mushaf styles:</b> besides the Uthmani and Naskh text, the <b>printed pages</b> of the Madani, <b>Shamarly</b> and <b>IndoPak</b> mushaf, downloaded as you read, with the ayah being recited boxed on the page.</li><li>📖 <b>One page or two side by side</b>, like an open mushaf.</li><li>🛠 In a wide window the text stays in a comfortable column; the scroll bar shows only while scrolling.</li></ul>]]></description>
+      <enclosure url="https://github.com/be-liever95/salah-bar/releases/download/v2.19.0/Salah-Bar-2.19.0.dmg" sparkle:edSignature="J2xM4uIj2Gv/8DITTdMSBnBKcifDMdDNGHMWItscQuQtpSpsHGpZL2Ue7wVn+MQFv0wh6OEgyqiVPhb4XVr/Cg==" length="54792435" type="application/octet-stream"/>
+    </item>
+    <item>
       <title>Salah Bar 2.18.0</title>
       <pubDate>Fri, 09 Oct 2026 15:25:31 +0300</pubDate>
       <sparkle:version>249</sparkle:version>

@@ -37,12 +37,12 @@ The floating Mushaf shows the **Tanzil Quran Text** in the Uthmani script
 `scripts/gen-quran-text.py --uthmani`) under the same terms: verbatim, with
 Tanzil's copyright notice in the file.
 
-The floating Mushaf's **Shamarly** style shows the printed pages of the Mushaf
-al-Shamarly and their ayah positions from **Quran for Android**
-(https://github.com/quran/quran_android; files.quran.app), contributed to that
-project by Waleed Ibrahim. They are downloaded only when the style is used, never
-bundled, and not covered by Salah Bar's license. No license is published for these
-images: the style stays hidden in released builds until permission is confirmed.
+The floating Mushaf's printed styles show page images and their ayah positions
+from **Quran for Android** (https://github.com/quran/quran_android; files.quran.app):
+the **Madani** pages, the **Mushaf al-Shamarly** (contributed to that project by
+Waleed Ibrahim) and the **IndoPak** mushaf (which that project uses with permission
+of SHL Info Systems). They are downloaded only when a style is used, never bundled,
+and not covered by Salah Bar's license. No license is published for these images.
 
 Where each page of the Madani mushaf begins, for the daily wird
 (`QuranPagesGenerated.swift`, made by `scripts/gen-quran-pages.py`), is from
