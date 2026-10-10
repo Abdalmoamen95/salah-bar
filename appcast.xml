@@ -5,6 +5,15 @@
     <link>https://github.com/be-liever95/salah-bar</link>
     <description>Salah Bar updates</description>
     <item>
+      <title>Salah Bar 2.22.0</title>
+      <pubDate>Sat, 10 Oct 2026 19:12:21 +0300</pubDate>
+      <sparkle:version>265</sparkle:version>
+      <sparkle:shortVersionString>2.22.0</sparkle:shortVersionString>
+      <sparkle:minimumSystemVersion>14.0</sparkle:minimumSystemVersion>
+      <description><![CDATA[<ul><li>📖 The floating Mushaf now looks like a printed mushaf: each page sits on paper inside a gilded double frame with stars at the corners, and its number in a rosette at the bottom.</li><li>With printed pages side by side, their credit now shows once under both.</li></ul>]]></description>
+      <enclosure url="https://github.com/be-liever95/salah-bar/releases/download/v2.22.0/Salah-Bar-2.22.0.dmg" sparkle:edSignature="xe9T6eIdUK/Ki4zHU4hpFrKooporI6ZyG9fzdS8moCBt9BhbYLJ0wzE7x1uZmdmVMD3psBCj/hmi8wiZWNWwCg==" length="54904664" type="application/octet-stream"/>
+    </item>
+    <item>
       <title>Salah Bar 2.21.0</title>
       <pubDate>Sat, 10 Oct 2026 00:19:53 +0300</pubDate>
       <sparkle:version>263</sparkle:version>
